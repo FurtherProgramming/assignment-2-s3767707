@@ -1,6 +1,7 @@
 # Readme
 
-This README should be completed by the student
+Student number : s3767707
+Course name: Further Programming (2110)
 
 # Packaging
 The main class is Main.java
