@@ -5,19 +5,33 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="385.0" prefWidth="338.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controller.LoginController">
+<AnchorPane prefHeight="480.0" prefWidth="448.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controller.LoginController">
     <children>
-            <Label fx:id="isConnected" layoutX="23.0" layoutY="173.0">
+        <Label fx:id="isConnected" layoutX="37.0" layoutY="432.0" text="Status">
 
-            </Label>
-      <TextField fx:id="txtUsername" layoutX="122.0" layoutY="55.0" prefHeight="30.0" prefWidth="155.0" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="122.0" AnchorPane.rightAnchor="61.0" AnchorPane.topAnchor="55.0" />
-      <PasswordField fx:id="txtPassword" layoutX="122.0" layoutY="107.0" prefHeight="30.0" prefWidth="155.0" AnchorPane.bottomAnchor="248.0" AnchorPane.leftAnchor="122.0" AnchorPane.rightAnchor="61.0" AnchorPane.topAnchor="107.0" />
-      <Hyperlink layoutX="122.0" layoutY="268.0" text="Reset password" />
-      <Label layoutX="29.0" layoutY="60.0" text="Username" />
-      <Label layoutX="29.0" layoutY="112.0" text="password" />
-      <Button layoutX="143.0" layoutY="218.0" mnemonicParsing="false" text="Login" />
+        </Label>
+        <TextField fx:id="txtUsername" layoutX="158.0" layoutY="187.0" prefHeight="40.0" prefWidth="220.0" AnchorPane.bottomAnchor="253.0" AnchorPane.leftAnchor="158.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="187.0" />
+        <PasswordField fx:id="txtPassword" layoutX="158.0" layoutY="252.0" prefHeight="40.0" prefWidth="220.0" AnchorPane.bottomAnchor="188.0" AnchorPane.leftAnchor="158.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="252.0" />
+      <Label layoutX="57.0" layoutY="197.0" text="Username" />
+      <Label layoutX="59.0" layoutY="262.0" text="Password" />
+      <Button layoutX="198.0" layoutY="335.0" mnemonicParsing="false" onAction="#Login" text="login" />
+      <ToolBar layoutX="6.0" layoutY="8.0" prefHeight="45.0" prefWidth="242.0">
+         <items>
+            <Button mnemonicParsing="false" onAction="#HomePage" prefHeight="31.0" prefWidth="70.0" text="Home" />
+            <Button mnemonicParsing="false" onAction="#LoginPage" text="Login" />
+            <Button mnemonicParsing="false" onAction="#RegisterPage" prefHeight="31.0" prefWidth="76.0" text="Register" />
+         </items>
+      </ToolBar>
+      <Label layoutX="195.0" layoutY="99.0" text="Login">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Hyperlink layoutX="168.0" layoutY="387.0" onAction="#ResetPassword" text="Reset password" />
 
 
     </children>

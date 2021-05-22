@@ -23,6 +23,7 @@ public class LoginModel {
     public Boolean isDbConnected(){
         try {
             return !connection.isClosed();
+
         }
         catch(Exception e){
             return false;
@@ -53,6 +54,34 @@ public class LoginModel {
         }finally {
            preparedStatement.close();
            resultSet.close();
+        }
+
+    }
+
+    public Boolean isAdmin(String user, String pass) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet=null;
+        String query = "select * from employee where username = ? and password= ?";
+        try {
+
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, user);
+            preparedStatement.setString(2, pass);
+
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.getString("role").equals("admin")) {
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        catch (Exception e)
+        {
+            return false;
+        }finally {
+            preparedStatement.close();
+            resultSet.close();
         }
 
     }
