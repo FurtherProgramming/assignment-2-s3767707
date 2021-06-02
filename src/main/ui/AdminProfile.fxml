@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -11,11 +10,11 @@
 
 <AnchorPane prefHeight="480.0" prefWidth="448.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controller.AdminProfileController">
    <children>
-      <ToolBar layoutX="6.0" layoutY="8.0" prefHeight="45.0" prefWidth="442.0">
+      <ToolBar layoutX="1.0" prefHeight="45.0" prefWidth="448.0">
          <items>
-            <Button onAction="#HomePage" mnemonicParsing="false" prefHeight="31.0" prefWidth="70.0" text="Home" />
-            <Button onAction="#ProfilePage" mnemonicParsing="false" text="Profile" />
-            <Button onAction="#Logout" mnemonicParsing="false" prefHeight="31.0" prefWidth="76.0" text="Logout" />
+            <Button mnemonicParsing="false" onAction="#HomePage" prefHeight="31.0" prefWidth="70.0" text="Home" />
+            <Button mnemonicParsing="false" onAction="#ProfilePage" prefHeight="31.0" prefWidth="71.0" text="Profile" />
+            <Button mnemonicParsing="false" onAction="#Logout" prefHeight="31.0" prefWidth="76.0" text="Logout" />
          </items>
       </ToolBar>
       <Label layoutX="142.0" layoutY="118.0">
@@ -23,18 +22,17 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Hyperlink layoutX="168.0" layoutY="387.0" />
-      <Label layoutX="145.0" layoutY="136.0" prefHeight="35.0" prefWidth="159.0" text="Admin Profile">
+      <Label layoutX="155.0" layoutY="136.0" prefHeight="35.0" prefWidth="146.0" text="Admin Profile">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Button layoutX="144.0" layoutY="218.0" mnemonicParsing="false" text="Booking management" />
-      <Button layoutX="144.0" layoutY="285.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="167.0" text="Account management" />
+      <Button layoutX="144.0" layoutY="218.0" mnemonicParsing="false" onAction="#BookingManagement" text="Booking management" />
+      <Button onAction="#AccountManagement" layoutX="144.0" layoutY="285.0" mnemonicParsing="false"  prefHeight="31.0" prefWidth="167.0" text="Account management" />
       <Circle fill="WHITE" layoutX="50.0" layoutY="81.0" radius="18.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle layoutX="50.0" layoutY="76.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" />
       <Ellipse layoutX="50.0" layoutY="90.0" radiusX="13.0" radiusY="8.0" stroke="BLACK" strokeType="INSIDE" />
-      <Label layoutX="107.0" layoutY="72.0" text="Label" />
-      <Button layoutX="144.0" layoutY="350.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="167.0" text="Report" />
+      <Label fx:id="username" layoutX="88.0" layoutY="71.0" text="Label" />
+      <Button onAction="#Report" layoutX="144.0" layoutY="350.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="167.0" text="Report" />
    </children>
 </AnchorPane>

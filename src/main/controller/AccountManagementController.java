@@ -10,7 +10,7 @@ import main.model.User;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AdminProfileController implements Initializable {
+public class AccountManagementController implements Initializable {
 
     private Main main = new Main();
     @FXML
@@ -39,19 +39,20 @@ public class AdminProfileController implements Initializable {
         main.change("ui/Login.fxml");
     }
 
-    public void BookingManagement(ActionEvent event) throws Exception {
+    public void AddAccount(ActionEvent event) throws Exception {
 
-        main.change("ui/BookingManagement.fxml");
+        main.change("ui/AddAccount.fxml");
     }
 
-    public void AccountManagement(ActionEvent event) throws Exception {
+    public void AdminSearchAccount(ActionEvent event) throws Exception {
 
-        main.change("ui/AccountManagement.fxml");
+        main.change("ui/AdminSearchAccountToUpdate.fxml");
     }
 
-    public void Report(ActionEvent event) throws Exception {
+    public void AdminDeleteAccount(ActionEvent event) throws Exception {
 
-        main.change("ui/AdminReport.fxml");
+        main.change("ui/AdminRemoveAccount.fxml");
     }
+
 
 }

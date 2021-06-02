@@ -38,4 +38,30 @@ public class User{
 
         return question;
     }
+
+    public String getEmployerId() {
+
+        return employerId;
+    }
+
+    public String getPassword() {
+
+        return employerId;
+    }
+
+    public String getFirstName() {
+
+        return firstname;
+    }
+
+    public String getLastName() {
+
+        return lastname;
+    }
+
+    public String getRole() {
+
+        return role;
+    }
+
 }

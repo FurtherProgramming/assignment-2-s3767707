@@ -5,16 +5,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import main.Main;
+import main.model.SeatManagementModel;
 import main.model.User;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class AdminProfileController implements Initializable {
+public class BookingManagementController implements Initializable {
 
     private Main main = new Main();
     @FXML
     private Label username;
+    private SeatManagementModel seatManagementModel = new SeatManagementModel();
 
     // Check database connection
     @Override
@@ -39,19 +42,19 @@ public class AdminProfileController implements Initializable {
         main.change("ui/Login.fxml");
     }
 
-    public void BookingManagement(ActionEvent event) throws Exception {
+    public void EditBooking(ActionEvent event) throws Exception {
 
-        main.change("ui/BookingManagement.fxml");
+        main.change("ui/AdminEditBooking.fxml");
     }
 
-    public void AccountManagement(ActionEvent event) throws Exception {
+    public void SeatManagement(ActionEvent event) throws Exception {
 
-        main.change("ui/AccountManagement.fxml");
+        //main.change("ui/SeatManagement.fxml");
+        ArrayList<String> allSeatIds = seatManagementModel.getAllSeats();
+        ArrayList<String> seatIds = seatManagementModel.getSeatId(seatManagementModel.getCondition());
+        main.setSeatColor("ui/SeatManagement.fxml", allSeatIds, seatIds);
     }
 
-    public void Report(ActionEvent event) throws Exception {
 
-        main.change("ui/AdminReport.fxml");
-    }
 
 }

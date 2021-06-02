@@ -6,17 +6,16 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="512.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controller.HomeController">
    <children>
-      <ToolBar layoutX="14.0" layoutY="14.0" prefHeight="45.0" prefWidth="223.0">
+      <ToolBar layoutY="7.0" prefHeight="45.0" prefWidth="512.0">
         <items>
-          <Button onAction="#HomePage" mnemonicParsing="false" text="Home" />
-            <Button onAction="#LoginPage" mnemonicParsing="false" text="Login" />
-            <Button onAction="#RegisterPage" mnemonicParsing="false" text="Register" />
+          <Button mnemonicParsing="false" onAction="#HomePage" text="Home" />
+            <Button mnemonicParsing="false" onAction="#LoginPage" text="Login" />
+            <Button mnemonicParsing="false" onAction="#RegisterPage" text="Register" />
         </items>
       </ToolBar>
-      <Label layoutX="114.0" layoutY="173.0" prefHeight="54.0" prefWidth="284.0" text="HOTDESKING">
+      <Label layoutX="197.0" layoutY="173.0" prefHeight="54.0" prefWidth="119.0" text="ARUB">
          <font>
             <Font name="Arial Black" size="36.0" />
          </font>

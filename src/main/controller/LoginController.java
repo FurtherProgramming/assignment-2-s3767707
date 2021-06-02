@@ -2,12 +2,12 @@ package main.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 import main.Main;
 import main.model.LoginModel;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -15,8 +15,6 @@ import java.util.ResourceBundle;
 public class LoginController implements Initializable {
     private LoginModel loginModel = new LoginModel();
     private Main main = new Main();
-    @FXML
-    private Label isConnected;
     @FXML
     private TextField txtUsername;
     @FXML
@@ -26,11 +24,6 @@ public class LoginController implements Initializable {
     // Check database connection
     @Override
     public void initialize(URL location, ResourceBundle resources){
-        if (loginModel.isDbConnected()){
-            isConnected.setText("Connected");
-        }else{
-            isConnected.setText("Not Connected");
-        }
 
     }
     /* login Action method
@@ -41,15 +34,39 @@ public class LoginController implements Initializable {
         try {
             if (loginModel.isLogin(txtUsername.getText(),txtPassword.getText())){
                 if(loginModel.isAdmin(txtUsername.getText(), txtPassword.getText())) {
-
-                    main.change("ui/adminProfile.fxml");
+                    ButtonType admin = new ButtonType("ADMIN");
+                    ButtonType user = new ButtonType("USER");
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Choose your account type", admin, user);
+                    alert.showAndWait();
+                    if (alert.getResult() == admin) {
+                        alert.close();
+                        main.change("ui/AdminProfile.fxml");
+                    }
+                    else {
+                        main.change("ui/UserProfile.fxml");
+                    }
                 }
                 else {
-                    main.change("ui/userProfile.fxml");
+                    main.change("ui/UserProfile.fxml");
                 }
 
             }else{
-                isConnected.setText("username and password is incorrect");
+                if(loginModel.usernameValid(txtUsername.getText())) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Password is invalid!", ButtonType.CLOSE);
+                    alert.showAndWait();
+                    if (alert.getResult() == ButtonType.CLOSE) {
+                        alert.close();
+                        main.change("ui/Login.fxml");
+                    }
+                }
+                else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Username is invalid!", ButtonType.CLOSE);
+                    alert.showAndWait();
+                    if (alert.getResult() == ButtonType.CLOSE) {
+                        alert.close();
+                        main.change("ui/Login.fxml");
+                    }
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,22 +78,22 @@ public class LoginController implements Initializable {
 
     public void ResetPassword(ActionEvent event) throws Exception {
 
-        main.change("ui/resetPassword.fxml");
+        main.change("ui/ResetPassword.fxml");
     }
 
     public void LoginPage(ActionEvent event) throws Exception {
 
-        main.change("ui/login.fxml");
+        main.change("ui/Login.fxml");
     }
 
     public void RegisterPage(ActionEvent event) throws Exception {
 
-        main.change("ui/register.fxml");
+        main.change("ui/Register.fxml");
     }
 
     public void HomePage(ActionEvent event) throws Exception {
 
-        main.change("ui/home.fxml");
+        main.change("ui/Home.fxml");
     }
 
 

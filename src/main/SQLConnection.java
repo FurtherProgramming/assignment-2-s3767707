@@ -6,9 +6,9 @@ public class SQLConnection {
 
     public static Connection connect(){
         try{
-          Class.forName("org.sqlite.JDBC");
-          Connection connection = DriverManager.getConnection("jdbc:sqlite:assignment.db");
-          return connection;
+            Class.forName("org.sqlite.JDBC");
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:assignment.db");
+            return connection;
 
         }
         catch (Exception e){
