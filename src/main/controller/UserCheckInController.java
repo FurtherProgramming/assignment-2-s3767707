@@ -8,19 +8,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import main.Main;
 import main.model.*;
-
 import java.net.URL;
-import java.security.SecureRandom;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+/*
+ * Class:		UserCheckInController
+ * Description:	A class that handles user check in page
+ * Author:		Anson Go Guang Ping
+ */
 public class UserCheckInController implements Initializable {
     private UserCheckInModel userCheckInModel = new UserCheckInModel();
     private Main main = new Main();
@@ -57,6 +57,7 @@ public class UserCheckInController implements Initializable {
         setTableColumns();
         User user = (User) Main.stage.getUserData();
         try {
+            // only show today's accepted bookings so user can only pick from it
             ObservableList<Booking> populateTableList = FXCollections.observableArrayList(userCheckInModel.getUserBooking(user.getUsername(), "Accepted", LocalDate.now()));
             table.getItems().addAll(populateTableList);
         } catch (SQLException e) {
@@ -114,7 +115,9 @@ public class UserCheckInController implements Initializable {
         if(table.getSelectionModel().getSelectedItem() != null) {
 
                 if (isSelectedRowValid(selectedRowId)) {
+                    // check if the current time is within the booking session
                     if(userCheckInModel.isTime(selectedRowId, LocalDateTime.now().getHour())) {
+                        // user can check in on a checked in a booking
                         if(!userCheckInModel.isCheckedIn(selectedRowId)) {
                             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to check-in with this booking?", ButtonType.YES, ButtonType.NO);
                             alert.showAndWait();

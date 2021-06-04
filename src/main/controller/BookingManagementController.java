@@ -7,11 +7,14 @@ import javafx.scene.control.Label;
 import main.Main;
 import main.model.SeatManagementModel;
 import main.model.User;
-
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+/*
+ * Class:		BookingManagementController
+ * Description:	A class that handles admin booking management page
+ * Author:		Anson Go Guang Ping
+ */
 public class BookingManagementController implements Initializable {
 
     private Main main = new Main();
@@ -49,10 +52,7 @@ public class BookingManagementController implements Initializable {
 
     public void SeatManagement(ActionEvent event) throws Exception {
 
-        //main.change("ui/SeatManagement.fxml");
-        ArrayList<String> allSeatIds = seatManagementModel.getAllSeats();
-        ArrayList<String> seatIds = seatManagementModel.getSeatId(seatManagementModel.getCondition());
-        main.setSeatColor("ui/SeatManagement.fxml", allSeatIds, seatIds);
+        main.setSeatColorInSeatManagement("ui/SeatManagement.fxml", seatManagementModel.getAllSeats());
     }
 
 

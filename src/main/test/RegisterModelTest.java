@@ -9,12 +9,13 @@ import java.sql.SQLException;
 import main.SQLConnection;
 import main.model.LoginModel;
 import main.model.RegisterModel;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RegisterModelTest {
 
     private static RegisterModel registerModel = new RegisterModel();
+    private static LoginModel loginModel = new LoginModel();
     static Connection connection;
 
     @BeforeAll
@@ -27,6 +28,7 @@ public class RegisterModelTest {
     }
 
     @Test
+    @Order(24)
     void testEmployerId_returnTrue_IfEmployerIdExists() throws SQLException {
 
         boolean bool = registerModel.employerIdExist("1");
@@ -34,6 +36,7 @@ public class RegisterModelTest {
     }
 
     @Test
+    @Order(25)
     void testEmployerId_returnTrue_IfEmployerIdNotExists() throws SQLException {
 
         boolean bool = registerModel.employerIdExist("10");
@@ -41,38 +44,33 @@ public class RegisterModelTest {
     }
 
     @Test
+    @Order(26)
     void testUsername_returnTrue_IfUsernameExists() throws SQLException {
 
-        boolean bool = registerModel.usernameExist("test");
+        boolean bool = loginModel.usernameExist("test");
         assertTrue(bool);
     }
 
     @Test
+    @Order(27)
     void testUsername_returnFalse_IfUsernameNotExists() throws SQLException {
 
-        boolean bool = registerModel.usernameExist("d");
+        boolean bool = loginModel.usernameExist("d");
         assertFalse(bool);
     }
 
     @Test
+    @Order(28)
     void testRegister_returnTrue_IfAllInfoIsValid() throws SQLException {
 
-        boolean bool = registerModel.register("3","b","b","user","b","1234","What is your favourite colour?","Blue");
-        assertTrue(bool);
-
-    }
-
-    @Test
-    void testRegister_returnTrue_IfDatabaseIsUdated() throws SQLException {
-
-        boolean bool = registerModel.employerIdExist("3");
+        boolean bool = registerModel.register("c","c","c","user","c","c","What is your favourite colour?","c");
         assertTrue(bool);
         PreparedStatement preparedStatement = null;
         String query = "DELETE FROM Employee WHERE emp_id = ?";
         try {
 
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, "3");
+            preparedStatement.setString(1, "c");
             preparedStatement.executeUpdate();
             bool = true;
         }
@@ -83,6 +81,16 @@ public class RegisterModelTest {
             preparedStatement.close();
 
         }
+
+    }
+
+    @Test
+    @Order(29)
+    void testRegister_returnTrue_IfDatabaseIsUpdated() throws SQLException {
+
+        boolean bool = registerModel.employerIdExist("1");
+        assertTrue(bool);
+
     }
 
 }

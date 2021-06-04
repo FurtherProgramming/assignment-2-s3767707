@@ -1,13 +1,15 @@
 package main.model;
 
-import main.Main;
 import main.SQLConnection;
-
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/*
+ * Class:		UserCheckInModel
+ * Description:	A class that handles user check in function
+ * Author:		Anson Go Guang Ping
+ */
 public class UserCheckInModel {
 
     Connection connection;
@@ -20,16 +22,9 @@ public class UserCheckInModel {
 
     }
 
-    public Boolean isDbConnected(){
-        try {
-            return !connection.isClosed();
-
-        }
-        catch(Exception e){
-            return false;
-        }
-    }
-
+    /*
+     * return true if check in time matches booking time
+     */
     public Boolean isTime(String bookingId, int time) throws SQLException {
 
         PreparedStatement preparedStatement = null;
@@ -42,6 +37,7 @@ public class UserCheckInModel {
             resultSet = preparedStatement.executeQuery();
             if(resultSet.next()) {
                 String bookTime = resultSet.getString("booking_time");
+                //validate if check in time is within booking time session
                 if(bookTime.equals("0800")) {
                     if(time < 14 && time >= 8) {
                         isDate = true;
@@ -52,6 +48,9 @@ public class UserCheckInModel {
                         isDate = true;
                     }
                 }
+            }
+            else {
+                isDate = false;
             }
         }
         catch (Exception e)
@@ -65,6 +64,9 @@ public class UserCheckInModel {
         return isDate;
     }
 
+    /*
+     * check if booking is checked in
+     */
     public Boolean isCheckedIn(String bookingId) throws SQLException {
 
         PreparedStatement preparedStatement = null;
@@ -92,8 +94,9 @@ public class UserCheckInModel {
         return isCheck;
     }
 
-
-
+    /*
+     * check in booking
+     */
     public Boolean checkIn(String bookingId) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean bool = false;
@@ -116,6 +119,9 @@ public class UserCheckInModel {
         return bool;
     }
 
+    /*
+     * return user's booking list of particular day
+     */
     public ArrayList<Booking> getUserBooking(String username, String status, LocalDate date) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet=null;

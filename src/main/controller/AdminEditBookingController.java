@@ -13,13 +13,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import main.Main;
 import main.model.*;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+/*
+ * Class:		AdminEditBookingController
+ * Description:	A class that handles user edit bookings page
+ * Author:		Anson Go Guang Ping
+ */
 public class AdminEditBookingController implements Initializable {
 
     private Main main = new Main();
@@ -45,15 +49,14 @@ public class AdminEditBookingController implements Initializable {
     @FXML
     private String selectedRowId;
 
-    // Check database connection
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        setTableColumns();
+        setTableColumns(); // show all booking lists
         User user = (User) Main.stage.getUserData();
-
-
         try {
+            // only show future 'Pending' bookings
+            // filters pass bookings, 'Accepted' and 'Rejected' bookings
             populateTableList = FXCollections.observableArrayList(adminEditBookingModel.getUserBookings("Pending", LocalDate.now()));
             table.getItems().addAll(populateTableList);
         } catch (SQLException e) {
@@ -68,7 +71,7 @@ public class AdminEditBookingController implements Initializable {
 
     public void Profile(ActionEvent event) throws Exception {
 
-        main.change("ui/UserProfile.fxml");
+        main.change("ui/AdminProfile.fxml");
     }
 
     public void Logout(ActionEvent event) throws Exception {
@@ -76,6 +79,10 @@ public class AdminEditBookingController implements Initializable {
         main.change("ui/Login.fxml");
     }
 
+    public void Back(ActionEvent event) throws Exception {
+
+        main.change("ui/BookingManagement.fxml");
+    }
 
     private void setTableColumns() {
 
@@ -101,14 +108,15 @@ public class AdminEditBookingController implements Initializable {
             this.selectedRowId = table.getSelectionModel().getSelectedItem().getBookingId();
     }
 
-
+    /*
+     * handles reject booking button
+     */
     public void RejectBooking(ActionEvent event) throws Exception {
 
+        //if a row is picked, remove booking
         if (table.getSelectionModel().getSelectedItem() != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to reject this booking?", ButtonType.YES, ButtonType.NO);
             alert.showAndWait();
-            // if the user clicks OK
-
             if (alert.getResult() == ButtonType.YES) {
                 if (isSelectedRowValid(selectedRowId)) {
                     String bookingId = table.getSelectionModel().getSelectedItem().getBookingId();
@@ -119,7 +127,7 @@ public class AdminEditBookingController implements Initializable {
             } else if (alert.getResult() == ButtonType.NO) {
                 alert.close();
             }
-        } else {
+        } else { // no row picked
             Alert alert2 = new Alert(Alert.AlertType.ERROR, "Please pick a booking!", ButtonType.CLOSE);
             alert2.showAndWait();
             if (alert2.getResult() == ButtonType.CLOSE)
@@ -127,17 +135,19 @@ public class AdminEditBookingController implements Initializable {
         }
     }
 
+    /*
+     * handles accept button
+     */
     public void AcceptBooking(ActionEvent event) throws Exception {
 
+        //if row picked
         if (table.getSelectionModel().getSelectedItem() != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to accept this booking?", ButtonType.YES, ButtonType.NO);
             alert.showAndWait();
-            // if the user clicks OK
-
             if (alert.getResult() == ButtonType.YES) {
                 if (isSelectedRowValid(selectedRowId)) {
                     String bookingId = table.getSelectionModel().getSelectedItem().getBookingId();
-                    adminEditBookingModel.editBookingStatus(bookingId, "Accepted");
+                    adminEditBookingModel.editBookingStatus(bookingId, "Accepted"); // update booking status into "Accepted"
                     main.change("ui/AdminEditBooking.fxml");
                     alert.close();
                 }

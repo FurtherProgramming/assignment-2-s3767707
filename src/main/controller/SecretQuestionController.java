@@ -8,9 +8,13 @@ import main.Main;
 import main.model.ResetPasswordModel;
 import main.model.User;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/*
+ * Class:		SecretQuestionController
+ * Description:	A class that shows secret question when user reset their password
+ * Author:		Anson Go Guang Ping
+ */
 public class SecretQuestionController implements Initializable {
     private ResetPasswordModel resetPasswordModel = new ResetPasswordModel();
     private Main main = new Main();
@@ -31,13 +35,14 @@ public class SecretQuestionController implements Initializable {
 
     public void Submit(ActionEvent event) throws Exception {
 
-        if (resetPasswordModel.validateAnswer(txtAnswer.getText())){
+        User user = (User) Main.stage.getUserData();
+        if (resetPasswordModel.validateAnswer(user.getAnswer() ,txtAnswer.getText())){ //validate answer
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you confirm to reset your password?", ButtonType.YES, ButtonType.NO);
             alert.showAndWait();
             if (alert.getResult() == ButtonType.YES) {
                 alert.close();
                 String newPassword = resetPasswordModel.generateRandomPassword(4);
-                resetPasswordModel.updatePassword(newPassword);
+                resetPasswordModel.updatePassword(user.getUsername(), newPassword);
                 Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Update successfully! Your new password is " + newPassword + ".", ButtonType.CLOSE);
                 alert2.showAndWait();
                 if (alert2.getResult() == ButtonType.CLOSE) {

@@ -2,13 +2,16 @@ package main.model;
 
 import main.Main;
 import main.SQLConnection;
-import org.sqlite.SQLiteConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/*
+ * Class:		LoginModel
+ * Description:	A class that handles all the login function
+ * Author:		Anson Go Guang Ping
+ */
 public class LoginModel {
 
     Connection connection;
@@ -21,24 +24,18 @@ public class LoginModel {
 
     }
 
-    public Boolean isDbConnected(){
-        try {
-            return !connection.isClosed();
-
-        }
-        catch(Exception e){
-            return false;
-        }
-    }
-
-    public Boolean isLogin(String user, String pass) throws SQLException {
+    /*
+     * return true if username and password of user is valid
+     */
+    public User isLogin(String username, String pass) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet=null;
+        User user = null;
         String query = "select * from employee where username = ? and password= ?";
         try {
 
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, user);
+            preparedStatement.setString(1, username);
             preparedStatement.setString(2, pass);
 
             resultSet = preparedStatement.executeQuery();
@@ -51,24 +48,23 @@ public class LoginModel {
                 String p = resultSet.getString("password");
                 String ques = resultSet.getString("secret_question");
                 String ans = resultSet.getString("answer");
-                User u = new User(empId, fn, ln, role, un, p, ques, ans);
-                Main.stage.setUserData(u);
-                return true;
+                user = new User(empId, fn, ln, role, un, p, ques, ans);
             }
-            else{
-                return false;
-            }
+
         }
         catch (Exception e)
         {
-            return false;
+           e.printStackTrace();
         }finally {
            preparedStatement.close();
            resultSet.close();
         }
-
+        return user;
     }
 
+    /*
+     * return true if user is an admin
+     */
     public Boolean isAdmin(String user, String pass) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet=null;
@@ -96,7 +92,10 @@ public class LoginModel {
         }
     }
 
-    public Boolean usernameValid(String username) throws SQLException {
+    /*
+     * return true if username exist
+     */
+    public Boolean usernameExist(String username) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet=null;
         boolean valid = false;
@@ -115,8 +114,6 @@ public class LoginModel {
                 String p = resultSet.getString("password");
                 String ques = resultSet.getString("secret_question");
                 String ans = resultSet.getString("answer");
-                User u = new User(empId, fn, ln, role, un, p, ques, ans);
-                Main.stage.setUserData(u);
                 valid = true;
             }
         }
@@ -128,16 +125,5 @@ public class LoginModel {
             resultSet.close();
         }
         return valid;
-    }
-
-    public Boolean passwordValid(String password) {
-
-        User user = (User) Main.stage.getUserData();
-        if(user.getPassword().equals(password)) {
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 }

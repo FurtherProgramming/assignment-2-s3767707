@@ -7,15 +7,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import main.Main;
+import main.model.LoginModel;
 import main.model.RegisterModel;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-
+/*
+ * Class:		RegisterController
+ * Description:	A class that handles register page
+ * Author:		Anson Go Guang Ping
+ */
 public class RegisterController implements Initializable {
-    public RegisterModel registerModel = new RegisterModel();
+    private RegisterModel registerModel = new RegisterModel();
+    private LoginModel loginModel = new LoginModel();
     public Main main = new Main();
     @FXML
     private TextField txtEmployerId;
@@ -100,7 +106,7 @@ public class RegisterController implements Initializable {
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
             }
-            else if (registerModel.usernameExist(txtUsername.getText())){
+            else if (loginModel.usernameExist(txtUsername.getText())){
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Username exists!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)

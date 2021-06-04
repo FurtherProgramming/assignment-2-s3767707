@@ -2,14 +2,15 @@ package main.model;
 
 import main.Main;
 import main.SQLConnection;
-
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
-
+/*
+ * Class:		AdminEditBookingModel
+ * Description:	The class contains function for admin to add/update/delete bookings
+ * Author:		Anson Go Guang Ping
+ */
 public class AdminEditBookingModel {
 
     Connection connection;
@@ -22,20 +23,14 @@ public class AdminEditBookingModel {
 
     }
 
-    public Boolean isDbConnected(){
-        try {
-            return !connection.isClosed();
-        }
-        catch(Exception e){
-            return false;
-        }
-    }
-
+    /*
+     * get bookings by status and booking date order by booking date
+     */
     public ArrayList<Booking> getUserBookings(String status, LocalDate date) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet=null;
 
-        String query = "select * from booking where status = ? and booking_date > ?";
+        String query = "select * from booking where status = ? and booking_date > ? ORDER BY booking_date";
         try {
 
             preparedStatement = connection.prepareStatement(query);
@@ -66,12 +61,13 @@ public class AdminEditBookingModel {
         return bookings;
     }
 
+    /*
+     * update booking status by booking id
+     */
     public Boolean editBookingStatus(String bookId, String status) throws SQLException {
 
         PreparedStatement preparedStatement = null;
         ResultSet resultSet=null;
-        User user = (User) Main.stage.getUserData();
-        String username = user.getUsername();
         boolean bool = false;
         String query = "UPDATE booking SET status = ? WHERE id = ?;";
         try {
@@ -90,10 +86,12 @@ public class AdminEditBookingModel {
         return bool;
     }
 
+    /*
+     * Update booking status by booking date
+     */
     public Boolean autoRejectBooking(LocalDate date, String status) throws SQLException {
 
         PreparedStatement preparedStatement = null;
-        User user = (User) Main.stage.getUserData();
         boolean bool = false;
         String query = "UPDATE booking SET status = ? WHERE booking_date <= ?;";
         try {
@@ -112,6 +110,9 @@ public class AdminEditBookingModel {
         return bool;
     }
 
+    /*
+     * Delete rejected bookings from database after one week of expire date
+     */
     public Boolean removeBookingFromDatabaseAfter7Days() throws SQLException {
 
         PreparedStatement preparedStatement = null;

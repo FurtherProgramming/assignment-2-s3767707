@@ -1,9 +1,12 @@
 package main.model;
 
-
 import java.time.LocalDate;
 
-
+/*
+ * Class:		Booking
+ * Description:	A class that represents a booking item
+ * Author:		Anson Go Guang Ping
+ */
 public class Booking {
 
     private String bookingId;

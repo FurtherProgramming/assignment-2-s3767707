@@ -10,13 +10,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import main.Main;
 import main.model.*;
-
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+/*
+ * Class:		AdminRemoveAccountController
+ * Description:	A class that handles admin remove account page
+ * Author:		Anson Go Guang Ping
+ */
 public class AdminRemoveAccountController implements Initializable {
 
     private Main main = new Main();
@@ -51,6 +54,7 @@ public class AdminRemoveAccountController implements Initializable {
         setTableColumns();
         User user = (User) Main.stage.getUserData();
         try {
+            // show all accounts in table
             ObservableList<User> populateTableList = FXCollections.observableArrayList(accountManagementModel.getAllUser());
             table.getItems().addAll(populateTableList);
         } catch (SQLException e) {
@@ -78,6 +82,9 @@ public class AdminRemoveAccountController implements Initializable {
         main.change("ui/AccountManagement.fxml");
     }
 
+    /*
+     * Search account by entering username
+     */
     public void Search(ActionEvent event) throws Exception {
 
         User user = accountManagementModel.getUserByUsername(txtUsername.getText());
@@ -131,7 +138,10 @@ public class AdminRemoveAccountController implements Initializable {
             this.selectedRowId = table.getSelectionModel().getSelectedItem().getEmployerId();
     }
 
-    public void deleteBooking(ActionEvent event) throws Exception {
+    /*
+     * handle remove account button
+     */
+    public void deleteAccount(ActionEvent event) throws Exception {
 
         if(table.getSelectionModel().getSelectedItem() != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to remove this account?", ButtonType.YES, ButtonType.NO);
@@ -140,7 +150,9 @@ public class AdminRemoveAccountController implements Initializable {
 
             if (alert.getResult() == ButtonType.YES) {
                 if (isSelectedRowValid(selectedRowId)) {
+                    //remove user and all its bookings from database
                     accountManagementModel.removeAccount(selectedRowId);
+                    accountManagementModel.removeBookings(table.getSelectionModel().getSelectedItem().getUsername());
                     main.change("ui/AdminRemoveAccount.fxml");
                     alert.close();
                 }

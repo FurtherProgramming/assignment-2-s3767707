@@ -5,25 +5,27 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import main.Main;
 import main.model.*;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+/*
+ * Class:		BookingReportController
+ * Description:	A class that handles admin generate booking report page
+ * Author:		Anson Go Guang Ping
+ */
 public class BookingReportController implements Initializable {
 
     private Main main = new Main();
     private AdminReportModel adminReportModel = new AdminReportModel();
+
     @FXML
     public ObservableList<Booking> populateTableList;
     @FXML
@@ -42,6 +44,8 @@ public class BookingReportController implements Initializable {
     private TableView<Booking> table;
     @FXML
     private String selectedRowId;
+    @FXML
+    private DatePicker date;
 
     // Check database connection
     @Override
@@ -52,6 +56,7 @@ public class BookingReportController implements Initializable {
 
 
         try {
+            //show all accepted bookings in table
             populateTableList = FXCollections.observableArrayList(adminReportModel.getAllBookings());
             table.getItems().addAll(populateTableList);
         } catch (SQLException e) {
@@ -102,13 +107,42 @@ public class BookingReportController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you confirm to export Booking table to csv?!", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.YES) {
-            adminReportModel.exportBookingTable();
-            alert.close();
-            main.change("ui/AdminReport.fxml");
+            if(date.getValue() != null) { //if admin enter date
+                adminReportModel.exportBookingTableWithDate(date.getValue()); // export all accepted bookings on that day into csv file
+                alert.close();
+                main.change("ui/AdminReport.fxml");
+            }
+            else {
+                adminReportModel.exportBookingTable(); // export all accepted bookings into csv file
+                alert.close();
+                main.change("ui/AdminReport.fxml");
+            }
         }
         else {
             alert.close();
         }
     }
 
+    public void Search(ActionEvent event) throws Exception {
+
+        if(date.getValue() != null) {
+            table.getItems().clear(); // clear table to avoid stacking
+            // show table of accepted bookings with booking date searched
+            ArrayList<Booking> bookings = adminReportModel.getAllBookingsWithDate(date.getValue());
+            ObservableList<Booking> populateTableList = FXCollections.observableArrayList(bookings);
+            table.getItems().addAll(populateTableList);
+        }
+        else {
+            table.getItems().clear();
+            // show table of all accepted bookings
+            ArrayList<Booking> bookings = adminReportModel.getAllBookings();
+            ObservableList<Booking> populateTableList = FXCollections.observableArrayList(bookings);
+            table.getItems().addAll(populateTableList);
+        }
+    }
+
+    public void Reset(ActionEvent event) throws Exception {
+
+        main.change("ui/BookingReport.fxml");
+    }
 }

@@ -2,14 +2,17 @@ package main.model;
 
 import main.Main;
 import main.SQLConnection;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
-
+/*
+ * Class:		UserEditBookingModel
+ * Description:	A class that handles user edit bookings function
+ * Author:		Anson Go Guang Ping
+ */
 public class UserEditBookingModel {
 
     Connection connection;
@@ -21,21 +24,17 @@ public class UserEditBookingModel {
 
     }
 
-    public Boolean isDbConnected(){
-        try {
-            return !connection.isClosed();
-        }
-        catch(Exception e){
-            return false;
-        }
-    }
-
+    /*
+     * return booking list of username and particular condition (Accepted/Pending/Rejected) order by booking date
+     * Each seat has two session opened for bookings(morning/afternoon)
+     * User can have bookings on two session in the same day so list is returned
+     */
     public ArrayList<Booking> getUserBookings(String username, String status) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet=null;
         ArrayList<Booking> bookings = new ArrayList<Booking>();
 
-        String query = "select * from booking where username = ? and status = ? ";
+        String query = "select * from booking where username = ? and status = ? order by booking_date";
         try {
 
             preparedStatement = connection.prepareStatement(query);
@@ -67,10 +66,12 @@ public class UserEditBookingModel {
         return bookings;
     }
 
-    public Boolean checkHourBeforeDelete(LocalDate date, String time) {
+    /*
+     * check if booking available for removing/updating
+     */
+    public Boolean checkHourBeforeEdit(LocalDate date, String time, LocalDate now, LocalDateTime currentTime) {
 
         boolean valid = false;
-        LocalDate now = LocalDate.now();
         int hour = Integer.parseInt(time)/100;
         long daysBetween = ChronoUnit.DAYS.between(now, date);
         if(daysBetween < 2) {
@@ -80,9 +81,11 @@ public class UserEditBookingModel {
             valid = true;
         }
         else {
-            int hourNow = LocalDateTime.now().getHour();
-            int diff = (24 - hourNow) + 24 + hour;
-            if(diff < 48) {
+            int currentHour = currentTime.getHour();
+            // if difference of days between current day and booking date is 2 days, calculate the difference in hours
+            int diff = (24 - currentHour) + 24 + hour; // today's hours left before midnight + 24hour + midnight to booking time
+            System.out.println(diff);
+            if(diff <= 48) {
                 valid = false;
             }
             else {
@@ -92,11 +95,11 @@ public class UserEditBookingModel {
         return valid;
     }
 
+    /*
+     * remove booking from database with booking id
+     */
     public Boolean deleteBooking(String bookingId) throws SQLException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
-        User user = (User) Main.stage.getUserData();
-        String username = user.getUsername();
         boolean bool = false;
         String query = "DELETE FROM booking WHERE id = ?";
         try {
@@ -111,11 +114,13 @@ public class UserEditBookingModel {
             bool = false;
         }finally {
             preparedStatement.close();
-
         }
         return bool;
     }
 
+    /*
+     * update booking's seat id and booking time
+     */
     public Boolean updateBooking(String bookingId, String seatId, String time) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean bool = false;

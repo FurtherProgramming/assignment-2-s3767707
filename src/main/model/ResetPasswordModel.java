@@ -9,6 +9,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/*
+ * Class:		BookingHolder
+ * Description:	A singleton class that is used to pass booking information between scenes
+ * Author:		Anson Go Guang Ping
+ */
 public class ResetPasswordModel {
 
     Connection connection;
@@ -21,18 +26,13 @@ public class ResetPasswordModel {
 
     }
 
-    public Boolean isDbConnected(){
-        try {
-            return !connection.isClosed();
-        }
-        catch(Exception e){
-            return false;
-        }
-    }
-
-    public Boolean validateUsername(String username) throws SQLException {
+    /*
+     * return true if username valid
+     */
+    public User validateUsername(String username) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet=null;
+        User user = null;
         String query = "select * from employee where username = ?";
         try {
 
@@ -48,28 +48,25 @@ public class ResetPasswordModel {
                 String pass = resultSet.getString("password");
                 String ques = resultSet.getString("secret_question");
                 String ans = resultSet.getString("answer");
-                User user = new User(empId, fn, ln, role, un, pass, ques, ans);
-                Main.stage.setUserData(user);
-                return true;
-            }
-            else{
-                return false;
+                user = new User(empId, fn, ln, role, un, pass, ques, ans);
             }
         }
         catch (Exception e)
         {
-            return false;
+            e.printStackTrace();
         }finally {
            preparedStatement.close();
            resultSet.close();
         }
-
+        return user;
     }
 
-    public Boolean validateAnswer(String answer) {
+    /*
+     * return true if answer matches secret question
+     */
+    public Boolean validateAnswer(String answer, String txtAnswer) {
 
-        User user = (User) Main.stage.getUserData();
-        if(user.getAnswer().equals(answer)) {
+        if(answer.equals(txtAnswer)) {
             return true;
         }
         else {
@@ -77,6 +74,9 @@ public class ResetPasswordModel {
         }
     }
 
+    /*
+     * generates random password
+     */
     public String generateRandomPassword(int len)
     {
 
@@ -94,11 +94,11 @@ public class ResetPasswordModel {
         return sb.toString();
     }
 
-    public Boolean updatePassword(String password) throws SQLException {
+    /*
+     * return true if password updated successfully
+     */
+    public Boolean updatePassword(String username, String password) throws SQLException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
-        User user = (User) Main.stage.getUserData();
-        String username = user.getUsername();
         boolean bool = false;
         String query = "UPDATE Employee SET password = ? WHERE username = ?;";
         try {

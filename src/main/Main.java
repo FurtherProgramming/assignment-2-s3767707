@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
@@ -13,7 +14,11 @@ import javafx.stage.Stage;
 import main.model.*;
 import java.util.ArrayList;
 
-
+/*
+ * Class:		Main
+ * Description:	A class that handles passing of parameter between scenes, preset scene visuals and run main application
+ * Author:		Anson Go Guang Ping
+ */
 public class Main extends Application {
 
     public static Stage stage = new Stage();
@@ -37,15 +42,18 @@ public class Main extends Application {
         stage.show();
     }
 
+    /*
+     * pass account instance between scenes and set scene visuals
+     */
     public void passAccount(String path, User user) throws Exception {
 
         Parent root = FXMLLoader.load(getClass().getResource(path));
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        //stage.hide();
         stage.show();
         AccountHolder holder = AccountHolder.getInstance();
         holder.setAccount(user);
+        // preview of account details when rendering AdminUpdateAccount page
         if(user != null) {
             TextField t = (TextField) scene.lookup("#txtEmployerId");
             if(t != null) {
@@ -82,31 +90,45 @@ public class Main extends Application {
         }
     }
 
-    public void setSeatColor(String path, ArrayList<String> allSeats, ArrayList<String> seats) throws Exception {
+
+
+    /*
+     * set seat colour after setting COVID condition
+     */
+    public void setSeatColorInSeatManagement(String path, ArrayList<Seat> allSeats) throws Exception {
 
         Parent root = FXMLLoader.load(getClass().getResource(path));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+        ChoiceBox condition = (ChoiceBox) scene.lookup("#condition");
+        DatePicker startDate = (DatePicker) scene.lookup("#startDate");
+        DatePicker endDate = (DatePicker) scene.lookup("#endDate");
 
-        for(String seat : allSeats) {
-            if(seat != null) {
-                String seatId = "#" + seat;
+        for(Seat seat : allSeats) {
+            if(seat.getCondition().equals("Normal")) {
+                condition.setValue(seat.getCondition());
+                String seatId = "#" + seat.getSeatId();
                 Rectangle rectangle = (Rectangle) scene.lookup(seatId);
                 rectangle.setFill(Color.LIGHTGREEN);
             }
-        }
-        for(String seat : seats) {
-            if(seat != null) {
-                String seatId = "#" + seat;
+            else {
+                if(seat.getSeatId().equals("2")) {
+                    condition.setValue(seat.getCondition());
+                    startDate.setValue(seat.getStartDate());
+                    endDate.setValue(seat.getEndDate());
+                }
+                String seatId = "#" + seat.getSeatId();
                 Rectangle rectangle = (Rectangle) scene.lookup(seatId);
                 rectangle.setFill(Color.ORANGE);
             }
         }
     }
 
-
-    public void displaySeatsWithCondition(String path, Booking booking, ArrayList<String> seats, ArrayList<String> seatIds, ArrayList<String> seatCd) throws Exception {
+    /*
+     * set seats colour of booking scenes after applying COVID conditions
+     */
+    public void displaySeatsWithCondition(String path, Booking booking, ArrayList<String> seats, ArrayList<String> seatIds, ArrayList<Seat> seatCd) throws Exception {
 
         Parent root = FXMLLoader.load(getClass().getResource(path));
         BookingHolder holder = BookingHolder.getInstance();
@@ -137,11 +159,13 @@ public class Main extends Application {
             }
         }
         if (seatCd != null) {
-            for (String seat : seatCd) {
-                if (seat != null) {
-                    String seatId = "#" + seat;
-                    Rectangle rectangle = (Rectangle) scene.lookup(seatId);
-                    rectangle.setFill(Color.ORANGE);
+            for (Seat seat : seatCd) {
+                if(!booking.getBookingDate().isBefore(seat.getStartDate()) && !booking.getBookingDate().isAfter(seat.getEndDate())) {
+                    if (seat.getCondition().equals("Restriction") || seat.getCondition().equals("Lockdown")) {
+                        String seatId = "#" + seat.getSeatId();
+                        Rectangle rectangle = (Rectangle) scene.lookup(seatId);
+                        rectangle.setFill(Color.ORANGE);
+                    }
                 }
             }
         }

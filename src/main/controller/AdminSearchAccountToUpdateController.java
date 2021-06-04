@@ -10,14 +10,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import main.Main;
 import main.model.AccountManagementModel;
-import main.model.ResetPasswordModel;
 import main.model.User;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+/*
+ * Class:		AdminSearchAccountToUpdateController
+ * Description:	A class that enables admin to search account by username for update
+ * Author:		Anson Go Guang Ping
+ */
 public class AdminSearchAccountToUpdateController implements Initializable {
     private Main main = new Main();
     private AccountManagementModel accountManagementModel = new AccountManagementModel();
@@ -44,12 +47,12 @@ public class AdminSearchAccountToUpdateController implements Initializable {
     @FXML
     private TextField txtUsername;
 
-    // Check database connection
     @Override
     public void initialize(URL location, ResourceBundle resources){
 
         setTableColumns();
         try {
+            // add all account into table
             ObservableList<User> populateTableList = FXCollections.observableArrayList(accountManagementModel.getAllUser());
             table.getItems().addAll(populateTableList);
         } catch (SQLException e) {
@@ -98,6 +101,9 @@ public class AdminSearchAccountToUpdateController implements Initializable {
 
     }
 
+    /*
+     * reset search result and show all accounts in table
+     */
     public void Reset(ActionEvent event) throws Exception {
 
         main.change("ui/AdminSearchAccountToUpdate.fxml");
@@ -130,6 +136,9 @@ public class AdminSearchAccountToUpdateController implements Initializable {
             this.selectedRowId = table.getSelectionModel().getSelectedItem().getEmployerId();
     }
 
+    /*
+     * directs admin to update account page if a table row is selected
+     */
     public void UpdateBooking(ActionEvent event) throws Exception {
 
         if(table.getSelectionModel().getSelectedItem() != null) {

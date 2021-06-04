@@ -8,6 +8,11 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+/*
+ * Class:		SeatManagementModel
+ * Description:	A class that handles COVID seat management
+ * Author:		Anson Go Guang Ping
+ */
 public class SeatManagementModel {
 
     Connection connection;
@@ -20,21 +25,16 @@ public class SeatManagementModel {
 
     }
 
-    public Boolean isDbConnected(){
-        try {
-            return !connection.isClosed();
-        }
-        catch(Exception e){
-            return false;
-        }
-    }
-
+    /*
+     * update seat condition and duration based on COVID condition picked
+     */
     public Boolean updateSeat(String condition, LocalDate startDate, LocalDate endDate) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean bool = false;
+        //if condition equals to "Restriction", locks seats in between
         if(condition.equals("Restriction")) {
             String query = "UPDATE Seat SET condition = ?, start_date = ?, end_date = ? WHERE status = ?;";
-            String query2 = "UPDATE Seat SET condition = ?, start_date = ?, end_date = ? WHERE status = ?;";
+            String query2 = "UPDATE Seat SET condition = ?, start_date = 0, end_date = 0 WHERE status = ?;";
             try {
                 preparedStatement = connection.prepareStatement(query);
                 preparedStatement.setString(1, condition);
@@ -44,9 +44,7 @@ public class SeatManagementModel {
                 preparedStatement.executeUpdate();
                 preparedStatement = connection.prepareStatement(query2);
                 preparedStatement.setString(1, "Normal");
-                preparedStatement.setDate(2, null);
-                preparedStatement.setDate(3, null);
-                preparedStatement.setInt(4, 1);
+                preparedStatement.setInt(2, 1);
                 preparedStatement.executeUpdate();
                 bool = true;
             }
@@ -58,6 +56,7 @@ public class SeatManagementModel {
 
             }
         }
+        //if conditions = "Lockdown", locks all seats
         else {
             String query = "UPDATE Seat SET condition = ?, start_date = ?, end_date = ? ";
             try {
@@ -78,6 +77,9 @@ public class SeatManagementModel {
         return bool;
     }
 
+    /*
+     * get seat id based on COVID condition
+     */
     public ArrayList<String> getSeatId(String condition) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet=null;
@@ -86,7 +88,6 @@ public class SeatManagementModel {
             if(condition.equals("Restriction")) {
                 String query = "select * from seat where status = ? ";
                 try {
-
                     preparedStatement = connection.prepareStatement(query);
                     preparedStatement.setInt(1, 0);
                     resultSet = preparedStatement.executeQuery();
@@ -102,7 +103,7 @@ public class SeatManagementModel {
                     resultSet.close();
                 }
             }
-            else {
+            if(condition.equals("Lockdown")) {
                 String query = "select * from seat ";
                 try {
 
@@ -120,10 +121,16 @@ public class SeatManagementModel {
                     resultSet.close();
                 }
             }
+            else {
+                seatIds = null;
+            }
         }
         return seatIds;
     }
 
+    /*
+     * get booking id affected by COVID condition
+     */
     public ArrayList<String> getBookingIdAffectedByCondition(String condition, LocalDate startDate, LocalDate endDate) throws SQLException {
 
         PreparedStatement preparedStatement = null;
@@ -171,14 +178,16 @@ public class SeatManagementModel {
         return seatIds;
     }
 
+    /*
+     * reset the conditions of all seats, i.e. unlock all seats
+     */
     public Boolean resetCondition() throws SQLException {
         PreparedStatement preparedStatement = null;
-        User user = (User) Main.stage.getUserData();
-        String username = user.getUsername();
         boolean bool = false;
-        String query = "UPDATE seat set condition = null, start_date = null, end_date = null where id in (select id from Seat)";
+        String query = "UPDATE seat set condition = ?, start_date = 0, end_date = 0 ";
         try {
             preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, "Normal");
             preparedStatement.executeUpdate();
             bool = true;
         }
@@ -192,40 +201,26 @@ public class SeatManagementModel {
         return bool;
     }
 
-    public String getCondition() throws SQLException {
+    /*
+     * get all Seats
+     */
+    public ArrayList<Seat> getAllSeats() throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet=null;
-        String condition = null;
-        String query = "select * from seat where status = 0 LIMIT 1";
-        try {
-
-            preparedStatement = connection.prepareStatement(query);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                condition = resultSet.getString("condition");
-            }
-        }
-        catch (Exception e)
-        {
-           e.printStackTrace();
-        }finally {
-            preparedStatement.close();
-            resultSet.close();
-        }
-        return condition;
-    }
-
-    public ArrayList<String> getAllSeats() throws SQLException {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
-        ArrayList<String> seats = new ArrayList<String>();
+        ArrayList<Seat> seats = new ArrayList<Seat>();
         String query = "select * from seat ";
         try {
 
             preparedStatement = connection.prepareStatement(query);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                seats.add(resultSet.getString("id"));
+                String seatId = resultSet.getString("id");
+                String status = resultSet.getString("status");
+                String condition = resultSet.getString("condition");
+                LocalDate startDate = resultSet.getDate("start_date").toLocalDate();
+                LocalDate endDate = resultSet.getDate("end_date").toLocalDate();
+                Seat seat = new Seat(seatId, status, condition, startDate, endDate);
+                seats.add(seat);
             }
         }
         catch (Exception e)
@@ -237,4 +232,6 @@ public class SeatManagementModel {
         }
         return seats;
     }
+
+
 }

@@ -7,6 +7,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/*
+ * Class:		BookingHolder
+ * Description:	A singleton class that is used to pass booking information between scenes
+ * Author:		Anson Go Guang Ping
+ */
 public class RegisterModel {
 
     Connection connection;
@@ -19,40 +24,9 @@ public class RegisterModel {
 
     }
 
-    public Boolean isDbConnected(){
-        try {
-            return !connection.isClosed();
-        }
-        catch(Exception e){
-            return false;
-        }
-    }
-
-    public Boolean usernameExist(String username) throws SQLException {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        String query = "select * from employee where username = ?";
-        try {
-
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, username);
-
-            resultSet = preparedStatement.executeQuery();
-            return resultSet.next();
-        }
-        catch (Exception e)
-        {
-            return false;
-        }finally {
-            if(preparedStatement != null && resultSet != null) {
-                preparedStatement.close();
-                resultSet.close();
-            }
-
-        }
-
-    }
-
+    /*
+     * return if employer id exist
+     */
     public Boolean employerIdExist(String employerId) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -78,6 +52,9 @@ public class RegisterModel {
 
     }
 
+    /*
+     * register new account and update the database
+     */
     public Boolean register(String empId, String fn, String ln, String role, String un, String pass, String ques, String ans) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean bool = false;

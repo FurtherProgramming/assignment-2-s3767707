@@ -6,10 +6,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import main.Main;
 import main.model.User;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/*
+ * Class:		AdminProfileController
+ * Description:	A class that handles admin profile page
+ * Author:		Anson Go Guang Ping
+ */
 public class AdminProfileController implements Initializable {
 
     private Main main = new Main();

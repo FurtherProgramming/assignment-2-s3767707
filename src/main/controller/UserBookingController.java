@@ -10,18 +10,21 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import main.Main;
-import main.model.Booking;
-import main.model.BookingHolder;
-import main.model.User;
-import main.model.UserBookingModel;
+import main.model.*;
 import java.net.URL;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+/*
+ * Class:		UserBookingController
+ * Description:	A class that handles user book seats function
+ * Author:		Anson Go Guang Ping
+ */
 public class UserBookingController implements Initializable {
     private UserBookingModel userBookingModel = new UserBookingModel();
+    private SeatManagementModel seatManagementModel = new SeatManagementModel();
     private Main main = new Main();
     private ArrayList<String> seats = new ArrayList<String>();
     private ArrayList<String> allSeatId = new ArrayList<String>();
@@ -29,7 +32,7 @@ public class UserBookingController implements Initializable {
     @FXML
     private DatePicker datePicker;
     @FXML
-    private ChoiceBox time;
+    private ChoiceBox book_time;
 
     // Check database connection
     @Override
@@ -45,7 +48,7 @@ public class UserBookingController implements Initializable {
         times.add("0800");
         times.add("1400");
         timeList.addAll(times);
-        time.getItems().addAll(timeList);
+        book_time.getItems().addAll(timeList);
     }
     public void Profile(ActionEvent event) throws Exception {
 
@@ -64,59 +67,50 @@ public class UserBookingController implements Initializable {
     }
 
 
+
     public void Search(ActionEvent event) throws Exception {
 
-
-        boolean dateEqualStart = datePicker.getValue().isEqual(userBookingModel.getConditionStartDate());
-        boolean dateEqualEnd = datePicker.getValue().isEqual(userBookingModel.getConditionEndDate());
-        boolean dateBetween = datePicker.getValue().isAfter(userBookingModel.getConditionStartDate()) && datePicker.getValue().isBefore(userBookingModel.getConditionEndDate());
-
-        if(datePicker.getValue() == null) {
-
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Pick your date!", ButtonType.CLOSE);
-            alert.showAndWait();
-            if (alert.getResult() == ButtonType.CLOSE) {
-                alert.close();
-                main.change("ui/UserBooking.fxml");
-            }
-        }
-        else if(time.getValue() == null) {
-
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Pick your time!", ButtonType.CLOSE);
-            alert.showAndWait();
-            if (alert.getResult() == ButtonType.CLOSE) {
-                alert.close();
-            }
-        }
-        else {
-            if(userBookingModel.validateDate(datePicker.getValue())) {
-                if(!user.getUsername().equals(userBookingModel.validateMultipleBookings(datePicker.getValue(), time.getValue().toString()))) {
-                    String username = user.getUsername();
-                    LocalDate date = datePicker.getValue();
-                    String time2 = time.getValue().toString();
-                    String status = "Pending";
-                    Booking booking = new Booking(null,username,null,date,status,time2,"N");
-                    String seatId = userBookingModel.previousBooking(user.getUsername());
-                    ArrayList<String> temps = new ArrayList<String>();
-                    temps = userBookingModel.isBooked(date, time2);
-                    seats.add(seatId);
-                    ArrayList<String> seatIds = userBookingModel.allSeatId();
-                    for(String temp : temps) {
-                        seats.add(temp);
+        if(datePicker.getValue() != null) { // if date choosed
+            if(book_time.getValue() != null) { //if book time choosed
+                if(datePicker.getValue().isAfter(LocalDate.now())) {//if date choosed is after current date
+                    if(!userBookingModel.UsernameExistInList(user.getUsername(), datePicker.getValue(), book_time.getValue().toString())) {// user can only have one bookings per session, applies to pending  bookings too to avoid spamming
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Click on seats to book!", ButtonType.CLOSE);
+                        alert.showAndWait();
+                        if (alert.getResult() == ButtonType.CLOSE) {
+                            alert.close();
+                        }
+                        Booking booking = new Booking(null, user.getUsername(), null, datePicker.getValue(), "Pending", book_time.getValue().toString(), "N");
+                        ArrayList<String> bookedSeats = userBookingModel.isBooked(datePicker.getValue(), book_time.getValue().toString());
+                        bookedSeats.add(userBookingModel.previousBooking(user.getUsername()));// user cannot book the same seat as previous bookings
+                        // get seats beside same Employees that have been sitten previously
+                        Booking prevBooking = userBookingModel.previousSit(user.getUsername());
+                        if(prevBooking != null) {
+                            ArrayList<String> usernames = userBookingModel.getAdjacentUserOfPreviousSit(prevBooking.getBookingDate(), prevBooking.getBookingTime(), prevBooking.getSeatId());
+                            if(usernames != null) {
+                                ArrayList<String> SeatsBookedByPrevUsers = userBookingModel.getSeatsOfPreviousAdjacentUser(datePicker.getValue(), book_time.getValue().toString(), usernames);
+                                ArrayList<String> SeatsBesidePrevUsers = userBookingModel.SeatsBesidePrevUser(SeatsBookedByPrevUsers);
+                                for(String s : SeatsBesidePrevUsers) {
+                                    bookedSeats.add(s);
+                                }
+                            }
+                        }
+                        ArrayList<String> allSeats = userBookingModel.allSeatId();
+                        // get locked seats due to COVID
+                        ArrayList<Seat> lockedSeat = seatManagementModel.getAllSeats();
+                        // All Booked seat, user previous booked seat and seats affected by COVID are stored in arrays and change seat color based on arrays' elements
+                        main.displaySeatsWithCondition("ui/UserBooking.fxml", booking, bookedSeats, allSeats, lockedSeat);
                     }
-                    if(dateEqualStart || dateEqualEnd || dateBetween) {
-                        ArrayList<String> id = userBookingModel.getSeatIdAffectedByCondition();
-                        main.displaySeatsWithCondition("ui/UserBooking.fxml", booking, seats, seatIds, id);
-                    }
-
                     else {
-
-                        ArrayList<String> id = null;
-                        main.displaySeatsWithCondition("ui/UserBooking.fxml", booking, seats, seatIds, id);
+                        Alert alert = new Alert(Alert.AlertType.ERROR, "Multiple bookings in a session not allowed!", ButtonType.CLOSE);
+                        alert.showAndWait();
+                        if (alert.getResult() == ButtonType.CLOSE) {
+                            alert.close();
+                            main.change("ui/UserBooking.fxml");
+                        }
                     }
                 }
                 else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR, "You can only book one seat per session!", ButtonType.CLOSE);
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Booking date cannot be today or past!", ButtonType.CLOSE);
                     alert.showAndWait();
                     if (alert.getResult() == ButtonType.CLOSE) {
                         alert.close();
@@ -125,7 +119,7 @@ public class UserBookingController implements Initializable {
                 }
             }
             else {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Date is invalid!", ButtonType.CLOSE);
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Pick booking time!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE) {
                     alert.close();
@@ -133,13 +127,31 @@ public class UserBookingController implements Initializable {
                 }
             }
         }
+        else {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Pick booking date!", ButtonType.CLOSE);
+            alert.showAndWait();
+            if (alert.getResult() == ButtonType.CLOSE) {
+                alert.close();
+                main.change("ui/UserBooking.fxml");
+            }
+        }
     }
 
+    /*
+     * User can only book green seats, clicking orange and red seat will show error message
+     */
     public void Book(MouseEvent event) throws Exception {
 
         Rectangle rectangle = (Rectangle) event.getSource();
-        if(rectangle.getFill() == Color.RED || rectangle.getFill() == Color.ORANGE) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Seat unavailable. Please pick again!", ButtonType.CLOSE);
+        if(rectangle.getFill() == Color.RED) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Seat booked. Please pick again!", ButtonType.CLOSE);
+            alert.showAndWait();
+            if (alert.getResult() == ButtonType.CLOSE) {
+                alert.close();
+            }
+        }
+        else if(rectangle.getFill() == Color.ORANGE) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Seat locked. Please pick again!", ButtonType.CLOSE);
             alert.showAndWait();
             if (alert.getResult() == ButtonType.CLOSE) {
                 alert.close();
@@ -153,7 +165,6 @@ public class UserBookingController implements Initializable {
             }
         }
         else {
-            //String str = String.format("%s\n%s%s\n%s%s\n%s%s", "Confirm Booking?", "Seat id: ", booking.getSeatId(), "Booking date: ", booking.getBookingDate(), "Booking Time: ", booking.getTime());
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Confirm booking?", ButtonType.YES, ButtonType.NO);
             alert.showAndWait();
             if (alert.getResult() == ButtonType.YES) {
@@ -174,6 +185,9 @@ public class UserBookingController implements Initializable {
         }
     }
 
+    /*
+     * generate random string for booking id
+     */
     public String generateId(int len)
     {
 

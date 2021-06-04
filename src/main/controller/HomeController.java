@@ -4,12 +4,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import main.Main;
 import main.model.AdminEditBookingModel;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
+/*
+ * Class:		HomeController
+ * Description:	A class that handles home page
+ * Author:		Anson Go Guang Ping
+ */
 public class HomeController implements Initializable {
 
     private Main main = new Main();
@@ -19,8 +23,8 @@ public class HomeController implements Initializable {
     public void initialize(URL location, ResourceBundle resources){
 
         try {
-            adminEditBookingModel.autoRejectBooking(LocalDate.now(), "Rejected");
-            adminEditBookingModel.removeBookingFromDatabaseAfter7Days();
+            adminEditBookingModel.autoRejectBooking(LocalDate.now(), "Rejected"); // booking id auto rejected after mid
+            //adminEditBookingModel.removeBookingFromDatabaseAfter7Days();
         } catch (SQLException e) {
             e.printStackTrace();
         }

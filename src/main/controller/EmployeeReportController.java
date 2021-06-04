@@ -7,16 +7,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import main.Main;
 import main.model.AccountManagementModel;
 import main.model.AdminReportModel;
 import main.model.User;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/*
+ * Class:		EmployeeReportController
+ * Description:	A class that handles admin generate employee report page
+ * Author:		Anson Go Guang Ping
+ */
 public class EmployeeReportController implements Initializable {
     private Main main = new Main();
     private AccountManagementModel accountManagementModel = new AccountManagementModel();
@@ -47,6 +50,7 @@ public class EmployeeReportController implements Initializable {
 
         setTableColumns();
         try {
+            // show table of all users
             ObservableList<User> populateTableList = FXCollections.observableArrayList(accountManagementModel.getAllUser());
             table.getItems().addAll(populateTableList);
         } catch (SQLException e) {

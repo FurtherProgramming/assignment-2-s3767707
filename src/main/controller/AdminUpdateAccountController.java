@@ -14,27 +14,26 @@ import main.model.AccountHolder;
 import main.model.AccountManagementModel;
 import main.model.RegisterModel;
 import main.model.User;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-
+/*
+ * Class:		AdminUpdateAccountController
+ * Description:	A class that handles user update account details page
+ * Author:		Anson Go Guang Ping
+ */
 public class AdminUpdateAccountController implements Initializable {
     public AccountManagementModel accountManagementModel = new AccountManagementModel();
     private RegisterModel registerModel = new RegisterModel();
     public Main main = new Main();
-    @FXML
-    private TextField txtEmployerId;
     @FXML
     private TextField txtFirstname;
     @FXML
     private TextField txtLastname;
     @FXML
     private ChoiceBox<String> txtRole;
-    @FXML
-    private TextField txtUsername;
     @FXML
     private TextField txtPassword;
     @FXML
@@ -65,79 +64,68 @@ public class AdminUpdateAccountController implements Initializable {
         txtSecretQuestion.getItems().addAll(secretQuestion);
     }
 
+    /*
+     * Enter account details to update
+     */
     public void UpdateAccount(ActionEvent event) throws Exception{
 
         try {
-            if (txtEmployerId.getText().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Employer id is required!", ButtonType.CLOSE);
-                alert.showAndWait();
-                if (alert.getResult() == ButtonType.CLOSE)
-                    alert.close();
-            }
-            else if (txtFirstname.getText().isEmpty()) {
+
+            // if first name is empty, show error message
+            if (txtFirstname.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "First name is required!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
             }
+            // if last name is empty, show error message
             else if (txtLastname.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Last name is required!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
             }
+            // if role is empty, show error message
             else if (txtRole.getValue() == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Role is required!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
             }
-            else if (txtUsername.getText().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Username is required!", ButtonType.CLOSE);
-                alert.showAndWait();
-                if (alert.getResult() == ButtonType.CLOSE)
-                    alert.close();
-            }
+            // if password is empty, show error message
             else if (txtPassword.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Password is required!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
             }
+            // if secret question is empty, show error message
             else if (txtSecretQuestion.getValue() == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Pick a secret question!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
             }
+            // if answer is empty, show error message
             else if (txtAnswer.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Answer for secret question is required!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
             }
-            else if (accountManagementModel.empIdValid(txtEmployerId.getText())){
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Employer id exists!", ButtonType.CLOSE);
-                alert.showAndWait();
-                if (alert.getResult() == ButtonType.CLOSE)
-                    alert.close();
-            }
-            else if (accountManagementModel.usernameValid(txtUsername.getText())){
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Username exists!", ButtonType.CLOSE);
-                alert.showAndWait();
-                if (alert.getResult() == ButtonType.CLOSE)
-                    alert.close();
-            }
             else{
+                // remove account first and add account again in database so same username can be reused
+                // (employer id and username is unique)
+                // Empoyer id and username cannot be changed
                 AccountHolder holder = AccountHolder.getInstance();
                 User user = holder.getAccount();
-                accountManagementModel.removeAccount(user.getEmployerId());
-                registerModel.register(txtEmployerId.getText(), txtFirstname.getText(), txtLastname.getText(), txtRole.getValue(), txtUsername.getText(), txtPassword.getText(), txtSecretQuestion.getValue(), txtAnswer.getText());
+                accountManagementModel.updateAccount(user.getEmployerId(), txtFirstname.getText(), txtLastname.getText(), txtRole.getValue(), txtPassword.getText(), txtSecretQuestion.getValue(), txtAnswer.getText());
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Update account successfully!", ButtonType.CLOSE);
                 alert.showAndWait();
-                if (alert.getResult() == ButtonType.CLOSE)
+                if (alert.getResult() == ButtonType.CLOSE) {
                     alert.close();
-                main.change("ui/AccountManagement.fxml");
+                    main.change("ui/AccountManagement.fxml");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

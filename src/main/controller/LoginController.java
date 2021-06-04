@@ -8,10 +8,17 @@ import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 import main.Main;
 import main.model.LoginModel;
+import main.model.User;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/*
+ * Class:		LoginController
+ * Description:	A class that handles login page
+ * Author:		Anson Go Guang Ping
+ */
 public class LoginController implements Initializable {
     private LoginModel loginModel = new LoginModel();
     private Main main = new Main();
@@ -26,14 +33,18 @@ public class LoginController implements Initializable {
     public void initialize(URL location, ResourceBundle resources){
 
     }
-    /* login Action method
-       check if user input is the same as database.
+    /*
+     * login Action method
+     * check if user input is the same as database.
      */
     public void Login(ActionEvent event){
 
         try {
-            if (loginModel.isLogin(txtUsername.getText(),txtPassword.getText())){
-                if(loginModel.isAdmin(txtUsername.getText(), txtPassword.getText())) {
+            User u = loginModel.isLogin(txtUsername.getText(),txtPassword.getText());
+            if (u != null){ // if username and password is valid
+                Main.stage.setUserData(u); // set current user as the object to be pass between scenes
+                if(loginModel.isAdmin(txtUsername.getText(), txtPassword.getText())) { // if employee is admin
+                    //admin can choose to login as normal user or admin
                     ButtonType admin = new ButtonType("ADMIN");
                     ButtonType user = new ButtonType("USER");
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Choose your account type", admin, user);
@@ -51,7 +62,7 @@ public class LoginController implements Initializable {
                 }
 
             }else{
-                if(loginModel.usernameValid(txtUsername.getText())) {
+                if(loginModel.usernameExist(txtUsername.getText())) { // username exist so password must be incorrect
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Password is invalid!", ButtonType.CLOSE);
                     alert.showAndWait();
                     if (alert.getResult() == ButtonType.CLOSE) {

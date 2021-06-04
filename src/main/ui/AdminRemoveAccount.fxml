@@ -39,7 +39,7 @@
                 <TableColumn fx:id="answer" prefWidth="96.0" text="Answer" />
             </columns>
         </TableView>
-        <Button fx:id="cancelBookingButton" layoutY="436.0" mnemonicParsing="false" onAction="#deleteBooking" prefHeight="31.0" prefWidth="845.0" text="Remove" />
+        <Button fx:id="cancelBookingButton" layoutY="436.0" mnemonicParsing="false" onAction="#deleteAccount" prefHeight="31.0" prefWidth="845.0" text="Remove" />
       <ToolBar layoutX="1.0" prefHeight="45.0" prefWidth="845.0">
          <items>
             <Button mnemonicParsing="false" onAction="#Home" prefHeight="31.0" prefWidth="70.0" text="Home" />

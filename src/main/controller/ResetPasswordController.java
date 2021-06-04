@@ -8,9 +8,16 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import main.Main;
 import main.model.ResetPasswordModel;
+import main.model.User;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/*
+ * Class:		ResetPasswordController
+ * Description:	A class that handles reset password page
+ * Author:		Anson Go Guang Ping
+ */
 public class ResetPasswordController implements Initializable {
     private ResetPasswordModel resetPasswordModel = new ResetPasswordModel();
     private Main main = new Main();
@@ -29,7 +36,10 @@ public class ResetPasswordController implements Initializable {
     public void ValidateUsername(ActionEvent event){
 
         try {
-            if (resetPasswordModel.validateUsername(txtUsername.getText())){
+            // user need to enter username before accessing their secret question
+            User user = resetPasswordModel.validateUsername(txtUsername.getText());
+            if (user != null){
+                Main.stage.setUserData(user);
                 main.change("ui/SecretQuestion.fxml");
             }else{
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Username is invalid!", ButtonType.CLOSE);

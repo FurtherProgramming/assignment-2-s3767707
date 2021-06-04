@@ -6,10 +6,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import main.Main;
 import main.model.User;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/*
+ * Class:		UserProfileController
+ * Description:	A class that handles user profile page
+ * Author:		Anson Go Guang Ping
+ */
 public class UserProfileController implements Initializable {
 
     private Main main = new Main();
@@ -45,7 +49,7 @@ public class UserProfileController implements Initializable {
 
     public void CancelBooking(ActionEvent actionEvent) throws Exception {
 
-        main.change("ui/UserRemoveBooking.fxml");
+        main.change("ui/UserCancelBooking.fxml");
     }
 
     public void CheckIn(ActionEvent event) throws Exception {

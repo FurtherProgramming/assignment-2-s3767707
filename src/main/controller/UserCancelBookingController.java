@@ -9,22 +9,27 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import main.Main;
-import main.model.Booking;
-import main.model.User;
-import main.model.UserBookingModel;
-import main.model.UserEditBookingModel;
+import main.model.*;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class UserRemoveBookingController implements Initializable {
+/*
+ * Class:		UserCancelBookingController
+ * Description:	A class that handles user cancel booking page
+ * Author:		Anson Go Guang Ping
+ */
+public class UserCancelBookingController implements Initializable {
 
     private Main main = new Main();
     private UserEditBookingModel userEditBookingModel = new UserEditBookingModel();
+    private AdminEditBookingModel adminEditBookingModel = new AdminEditBookingModel();
     private UserBookingModel userBookingModel = new UserBookingModel();
     private ArrayList<String> seats = new ArrayList<String>();
+    private SeatManagementModel seatManagementModel = new SeatManagementModel();
     @FXML
     private TableColumn<Booking, String> bookingId;
     @FXML
@@ -53,6 +58,7 @@ public class UserRemoveBookingController implements Initializable {
 
 
         try {
+            // sort the table from booking status "Accepted"->"Pending"->"Rejected" after each cancellation
             ObservableList<Booking> populateTableListAccepted = FXCollections.observableArrayList(userEditBookingModel.getUserBookings(user.getUsername(), "Accepted"));
             ObservableList<Booking> populateTableListPending = FXCollections.observableArrayList(userEditBookingModel.getUserBookings(user.getUsername(), "Pending"));
             ObservableList<Booking> populateTableListRejected = FXCollections.observableArrayList(userEditBookingModel.getUserBookings(user.getUsername(), "Rejected"));
@@ -119,9 +125,9 @@ public class UserRemoveBookingController implements Initializable {
         return dateComparison >= 0 ? true : false;
     }
 
-    public void deleteBooking(ActionEvent event) throws Exception {
+    public void CancelBooking(ActionEvent event) throws Exception {
 
-        if(table.getSelectionModel().getSelectedItem() != null) {
+        if(table.getSelectionModel().getSelectedItem() != null) { // if no item selected
             boolean validStatus = table.getSelectionModel().getSelectedItem().getStatus().equals("Accepted") || table.getSelectionModel().getSelectedItem().getStatus().equals("Pending");
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to cancel this booking?", ButtonType.YES, ButtonType.NO);
             alert.showAndWait();
@@ -129,11 +135,11 @@ public class UserRemoveBookingController implements Initializable {
 
             if (alert.getResult() == ButtonType.YES) {
                 if (isSelectedRowValid(selectedRowId)) {
-                    if (validStatus) {
+                    if (validStatus) { // user can only cancel "Pending" or "Accepted" bookings
                         if (validateBookingCancellation()) { // comparing booking's date with the current date
-                            if(userEditBookingModel.checkHourBeforeDelete(table.getSelectionModel().getSelectedItem().getBookingDate(), table.getSelectionModel().getSelectedItem().getBookingTime())) {
-                                userEditBookingModel.deleteBooking(selectedRowId);
-                                main.change("ui/UserRemoveBooking.fxml");
+                            if(userEditBookingModel.checkHourBeforeEdit(table.getSelectionModel().getSelectedItem().getBookingDate(), table.getSelectionModel().getSelectedItem().getBookingTime(), LocalDate.now(), LocalDateTime.now())) { // check if changes is not within 48 hours of booking date
+                                adminEditBookingModel.editBookingStatus(selectedRowId, "Rejected");
+                                main.change("ui/UserCancelBooking.fxml");
                                 alert.close();
                             }
                             else {
@@ -185,9 +191,9 @@ public class UserRemoveBookingController implements Initializable {
             // if the user clicks OK
             if (alert.getResult() == ButtonType.YES) {
                 if (isSelectedRowValid(selectedRowId)) {
-                    if (validStatus) {
+                    if (validStatus) { // user can only update pending bookings
                         if (validateBookingCancellation()) {
-                            if(userEditBookingModel.checkHourBeforeDelete(table.getSelectionModel().getSelectedItem().getBookingDate(), table.getSelectionModel().getSelectedItem().getBookingTime())) {
+                            if(userEditBookingModel.checkHourBeforeEdit(table.getSelectionModel().getSelectedItem().getBookingDate(), table.getSelectionModel().getSelectedItem().getBookingTime(), LocalDate.now(), LocalDateTime.now())) { // check changes is not within 48 hours
                                 User user = (User) Main.stage.getUserData();
                                 String username = user.getUsername();
                                 String bookingId = table.getSelectionModel().getSelectedItem().getBookingId();
@@ -205,15 +211,16 @@ public class UserRemoveBookingController implements Initializable {
                                 for(String temp : temps) {
                                     seats.add(temp);
                                 }
+                                // if current date affected by COVID restrictions, set seat color
                                 if(dateEqualStart || dateEqualEnd || dateBetween) {
-                                    ArrayList<String> id = userBookingModel.getSeatIdAffectedByCondition();
-                                    main.displaySeatsWithCondition("ui/UserUpdateBooking.fxml", booking, seats, seatIds, id);
+                                    ArrayList<Seat> lockedSeats = seatManagementModel.getAllSeats();
+                                    main.displaySeatsWithCondition("ui/UserUpdateBooking.fxml", booking, seats, seatIds, lockedSeats);
                                 }
 
                                 else {
 
-                                    ArrayList<String> id = null;
-                                    main.displaySeatsWithCondition("ui/UserUpdateBooking.fxml", booking, seats, seatIds, id);
+                                    ArrayList<Seat> lockedSeats = null;
+                                    main.displaySeatsWithCondition("ui/UserUpdateBooking.fxml", booking, seats, seatIds, lockedSeats);
                                 }
                             }
                             else {
