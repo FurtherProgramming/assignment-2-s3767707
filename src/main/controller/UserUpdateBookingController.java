@@ -51,7 +51,7 @@ public class UserUpdateBookingController implements Initializable {
 
     public void Back(ActionEvent event) throws Exception {
 
-        main.change("ui/UserCancelBooking.fxml");
+        main.change("ui/UserViewBooking.fxml");
     }
 
     /*
@@ -88,7 +88,7 @@ public class UserUpdateBookingController implements Initializable {
             String time = booking.getBookingTime();
             if (alert.getResult() == ButtonType.YES) {
                 userEditBookingModel.updateBooking(bookingId, seatId, time);
-                main.change("ui/UserCancelBooking.fxml");
+                main.change("ui/UserViewBooking.fxml");
             }
             else {
                 alert.close();

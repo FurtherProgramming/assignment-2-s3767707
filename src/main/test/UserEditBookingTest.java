@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserEditBookingTest {
 
     private static UserEditBookingModel userEditBookingModel = new UserEditBookingModel();
-    static Connection connection;
+    private static Connection connection;
 
     @BeforeAll
     static void setUpBeforeClass(){
@@ -26,6 +26,13 @@ public class UserEditBookingTest {
         connection = SQLConnection.connect();
         if (connection == null)
             System.exit(1);
+    }
+
+    @AfterAll
+    static  void setUpAfterClass() throws SQLException {
+
+        connection.close();
+
     }
 
     @Test
@@ -52,7 +59,7 @@ public class UserEditBookingTest {
     @Order(3)
     void testGetUserBookings_returnNull_IfStatusNotMatched() throws SQLException {
 
-        ArrayList<Booking> bookings = userEditBookingModel.getUserBookings("a", "Accepted");
+        ArrayList<Booking> bookings = userEditBookingModel.getUserBookings("a", "XXX");
         for (Booking booking : bookings) {
             assertNull(booking.getBookingId());
         }
@@ -104,7 +111,7 @@ public class UserEditBookingTest {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, "edOua1");
             preparedStatement.setString(2, "a");
-            preparedStatement.setString(3, "a1");
+            preparedStatement.setString(3, "1");
             preparedStatement.setDate(4, Date.valueOf(date));
             preparedStatement.setString(5, "0800");
             preparedStatement.setString(6, "Pending");
@@ -168,18 +175,18 @@ public class UserEditBookingTest {
     @Order(9)
     void testupdateBooking_returnUpdatedInfo_IfUpdatedBookingFound() throws SQLException {
 
-        userEditBookingModel.updateBooking("edOua1", "a2", "1400");
+        userEditBookingModel.updateBooking("edOua1", "2", "1400");
         String query = "Select * from booking where id = ? and seat_id = ? and booking_time = ?";
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, "edOua1");
-            preparedStatement.setString(2, "a2");
+            preparedStatement.setString(2, "2");
             preparedStatement.setString(3, "1400");
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                assertEquals("a2", resultSet.getString("seat_id"));
+                assertEquals("2", resultSet.getString("seat_id"));
                 assertEquals("1400", resultSet.getString("booking_time"));
             }
             else {
@@ -194,6 +201,6 @@ public class UserEditBookingTest {
                 preparedStatement.close();
             }
         }
-        userEditBookingModel.updateBooking("edOua1", "a1", "0800");
+        userEditBookingModel.updateBooking("edOua1", "1", "0800");
     }
 }

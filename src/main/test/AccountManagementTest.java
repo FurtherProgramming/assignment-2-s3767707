@@ -2,6 +2,7 @@ package main.test;
 
 import main.SQLConnection;
 import main.model.AccountManagementModel;
+import main.model.RegisterModel;
 import main.model.User;
 import org.junit.jupiter.api.*;
 
@@ -15,7 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AccountManagementTest {
 
     private static AccountManagementModel accountManagementModel = new AccountManagementModel();
-    static Connection connection;
+    private static RegisterModel registerModel = new RegisterModel();
+    private static Connection connection;
 
     @BeforeAll
     static void setUpBeforeClass(){
@@ -24,6 +26,13 @@ public class AccountManagementTest {
         connection = SQLConnection.connect();
         if (connection == null)
             System.exit(1);
+    }
+
+    @AfterAll
+    static  void setUpAfterClass() throws SQLException {
+
+        connection.close();
+
     }
 
     @Test
@@ -42,7 +51,7 @@ public class AccountManagementTest {
 
         accountManagementModel.removeAccount("3");
         String query = "Select * from employee where emp_id = ? ";
-        String query2 = "INSERT INTO Employee (emp_id, firstname, lastname, role, username, password, secret_question, answer) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        String query2 = "INSERT INTO Employee (emp_id, firstname, lastname, role, username, password, secret_question, answer, status) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -64,6 +73,7 @@ public class AccountManagementTest {
             preparedStatement.setString(6, "b");
             preparedStatement.setString(7, "What is your favourite colour?");
             preparedStatement.setString(8, "b");
+            preparedStatement.setString(9, "activated");
             preparedStatement.executeUpdate();
         }
         catch (Exception e)
@@ -80,14 +90,14 @@ public class AccountManagementTest {
     @Order(3)
     void testRemoveBookings_returnTrue_IfDatabaseUpdated() throws SQLException {
 
-        accountManagementModel.removeBookings("b");
+        accountManagementModel.removeBookings("q");
         String query = "Select * from booking where username = ? ";
         String query2 = "INSERT INTO booking (id, username, seat_id, booking_date, booking_time, status, check_in) VALUES(?, ?, ?, ?, ?, ?, ?)";
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, "b");
+            preparedStatement.setString(1, "q");
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 fail();
@@ -96,14 +106,14 @@ public class AccountManagementTest {
                 assertTrue(true);
             }
             preparedStatement = connection.prepareStatement(query2);
-            preparedStatement.setString(1, "aHbZa16");
-            preparedStatement.setString(2, "b");
-            preparedStatement.setString(3, "a16");
-            LocalDate date = LocalDate.of(2022, 6, 1);
+            preparedStatement.setString(1, "4Iri2");
+            preparedStatement.setString(2, "q");
+            preparedStatement.setString(3, "2");
+            LocalDate date = LocalDate.of(2022, 7, 1);
             preparedStatement.setDate(4, Date.valueOf(date));
             preparedStatement.setString(5, "0800");
-            preparedStatement.setString(6, "Pending");
-            preparedStatement.setString(7, "N");
+            preparedStatement.setString(6, "Accepted");
+            preparedStatement.setString(7, "Y");
             preparedStatement.executeUpdate();
         }
         catch (Exception e)
@@ -134,7 +144,9 @@ public class AccountManagementTest {
     @Order(6)
     void testUpdateAccount_lastnameEquals_IfComparedWithUpdatedResult() throws SQLException {
 
-        accountManagementModel.updateAccount("3", "b", "c", "user", "b", "What is your favourite colour?", "b");
+        registerModel.register("3", "b", "b", "user", "b", "b", "What is your favourite colour?", "b");
+        User u = new User("3", "b", "b", "user", "b", "b", "What is your favourite colour?", "b", "activated");
+        accountManagementModel.updateAccount("3", "b", "c", "user", "b", "b", "What is your favourite colour?", "b", u);
         String query = "Select * from employee where emp_id = ? ";
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
@@ -157,15 +169,18 @@ public class AccountManagementTest {
                 preparedStatement.close();
             }
         }
-        accountManagementModel.updateAccount("3", "b", "b", "user", "b", "What is your favourite colour?", "b");
+        accountManagementModel.updateAccount("3", "b", "b", "user", "b", "b", "What is your favourite colour?", "b", u);
     }
 
     @Test
     @Order(7)
     void testUpdateAccount_answerEquals_IfComparedWithUpdatedResult() throws SQLException {
 
-        accountManagementModel.updateAccount("3", "b", "c", "user", "b", "What is your favourite colour?", "c");
+        registerModel.register("3", "b", "b", "user", "b", "b", "What is your favourite colour?", "b");
+        User u = new User("3", "b", "b", "user", "b", "b", "What is your favourite colour?", "b", "activated");
+        accountManagementModel.updateAccount("3", "b", "c", "user", "b", "b", "What is your favourite colour?", "c", u);
         String query = "Select * from employee where emp_id = ? ";
+        String query2 = "Delete from employee where emp_id = ?";
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -178,6 +193,9 @@ public class AccountManagementTest {
             else {
                 fail();
             }
+            preparedStatement = connection.prepareStatement(query2);
+            preparedStatement.setString(1, "3");
+            preparedStatement.executeUpdate();
         }
         catch (Exception e)
         {
@@ -187,7 +205,7 @@ public class AccountManagementTest {
                 preparedStatement.close();
             }
         }
-        accountManagementModel.updateAccount("3", "b", "b", "user", "b", "What is your favourite colour?", "b");
+        accountManagementModel.updateAccount("3", "b", "b", "user", "b", "b", "What is your favourite colour?", "b", u);
     }
 
 }

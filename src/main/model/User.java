@@ -15,9 +15,10 @@ public class User{
     private String password;
     private String question;
     private String answer;
+    private String status;
 
 
-    public User(String empId, String fn, String ln, String role, String un, String pass, String ques, String ans) {
+    public User(String empId, String fn, String ln, String role, String un, String pass, String ques, String ans, String status) {
 
         this.employerId = empId;
         this.firstname = fn;
@@ -27,6 +28,7 @@ public class User{
         this.password = pass;
         this.question = ques;
         this.answer = ans;
+        this.status = status;
     }
 
     public String getUsername() {
@@ -51,7 +53,7 @@ public class User{
 
     public String getPassword() {
 
-        return employerId;
+        return password;
     }
 
     public String getFirstName() {
@@ -69,4 +71,8 @@ public class User{
         return role;
     }
 
+    public String getStatus() {
+
+        return status;
+    }
 }

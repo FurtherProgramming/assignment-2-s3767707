@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ResetPasswordTest {
 
     private static ResetPasswordModel resetPasswordModel = new ResetPasswordModel();
-    static Connection connection;
+    private static Connection connection;
 
     @BeforeAll
     static void setUpBeforeClass(){
@@ -26,6 +26,13 @@ public class ResetPasswordTest {
         connection = SQLConnection.connect();
         if (connection == null)
             System.exit(1);
+    }
+
+    @AfterAll
+    static  void setUpAfterClass() throws SQLException {
+
+        connection.close();
+
     }
 
     @Test

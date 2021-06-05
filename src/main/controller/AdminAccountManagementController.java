@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
  * Description:	A class that handles admin remove account page
  * Author:		Anson Go Guang Ping
  */
-public class AdminRemoveAccountController implements Initializable {
+public class AdminAccountManagementController implements Initializable {
 
     private Main main = new Main();
     private AccountManagementModel accountManagementModel = new AccountManagementModel();
@@ -41,6 +41,8 @@ public class AdminRemoveAccountController implements Initializable {
     @FXML
     private TableColumn<User, String> answer;
     @FXML
+    private TableColumn<User, String> status;
+    @FXML
     private TableView<User> table;
     @FXML
     private String selectedRowId;
@@ -49,7 +51,7 @@ public class AdminRemoveAccountController implements Initializable {
 
     // Check database connection
     @Override
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
 
         setTableColumns();
         User user = (User) Main.stage.getUserData();
@@ -69,7 +71,7 @@ public class AdminRemoveAccountController implements Initializable {
 
     public void Profile(ActionEvent event) throws Exception {
 
-        main.change("ui/UserProfile.fxml");
+        main.change("ui/AdminProfile.fxml");
     }
 
     public void Logout(ActionEvent event) throws Exception {
@@ -79,7 +81,7 @@ public class AdminRemoveAccountController implements Initializable {
 
     public void Back(ActionEvent event) throws Exception {
 
-        main.change("ui/AccountManagement.fxml");
+        main.change("ui/AdminProfile.fxml");
     }
 
     /*
@@ -88,19 +90,18 @@ public class AdminRemoveAccountController implements Initializable {
     public void Search(ActionEvent event) throws Exception {
 
         User user = accountManagementModel.getUserByUsername(txtUsername.getText());
-        if(user != null) {
+        if (user != null) {
             table.getItems().clear();
             ArrayList<User> users = new ArrayList<User>();
             users.add(user);
             ObservableList<User> populateTableList = FXCollections.observableArrayList(users);
             table.getItems().addAll(populateTableList);
-        }
-        else {
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Username is invalid!", ButtonType.CLOSE);
             alert.showAndWait();
             if (alert.getResult() == ButtonType.CLOSE) {
                 alert.close();
-                main.change("ui/AdminRemoveAccount.fxml");
+                main.change("ui/AdminAccountManagement.fxml");
             }
         }
 
@@ -108,7 +109,7 @@ public class AdminRemoveAccountController implements Initializable {
 
     public void Reset(ActionEvent event) throws Exception {
 
-        main.change("ui/AdminRemoveAccount.fxml");
+        main.change("ui/AdminAccountManagement.fxml");
     }
 
     private void setTableColumns() {
@@ -122,8 +123,8 @@ public class AdminRemoveAccountController implements Initializable {
         role.setCellValueFactory(new PropertyValueFactory<User, String>("role"));
         question.setCellValueFactory(new PropertyValueFactory<User, String>("question"));
         answer.setCellValueFactory(new PropertyValueFactory<User, String>("answer"));
+        status.setCellValueFactory(new PropertyValueFactory<User, String>("status"));
     }
-
 
 
     public boolean isSelectedRowValid(String selectedRowId) {
@@ -141,19 +142,50 @@ public class AdminRemoveAccountController implements Initializable {
     /*
      * handle remove account button
      */
-    public void deleteAccount(ActionEvent event) throws Exception {
+    public void Delete(ActionEvent event) throws Exception {
 
-        if(table.getSelectionModel().getSelectedItem() != null) {
+        if (table.getSelectionModel().getSelectedItem() != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to remove this account?", ButtonType.YES, ButtonType.NO);
             alert.showAndWait();
-            // if the user clicks OK
-
             if (alert.getResult() == ButtonType.YES) {
                 if (isSelectedRowValid(selectedRowId)) {
                     //remove user and all its bookings from database
-                    accountManagementModel.removeAccount(selectedRowId);
-                    accountManagementModel.removeBookings(table.getSelectionModel().getSelectedItem().getUsername());
-                    main.change("ui/AdminRemoveAccount.fxml");
+                    accountManagementModel.removeAccount(selectedRowId); // remove account
+                    accountManagementModel.removeBookings(table.getSelectionModel().getSelectedItem().getUsername()); // remove all bookings associated with this account
+                    main.change("ui/AdminAccountManagement.fxml");
+                    alert.close();
+                }
+            } else if (alert.getResult() == ButtonType.NO) {
+                alert.close();
+            }
+        } else {
+            Alert alert2 = new Alert(Alert.AlertType.ERROR, "Please pick an account before removing!", ButtonType.CLOSE);
+            alert2.showAndWait();
+            if (alert2.getResult() == ButtonType.CLOSE)
+                alert2.close();
+        }
+    }
+
+    /*
+     * directs admin to add account page if a table row is selected
+     */
+    public void Add(ActionEvent event) throws Exception {
+
+        main.change("ui/AdminAddAccount.fxml");
+    }
+
+    /*
+     * directs admin to update account page if a table row is selected
+     */
+    public void Update(ActionEvent event) throws Exception {
+
+        if(table.getSelectionModel().getSelectedItem() != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to update this account?", ButtonType.YES, ButtonType.NO);
+            alert.showAndWait();
+            if (alert.getResult() == ButtonType.YES) {
+                if (isSelectedRowValid(selectedRowId)) {
+                    User user = accountManagementModel.getUserById(selectedRowId);
+                    main.passAccount("ui/AdminUpdateAccount.fxml",user);
                     alert.close();
                 }
             }
@@ -162,12 +194,34 @@ public class AdminRemoveAccountController implements Initializable {
             }
         }
         else {
-            Alert alert2 = new Alert(Alert.AlertType.ERROR, "Please pick an account before removing!", ButtonType.CLOSE);
+            Alert alert2 = new Alert(Alert.AlertType.ERROR, "Please pick an account before updating!", ButtonType.CLOSE);
             alert2.showAndWait();
             if (alert2.getResult() == ButtonType.CLOSE)
                 alert2.close();
         }
     }
 
+    public void Deactivate(ActionEvent event) throws Exception {
+
+        if (table.getSelectionModel().getSelectedItem() != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to deactivate this account?", ButtonType.YES, ButtonType.NO);
+            alert.showAndWait();
+            if (alert.getResult() == ButtonType.YES) {
+                if (isSelectedRowValid(selectedRowId)) {
+                    //remove user and all its bookings from database
+                    accountManagementModel.deactivateAccount(selectedRowId); // remove account
+                    main.change("ui/AdminAccountManagement.fxml");
+                    alert.close();
+                }
+            } else if (alert.getResult() == ButtonType.NO) {
+                alert.close();
+            }
+        } else {
+            Alert alert2 = new Alert(Alert.AlertType.ERROR, "Please pick an account before deactivating!", ButtonType.CLOSE);
+            alert2.showAndWait();
+            if (alert2.getResult() == ButtonType.CLOSE)
+                alert2.close();
+        }
+    }
 }
 

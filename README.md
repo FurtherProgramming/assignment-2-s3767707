@@ -52,14 +52,26 @@ Password: test
 Readme files are made for developers (including you), but also could be used for the final users.
 So while you are writing your readme files please consider a few things:
 
-1. What is about?
-    - Your name and student number and course name on the top
-    - Describe the content of your project or repository
-    - Explain things the users would have a hard time understanding right away
+1. What is about?  
+Arub is a system to manage ‘Hotdesking’ methodology to allocate tables and seats to Arub employees.
+Users can register and login to their account and make their bookings by entering date and choose time. Bookings are  
+made by clicking on the seats where:  
+    - green -> available  
+    - orange -> locked  
+    - red -> booked  
+User can also edit time and seat of a booking and choose to cancel it within 48 hours of the booking date.
+Admin have three main features:
+    - Booking management  
+        Admin can accept and reject bookings. Besides that, admin can choose to apply restriction by locking down certain seats for a certain amount of time 
+    - Account management  
+        Admin can update, remove and add both users and admins account
+    - Generate report   
+        Admin can generate account report and booking report. Booking report generated will be sorted by date and admin can specify what date of boookings should they export.  
 2. What steps need to be taken?
-    - Any specific steps for running your application, what is the main class?
-    - Is there any requirements or dependencies?
-    - After the installation, how they compile or run the code?
+    - The project main class will be main.java
+    - Please make sure to include the Junit 5 Jar file before running the test packages
+    - Please make sure to run all the unit tests first before executing the program as changes in database may result in changes of outcome of test 
+    - Right click on the main.java and select "Run 'Main.main()'" to run the project  
 3. Execution examples
     - You could provide examples of execution with code and screenshots
     

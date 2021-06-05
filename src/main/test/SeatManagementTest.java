@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SeatManagementTest {
 
     private static SeatManagementModel seatManagementModel = new SeatManagementModel();
-    static Connection connection;
+    private static Connection connection;
 
     @BeforeAll
     static void setUpBeforeClass(){
@@ -30,19 +30,26 @@ public class SeatManagementTest {
             System.exit(1);
     }
 
+    @AfterAll
+    static  void setUpAfterClass() throws SQLException {
+
+        connection.close();
+
+    }
+
     @Test
     @Order(36)
     void testUpdateSeat_returnRestrictionCondition_IfDatabaseUpdated() throws SQLException {
 
-        LocalDate startDate = LocalDate.of(2021, 6, 6);
-        LocalDate endDate = LocalDate.of(2021, 6, 12);
+        LocalDate startDate = LocalDate.of(2022, 6, 6);
+        LocalDate endDate = LocalDate.of(2022, 6, 12);
         seatManagementModel.updateSeat("Restriction", startDate, endDate);
         String query = "Select * from seat where id = ? and condition = ?";
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, "a2");
+            preparedStatement.setString(1, "2");
             preparedStatement.setString(2, "Restriction");
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -67,15 +74,15 @@ public class SeatManagementTest {
     @Order(37)
     void testUpdateSeat_returnLockdownCondition_IfDatabaseUpdated() throws SQLException {
 
-        LocalDate startDate = LocalDate.of(2021, 6, 6);
-        LocalDate endDate = LocalDate.of(2021, 6, 12);
+        LocalDate startDate = LocalDate.of(2022, 6, 6);
+        LocalDate endDate = LocalDate.of(2022, 6, 12);
         seatManagementModel.updateSeat("Lockdown", startDate, endDate);
         String query = "Select * from seat where id = ? and condition = ?";
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, "a2");
+            preparedStatement.setString(1, "2");
             preparedStatement.setString(2, "Lockdown");
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {

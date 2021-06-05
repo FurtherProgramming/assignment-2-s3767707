@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AdminEditBookingTest {
 
     private static AdminEditBookingModel adminEditBookingModel = new AdminEditBookingModel();
-    static Connection connection;
+    private static Connection connection;
 
     @BeforeAll
     static void setUpBeforeClass(){
@@ -26,8 +26,15 @@ public class AdminEditBookingTest {
             System.exit(1);
     }
 
+    @AfterAll
+    static  void setUpAfterClass() throws SQLException {
+
+        connection.close();
+
+    }
+
     @Test
-    @Order(8)
+    @Order(1)
     void testGetUserBookings_returnNotNull_IfBookingsFound() throws SQLException {
 
         LocalDate date = LocalDate.of(2022, 6, 1);
@@ -38,7 +45,7 @@ public class AdminEditBookingTest {
     }
 
     @Test
-    @Order(9)
+    @Order(2)
     void testEditBookingStatus_returnNotNull_IfResultFoundAfterStatusUpdated() throws SQLException {
 
         adminEditBookingModel.editBookingStatus("aHbZa16", "Accepted");
@@ -48,11 +55,11 @@ public class AdminEditBookingTest {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, "aHbZa16");
+            preparedStatement.setString(1, "OIwIa1");
             preparedStatement.setString(2, "Accepted");
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                assertNotNull(resultSet.getString("status"));
+                assertEquals("Accepted", resultSet.getString("status"));
             }
             else {
                 fail();

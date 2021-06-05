@@ -3,6 +3,8 @@ package main.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import main.Main;
 import main.model.User;
@@ -43,17 +45,37 @@ public class UserProfileController implements Initializable {
 
     public void MakeBooking(ActionEvent event) throws Exception {
 
-        main.change("ui/UserBooking.fxml");
+        User u = (User) Main.stage.getUserData();
+        if(u.getStatus().equals("activated")) {
+            main.change("ui/UserBooking.fxml");
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Account deactivated. Please contact admin to reactivate your account!!", ButtonType.CLOSE);
+            alert.showAndWait();
+            if (alert.getResult() == ButtonType.CLOSE) {
+                alert.close();
+            }
+        }
     }
 
 
-    public void CancelBooking(ActionEvent actionEvent) throws Exception {
+    public void ViewBooking(ActionEvent actionEvent) throws Exception {
 
-        main.change("ui/UserCancelBooking.fxml");
+        main.change("ui/UserViewBooking.fxml");
     }
 
     public void CheckIn(ActionEvent event) throws Exception {
 
-        main.change("ui/UserCheckIn.fxml");
+        User u = (User) Main.stage.getUserData();
+        if(u.getStatus().equals("activated")) {
+            main.change("ui/UserCheckIn.fxml");
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Account deactivated. Please contact admin to reactivate your account!!", ButtonType.CLOSE);
+            alert.showAndWait();
+            if (alert.getResult() == ButtonType.CLOSE) {
+                alert.close();
+            }
+        }
     }
 }

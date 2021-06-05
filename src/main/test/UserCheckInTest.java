@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserCheckInTest {
 
     private static UserCheckInModel userCheckInModel = new UserCheckInModel();
-    static Connection connection;
+    private static Connection connection;
 
     @BeforeAll
     static void setUpBeforeClass(){
@@ -23,6 +23,13 @@ public class UserCheckInTest {
         connection = SQLConnection.connect();
         if (connection == null)
             System.exit(1);
+    }
+
+    @AfterAll
+    static  void setUpAfterClass() throws SQLException {
+
+        connection.close();
+
     }
 
     @Test

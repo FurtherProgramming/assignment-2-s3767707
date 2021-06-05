@@ -46,7 +46,8 @@ public class AccountManagementModel {
                 String p = resultSet.getString("password");
                 String ques = resultSet.getString("secret_question");
                 String ans = resultSet.getString("answer");
-                User user = new User(empId, fn, ln, role, un, p, ques, ans);
+                String st = resultSet.getString("status");
+                User user = new User(empId, fn, ln, role, un, p, ques, ans, st);
                 users.add(user);
             }
         }
@@ -130,7 +131,8 @@ public class AccountManagementModel {
                 String p = resultSet.getString("password");
                 String ques = resultSet.getString("secret_question");
                 String ans = resultSet.getString("answer");
-                user = new User(emp_Id, fn, ln, role, un, p, ques, ans);
+                String st = resultSet.getString("status");
+                user = new User(emp_Id, fn, ln, role, un, p, ques, ans, st);
             }
         }
         catch (Exception e)
@@ -165,7 +167,8 @@ public class AccountManagementModel {
                 String p = resultSet.getString("password");
                 String ques = resultSet.getString("secret_question");
                 String ans = resultSet.getString("answer");
-                user = new User(emp_Id, fn, ln, role, un, p, ques, ans);
+                String st = resultSet.getString("status");
+                user = new User(emp_Id, fn, ln, role, un, p, ques, ans, st);
             }
         }
         catch (Exception e)
@@ -181,21 +184,23 @@ public class AccountManagementModel {
     /*
      * update account details by employer id
      */
-    public Boolean updateAccount(String empId, String fn, String ln, String role, String pass, String ques, String ans) throws SQLException {
+    public Boolean updateAccount(String empId, String fn, String ln, String role, String un, String pass, String ques, String ans, User user) throws SQLException {
 
         PreparedStatement preparedStatement = null;
         ResultSet resultSet=null;
         boolean bool = false;
-        String query = "UPDATE employee SET firstname = ?, lastname = ?, role = ?, password = ?, secret_question = ?, answer = ? WHERE emp_id = ?;";
+        String query = "UPDATE employee SET emp_id = ?, firstname = ?, lastname = ?, role = ?, username = ?, password = ?, secret_question = ?, answer = ? WHERE emp_id = ?;";
         try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, fn);
-            preparedStatement.setString(2, ln);
-            preparedStatement.setString(3, role);
-            preparedStatement.setString(4, pass);
-            preparedStatement.setString(5, ques);
-            preparedStatement.setString(6, ans);
-            preparedStatement.setString(7, empId);
+            preparedStatement.setString(1, empId);
+            preparedStatement.setString(2, fn);
+            preparedStatement.setString(3, ln);
+            preparedStatement.setString(4, role);
+            preparedStatement.setString(5, un);
+            preparedStatement.setString(6, pass);
+            preparedStatement.setString(7, ques);
+            preparedStatement.setString(8, ans);
+            preparedStatement.setString(9, user.getEmployerId());
             preparedStatement.executeUpdate();
             bool = true;
         }
@@ -206,5 +211,97 @@ public class AccountManagementModel {
             preparedStatement.close();
         }
         return bool;
+    }
+
+    /*
+     * update account details by employer id
+     */
+    public Boolean deactivateAccount(String empId) throws SQLException {
+
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet=null;
+        boolean bool = false;
+        String query = "UPDATE employee SET status = ? WHERE emp_id = ?;";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, "deactivated");
+            preparedStatement.setString(2, empId);
+
+            preparedStatement.executeUpdate();
+            bool = true;
+        }
+        catch (Exception e)
+        {
+            bool = false;
+        }finally {
+            preparedStatement.close();
+        }
+        return bool;
+    }
+
+    /*
+     * return true if username exist
+     * allows admin to reuse previous account username
+     */
+    public Boolean usernameExist(String username, String prevUsername) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet=null;
+        boolean valid = false;
+        String query = "select * from employee where username = ?";
+        try {
+
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, username);
+            resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()) {
+                if(resultSet.getString("username").equals(prevUsername)) { // if username entered equals to previous username
+                    valid = false;
+                }
+                else {
+                    valid = true;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            valid = false;
+        }finally {
+            preparedStatement.close();
+            resultSet.close();
+        }
+        return valid;
+    }
+
+    /*
+     * return true if username exist
+     * allows admin to reuse previous account username
+     */
+    public Boolean empIdExist(String empId, String prevEmpId) throws SQLException {
+
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet=null;
+        boolean valid = false;
+        String query = "select * from employee where emp_id = ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, empId);
+            resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()) {
+                if(resultSet.getString("emp_id").equals(prevEmpId)) { // if username entered equals to previous username
+                    valid = false;
+                }
+                else {
+                    valid = true;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            valid = false;
+        }finally {
+            preparedStatement.close();
+            resultSet.close();
+        }
+        return valid;
     }
 }

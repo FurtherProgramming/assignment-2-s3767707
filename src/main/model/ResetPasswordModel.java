@@ -48,7 +48,8 @@ public class ResetPasswordModel {
                 String pass = resultSet.getString("password");
                 String ques = resultSet.getString("secret_question");
                 String ans = resultSet.getString("answer");
-                user = new User(empId, fn, ln, role, un, pass, ques, ans);
+                String st = resultSet.getString("status");
+                user = new User(empId, fn, ln, role, un, pass, ques, ans, st);
             }
         }
         catch (Exception e)

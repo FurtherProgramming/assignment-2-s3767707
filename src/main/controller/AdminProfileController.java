@@ -50,7 +50,7 @@ public class AdminProfileController implements Initializable {
 
     public void AccountManagement(ActionEvent event) throws Exception {
 
-        main.change("ui/AccountManagement.fxml");
+        main.change("ui/AdminAccountManagement.fxml");
     }
 
     public void Report(ActionEvent event) throws Exception {

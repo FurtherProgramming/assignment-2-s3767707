@@ -10,10 +10,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import main.Main;
-import main.model.AccountHolder;
-import main.model.AccountManagementModel;
-import main.model.RegisterModel;
-import main.model.User;
+import main.model.*;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,13 +25,18 @@ import java.util.ResourceBundle;
 public class AdminUpdateAccountController implements Initializable {
     public AccountManagementModel accountManagementModel = new AccountManagementModel();
     private RegisterModel registerModel = new RegisterModel();
+    private LoginModel loginModel = new LoginModel();
     public Main main = new Main();
+    @FXML
+    private TextField txtEmployerId;
     @FXML
     private TextField txtFirstname;
     @FXML
     private TextField txtLastname;
     @FXML
     private ChoiceBox<String> txtRole;
+    @FXML
+    private TextField txtUsername;
     @FXML
     private TextField txtPassword;
     @FXML
@@ -70,7 +73,8 @@ public class AdminUpdateAccountController implements Initializable {
     public void UpdateAccount(ActionEvent event) throws Exception{
 
         try {
-
+            AccountHolder holder = AccountHolder.getInstance();
+            User user = holder.getAccount();
             // if first name is empty, show error message
             if (txtFirstname.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "First name is required!", ButtonType.CLOSE);
@@ -88,6 +92,13 @@ public class AdminUpdateAccountController implements Initializable {
             // if role is empty, show error message
             else if (txtRole.getValue() == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Role is required!", ButtonType.CLOSE);
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.CLOSE)
+                    alert.close();
+            }
+            // if username is empty, show error message
+            else if (txtUsername.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Username is required!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
@@ -113,18 +124,28 @@ public class AdminUpdateAccountController implements Initializable {
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
             }
+            else if(accountManagementModel.empIdExist(txtEmployerId.getText(), user.getEmployerId())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Employer id exists!", ButtonType.CLOSE);
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.CLOSE)
+                    alert.close();
+            }
+            else if(accountManagementModel.usernameExist(txtUsername.getText(), user.getUsername())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Username exists!", ButtonType.CLOSE);
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.CLOSE)
+                    alert.close();
+            }
             else{
                 // remove account first and add account again in database so same username can be reused
                 // (employer id and username is unique)
                 // Empoyer id and username cannot be changed
-                AccountHolder holder = AccountHolder.getInstance();
-                User user = holder.getAccount();
-                accountManagementModel.updateAccount(user.getEmployerId(), txtFirstname.getText(), txtLastname.getText(), txtRole.getValue(), txtPassword.getText(), txtSecretQuestion.getValue(), txtAnswer.getText());
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Update account successfully!", ButtonType.CLOSE);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure to update this account?", ButtonType.YES, ButtonType.NO);
                 alert.showAndWait();
-                if (alert.getResult() == ButtonType.CLOSE) {
+                if (alert.getResult() == ButtonType.YES) {
                     alert.close();
-                    main.change("ui/AccountManagement.fxml");
+                    accountManagementModel.updateAccount(txtEmployerId.getText(), txtFirstname.getText(), txtLastname.getText(), txtRole.getValue(), txtUsername.getText(), txtPassword.getText(), txtSecretQuestion.getValue(), txtAnswer.getText(), user);
+                    main.change("ui/AdminAccountManagement.fxml");
                 }
             }
         } catch (SQLException e) {

@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserBookingTest {
 
     private static UserBookingModel userBookingModel = new UserBookingModel();
-    static Connection connection;
+    private static Connection connection;
 
     @BeforeAll
     static void setUpBeforeClass(){
@@ -21,6 +21,13 @@ public class UserBookingTest {
         connection = SQLConnection.connect();
         if (connection == null)
             System.exit(1);
+    }
+
+    @AfterAll
+    static  void setUpAfterClass() throws SQLException {
+
+        connection.close();
+
     }
 
     @Test
@@ -67,14 +74,14 @@ public class UserBookingTest {
     @Order(3)
     void testUsernameExistInList_returnTrue_IfUsernameExist() throws SQLException {
 
-        assertTrue(userBookingModel.UsernameExistInList("a", LocalDate.of(2022, 6, 1), "0800"));
+        assertTrue(userBookingModel.UsernameExistInList("q", LocalDate.of(2022, 7, 1), "0800"));
     }
 
     @Test
     @Order(4)
     void testPreviousBooking_EqualPreviousBookingSeatId_IfSearchForPreviousBooking() throws SQLException {
 
-        assertEquals("6", userBookingModel.previousBooking("b"));
+        assertEquals("1", userBookingModel.previousBooking("a"));
     }
 
     @Test

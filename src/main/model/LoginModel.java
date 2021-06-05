@@ -48,7 +48,8 @@ public class LoginModel {
                 String p = resultSet.getString("password");
                 String ques = resultSet.getString("secret_question");
                 String ans = resultSet.getString("answer");
-                user = new User(empId, fn, ln, role, un, p, ques, ans);
+                String st = resultSet.getString("status");
+                user = new User(empId, fn, ln, role, un, p, ques, ans, st);
             }
 
         }
@@ -106,14 +107,6 @@ public class LoginModel {
             preparedStatement.setString(1, username);
             resultSet = preparedStatement.executeQuery();
             if(resultSet.next()) {
-                String empId = resultSet.getString("emp_id");
-                String fn = resultSet.getString("firstname");
-                String ln = resultSet.getString("lastname");
-                String role = resultSet.getString("role");
-                String un = resultSet.getString("username");
-                String p = resultSet.getString("password");
-                String ques = resultSet.getString("secret_question");
-                String ans = resultSet.getString("answer");
                 valid = true;
             }
         }
@@ -125,5 +118,33 @@ public class LoginModel {
             resultSet.close();
         }
         return valid;
+    }
+
+    /*
+     * return true if account is activated
+     */
+    public Boolean isActivated(String username) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet=null;
+        boolean bool = false;
+        String query = "select * from employee where username = ? and status = ?";
+        try {
+
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, username);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                bool = true;
+            }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }finally {
+            preparedStatement.close();
+            resultSet.close();
+        }
+        return bool;
     }
 }

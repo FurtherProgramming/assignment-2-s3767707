@@ -58,7 +58,7 @@ public class RegisterModel {
     public Boolean register(String empId, String fn, String ln, String role, String un, String pass, String ques, String ans) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean bool = false;
-        String query = "INSERT INTO Employee (emp_id, firstname, lastname, role, username, password, secret_question, answer) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Employee (emp_id, firstname, lastname, role, username, password, secret_question, answer, status) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
 
             preparedStatement = connection.prepareStatement(query);
@@ -70,11 +70,13 @@ public class RegisterModel {
             preparedStatement.setString(6, pass);
             preparedStatement.setString(7, ques);
             preparedStatement.setString(8, ans);
+            preparedStatement.setString(9, "activated");
             preparedStatement.executeUpdate();
             bool = true;
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             bool = false;
         }finally {
             if(preparedStatement != null) {

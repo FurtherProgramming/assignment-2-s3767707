@@ -16,15 +16,22 @@ public class RegisterModelTest {
 
     private static RegisterModel registerModel = new RegisterModel();
     private static LoginModel loginModel = new LoginModel();
-    static Connection connection;
+    private static Connection connection;
 
     @BeforeAll
     static void setUpBeforeClass(){
 
-        registerModel = new RegisterModel();
         connection = SQLConnection.connect();
         if (connection == null)
             System.exit(1);
+
+    }
+
+    @AfterAll
+    static  void setUpAfterClass() throws SQLException {
+
+        connection.close();
+
     }
 
     @Test

@@ -1,4 +1,6 @@
 employer_id,first_name,last_name,role,username,password,secret_question,answer
 "1",homy,ash,admin,test,test,What is your favourite colour?,Red
 "2",a,a,user,a,a,What is your favourite food?,a
-"3",b,b,user,b,b,What is your favourite colour?,b
+"q",q,q,user,q,q,What is your favourite colour?,q
+"w",w,w,user,w,w,What is your favourite colour?,w
+"e",e,e,user,e,e,What is your favourite colour?,e

@@ -151,7 +151,7 @@ public class AdminAddAccountController implements Initializable {
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
-                main.change("ui/AccountManagement.fxml");
+                main.change("ui/AdminAccountManagement.fxml");
             }
         } catch (SQLException e) {
             e.printStackTrace();

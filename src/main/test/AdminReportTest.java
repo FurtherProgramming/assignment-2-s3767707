@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class AdminReportTest {
 
     private static AdminReportModel adminReportModel = new AdminReportModel();
-    static Connection connection;
+    private static Connection connection;
 
     @BeforeAll
     static void setUpBeforeClass(){
@@ -32,6 +32,13 @@ public class AdminReportTest {
         connection = SQLConnection.connect();
         if (connection == null)
             System.exit(1);
+    }
+
+    @AfterAll
+    static  void setUpAfterClass() throws SQLException {
+
+        connection.close();
+
     }
 
     @Test

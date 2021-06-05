@@ -50,6 +50,7 @@ public class SeatManagementModel {
             }
             catch (Exception e)
             {
+                e.printStackTrace();
                 bool = false;
             }finally {
                 preparedStatement.close();

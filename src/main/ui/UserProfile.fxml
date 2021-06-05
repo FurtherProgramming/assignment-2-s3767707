@@ -24,7 +24,7 @@
             <Font size="24.0" />
          </font></Label>
       <Button layoutX="167.0" layoutY="225.0" mnemonicParsing="false" onAction="#MakeBooking" text="Make Booking" />
-      <Button layoutX="167.0" layoutY="285.0" mnemonicParsing="false" onAction="#CancelBooking" prefHeight="31.0" prefWidth="116.0" text="View Booking" />
+      <Button layoutX="167.0" layoutY="285.0" mnemonicParsing="false" onAction="#ViewBooking" prefHeight="31.0" prefWidth="116.0" text="View Booking" />
       <Circle fill="WHITE" layoutX="50.0" layoutY="81.0" radius="18.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle layoutX="50.0" layoutY="76.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" />
       <Ellipse layoutX="50.0" layoutY="90.0" radiusX="13.0" radiusY="8.0" stroke="BLACK" strokeType="INSIDE" />
