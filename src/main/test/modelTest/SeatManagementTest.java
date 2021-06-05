@@ -1,9 +1,8 @@
-package main.test;
+package main.test.modelTest;
 
 import main.SQLConnection;
 import main.model.Seat;
 import main.model.SeatManagementModel;
-import main.model.UserBookingModel;
 import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
@@ -22,7 +21,7 @@ public class SeatManagementTest {
     private static Connection connection;
 
     @BeforeAll
-    static void setUpBeforeClass(){
+    static void setUpBeforeClass() {
 
         seatManagementModel = new SeatManagementModel();
         connection = SQLConnection.connect();
@@ -31,7 +30,7 @@ public class SeatManagementTest {
     }
 
     @AfterAll
-    static  void setUpAfterClass() throws SQLException {
+    static void setUpAfterClass() throws SQLException {
 
         connection.close();
 
@@ -54,16 +53,13 @@ public class SeatManagementTest {
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 assertEquals("Restriction", resultSet.getString("condition"));
-            }
-            else {
+            } else {
                 fail();
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if(preparedStatement != null) {
+        } finally {
+            if (preparedStatement != null) {
                 preparedStatement.close();
             }
         }
@@ -133,7 +129,7 @@ public class SeatManagementTest {
 
         ArrayList<Seat> seats = seatManagementModel.getAllSeats();
         int count = 0;
-        for(Seat s : seats) {
+        for (Seat s : seats) {
             count++;
         }
         assertEquals(16, count);
@@ -143,10 +139,10 @@ public class SeatManagementTest {
     @Order(40)
     void testGetBookingIdAffectedByCondition_returnNotNull_IfBookingsFound() throws SQLException {
 
-        LocalDate startDate = LocalDate.of(2021, 6 , 5);
-        LocalDate endDate = LocalDate.of(2021, 6 , 6);
+        LocalDate startDate = LocalDate.of(2021, 6, 5);
+        LocalDate endDate = LocalDate.of(2021, 6, 6);
         ArrayList<String> bookingIds = seatManagementModel.getBookingIdAffectedByCondition("Restriction", startDate, endDate);
-        for(String id : bookingIds) {
+        for (String id : bookingIds) {
             assertNotNull(id);
         }
     }

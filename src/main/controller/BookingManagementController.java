@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import main.Main;
 import main.model.SeatManagementModel;
 import main.model.User;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -24,7 +25,7 @@ public class BookingManagementController implements Initializable {
 
     // Check database connection
     @Override
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
 
         User user = (User) Main.stage.getUserData();
         username.setText(user.getUsername());
@@ -54,7 +55,6 @@ public class BookingManagementController implements Initializable {
 
         main.setSeatColorInSeatManagement("ui/SeatManagement.fxml", seatManagementModel.getAllSeats());
     }
-
 
 
 }

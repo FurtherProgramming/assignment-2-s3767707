@@ -1,19 +1,21 @@
-package main.test;
+package main.test.modelTest;
 
 
-import java.sql.SQLException;
 import main.model.LoginModel;
 import main.model.User;
 import org.junit.jupiter.api.*;
 
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class LoginModelTest {
 
     private static LoginModel loginModel;
 
     @BeforeAll
-    static void setUpBeforeClass(){
+    static void setUpBeforeClass() {
 
         loginModel = new LoginModel();
     }
@@ -22,7 +24,7 @@ public class LoginModelTest {
     @Order(15)
     void testUsername_returnNull_IfUsernameIsEmpty() throws SQLException {
 
-        User user = loginModel.isLogin("","test");
+        User user = loginModel.isLogin("", "test");
         assertNull(user);
     }
 
@@ -30,7 +32,7 @@ public class LoginModelTest {
     @Order(16)
     void testPassword_returnNull_IfPasswordIsEmpty() throws SQLException {
 
-        User user = loginModel.isLogin("test","");
+        User user = loginModel.isLogin("test", "");
         assertNull(user);
     }
 
@@ -38,7 +40,7 @@ public class LoginModelTest {
     @Order(17)
     void testPassword_returnNotNull_IfUsernameAndPasswordIsValid() throws SQLException {
 
-        User user = loginModel.isLogin("test","test");
+        User user = loginModel.isLogin("test", "test");
         assertNotNull(user);
     }
 
@@ -46,7 +48,7 @@ public class LoginModelTest {
     @Order(18)
     void testPassword_returnNull_IfUsernameIsInvalid() throws SQLException {
 
-        User user = loginModel.isLogin("test1","test");
+        User user = loginModel.isLogin("test1", "test");
         assertNull(user);
     }
 
@@ -54,7 +56,7 @@ public class LoginModelTest {
     @Order(19)
     void testPassword_returnNull_IfPasswordIsInvalid() throws SQLException {
 
-        User user = loginModel.isLogin("test","test1");
+        User user = loginModel.isLogin("test", "test1");
         assertNull(user);
     }
 

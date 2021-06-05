@@ -1,15 +1,19 @@
-package main.test;
+package main.test.modelTest;
 
 import main.SQLConnection;
 import main.model.Booking;
 import main.model.UserCheckInModel;
 import org.junit.jupiter.api.*;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserCheckInTest {
 
@@ -17,7 +21,7 @@ public class UserCheckInTest {
     private static Connection connection;
 
     @BeforeAll
-    static void setUpBeforeClass(){
+    static void setUpBeforeClass() {
 
         userCheckInModel = new UserCheckInModel();
         connection = SQLConnection.connect();
@@ -26,7 +30,7 @@ public class UserCheckInTest {
     }
 
     @AfterAll
-    static  void setUpAfterClass() throws SQLException {
+    static void setUpAfterClass() throws SQLException {
 
         connection.close();
 
@@ -71,11 +75,9 @@ public class UserCheckInTest {
             preparedStatement.setString(1, "N");
             preparedStatement.setString(2, "edOua1");
             preparedStatement.executeUpdate();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             preparedStatement.close();
 
         }
@@ -97,20 +99,17 @@ public class UserCheckInTest {
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 assertEquals("Y", resultSet.getString("check_in"));
-            }
-            else {
+            } else {
                 fail();
             }
             preparedStatement = connection.prepareStatement(query2);
             preparedStatement.setString(1, "N");
             preparedStatement.setString(2, "edOua1");
             preparedStatement.executeUpdate();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if(preparedStatement != null) {
+        } finally {
+            if (preparedStatement != null) {
                 preparedStatement.close();
             }
         }
@@ -120,7 +119,7 @@ public class UserCheckInTest {
     @Order(52)
     void testGetUserBooking_returnNotNull_IfBookingExist() throws SQLException {
 
-        LocalDate date = LocalDate.of(2022, 6,1 );
+        LocalDate date = LocalDate.of(2022, 6, 1);
         ArrayList<Booking> bookings = userCheckInModel.getUserBooking("a", "Pending", date);
         assertNotNull(bookings);
     }
@@ -129,7 +128,7 @@ public class UserCheckInTest {
     @Order(53)
     void testGetUserBooking_returnNull_IfBookingNotExist() throws SQLException {
 
-        LocalDate date = LocalDate.of(2024, 6,1 );
+        LocalDate date = LocalDate.of(2024, 6, 1);
         ArrayList<Booking> bookings = userCheckInModel.getUserBooking("a", "Pending", date);
         assertNotNull(bookings);
     }

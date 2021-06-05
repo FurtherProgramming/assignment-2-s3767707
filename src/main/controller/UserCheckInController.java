@@ -9,7 +9,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import main.Main;
-import main.model.*;
+import main.model.Booking;
+import main.model.User;
+import main.model.UserCheckInModel;
+import main.model.UserEditBookingModel;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -48,12 +52,13 @@ public class UserCheckInController implements Initializable {
     private TableView<Booking> table;
     @FXML
     private String selectedRowId;
+
     // Check database connection
     @Override
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
 
         label.setText(LocalDate.now().toString());
-        label2.setText(String.valueOf(LocalDateTime.now().getHour())+":"+ String.valueOf(LocalDateTime.now().getMinute()));
+        label2.setText(String.valueOf(LocalDateTime.now().getHour()) + ":" + String.valueOf(LocalDateTime.now().getMinute()));
         setTableColumns();
         User user = (User) Main.stage.getUserData();
         try {
@@ -112,44 +117,40 @@ public class UserCheckInController implements Initializable {
 
     public void CheckIn(ActionEvent event) throws Exception {
 
-        if(table.getSelectionModel().getSelectedItem() != null) {
+        if (table.getSelectionModel().getSelectedItem() != null) {
 
-                if (isSelectedRowValid(selectedRowId)) {
-                    // check if the current time is within the booking session
-                    if(userCheckInModel.isTime(selectedRowId, LocalDateTime.now().getHour())) {
-                        // user can check in on a checked in a booking
-                        if(!userCheckInModel.isCheckedIn(selectedRowId)) {
-                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to check-in with this booking?", ButtonType.YES, ButtonType.NO);
-                            alert.showAndWait();
-                            if (alert.getResult() == ButtonType.YES) {
-                                userCheckInModel.checkIn(selectedRowId);
-                                main.change("ui/UserCheckIn.fxml");
-                            }
-                            else {
-                                alert.close();
-                                main.change("ui/UserCheckIn.fxml");
-                            }
+            if (isSelectedRowValid(selectedRowId)) {
+                // check if the current time is within the booking session
+                if (userCheckInModel.isTime(selectedRowId, LocalDateTime.now().getHour())) {
+                    // user can check in on a checked in a booking
+                    if (!userCheckInModel.isCheckedIn(selectedRowId)) {
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to check-in with this booking?", ButtonType.YES, ButtonType.NO);
+                        alert.showAndWait();
+                        if (alert.getResult() == ButtonType.YES) {
+                            userCheckInModel.checkIn(selectedRowId);
+                            main.change("ui/UserCheckIn.fxml");
+                        } else {
+                            alert.close();
+                            main.change("ui/UserCheckIn.fxml");
                         }
-                        else {
-                            Alert alert = new Alert(Alert.AlertType.ERROR, "Seat already checked-in!", ButtonType.CLOSE);
-                            alert.showAndWait();
-                            if (alert.getResult() == ButtonType.CLOSE) {
-                                alert.close();
-                                main.change("ui/UserCheckIn.fxml");
-                            }
-                        }
-                    }
-                    else {
-                        Alert alert = new Alert(Alert.AlertType.ERROR, "Seat not opened! Check your booking time!", ButtonType.CLOSE);
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR, "Seat already checked-in!", ButtonType.CLOSE);
                         alert.showAndWait();
                         if (alert.getResult() == ButtonType.CLOSE) {
                             alert.close();
                             main.change("ui/UserCheckIn.fxml");
                         }
                     }
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Seat not opened! Check your booking time!", ButtonType.CLOSE);
+                    alert.showAndWait();
+                    if (alert.getResult() == ButtonType.CLOSE) {
+                        alert.close();
+                        main.change("ui/UserCheckIn.fxml");
+                    }
                 }
-        }
-        else {
+            }
+        } else {
             Alert alert2 = new Alert(Alert.AlertType.ERROR, "Please pick a booking!", ButtonType.CLOSE);
             alert2.showAndWait();
             if (alert2.getResult() == ButtonType.CLOSE) {
@@ -158,7 +159,6 @@ public class UserCheckInController implements Initializable {
             }
         }
     }
-
 
 
 }

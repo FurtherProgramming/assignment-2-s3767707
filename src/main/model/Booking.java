@@ -29,24 +29,14 @@ public class Booking {
         this.checkIn = checkIn;
     }
 
-    public void setBookingId(String bookingId) {
+    public String getSeatId() {
 
-        this.bookingId = bookingId;
+        return seatId;
     }
 
     public void setSeatId(String seatId) {
 
         this.seatId = seatId;
-    }
-
-    public void setBookingTime(String time) {
-
-        this.bookingTime = time;
-    }
-
-    public String getSeatId() {
-
-        return seatId;
     }
 
     public LocalDate getBookingDate() {
@@ -57,6 +47,11 @@ public class Booking {
     public String getBookingId() {
 
         return bookingId;
+    }
+
+    public void setBookingId(String bookingId) {
+
+        this.bookingId = bookingId;
     }
 
     public String getStatus() {
@@ -72,6 +67,11 @@ public class Booking {
     public String getBookingTime() {
 
         return bookingTime;
+    }
+
+    public void setBookingTime(String time) {
+
+        this.bookingTime = time;
     }
 
     public String getCheckIn() {

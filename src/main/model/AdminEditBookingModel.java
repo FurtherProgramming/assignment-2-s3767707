@@ -1,7 +1,7 @@
 package main.model;
 
-import main.Main;
 import main.SQLConnection;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,7 +15,8 @@ public class AdminEditBookingModel {
 
     Connection connection;
     private ArrayList<Booking> bookings = new ArrayList<Booking>();
-    public AdminEditBookingModel(){
+
+    public AdminEditBookingModel() {
 
         connection = SQLConnection.connect();
         if (connection == null)
@@ -28,7 +29,7 @@ public class AdminEditBookingModel {
      */
     public ArrayList<Booking> getUserBookings(String status, LocalDate date) throws SQLException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
 
         String query = "select * from booking where status = ? and booking_date > ? ORDER BY booking_date";
         try {
@@ -49,11 +50,10 @@ public class AdminEditBookingModel {
                 bookings.add(booking);
             }
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -67,7 +67,7 @@ public class AdminEditBookingModel {
     public Boolean editBookingStatus(String bookId, String status) throws SQLException {
 
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         boolean bool = false;
         String query = "UPDATE booking SET status = ? WHERE id = ?;";
         try {
@@ -76,11 +76,9 @@ public class AdminEditBookingModel {
             preparedStatement.setString(2, bookId);
             preparedStatement.executeUpdate();
             bool = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             bool = false;
-        }finally {
+        } finally {
             preparedStatement.close();
         }
         return bool;
@@ -100,11 +98,9 @@ public class AdminEditBookingModel {
             preparedStatement.setDate(2, Date.valueOf(date));
             preparedStatement.executeUpdate();
             bool = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             bool = false;
-        }finally {
+        } finally {
             preparedStatement.close();
         }
         return bool;
@@ -124,11 +120,9 @@ public class AdminEditBookingModel {
             preparedStatement.setDate(1, Date.valueOf(date));
             preparedStatement.executeUpdate();
             bool = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             bool = false;
-        }finally {
+        } finally {
             preparedStatement.close();
         }
         return bool;

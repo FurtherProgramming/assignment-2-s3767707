@@ -9,7 +9,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import main.Main;
-import main.model.*;
+import main.model.AccountManagementModel;
+import main.model.User;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,8 +24,8 @@ import java.util.ResourceBundle;
  */
 public class AdminAccountManagementController implements Initializable {
 
-    private Main main = new Main();
-    private AccountManagementModel accountManagementModel = new AccountManagementModel();
+    private final Main main = new Main();
+    private final AccountManagementModel accountManagementModel = new AccountManagementModel();
     @FXML
     private TableColumn<User, String> username;
     @FXML
@@ -128,7 +130,7 @@ public class AdminAccountManagementController implements Initializable {
 
 
     public boolean isSelectedRowValid(String selectedRowId) {
-        return selectedRowId != null ? true : false;
+        return selectedRowId != null;
     }
 
 
@@ -179,21 +181,19 @@ public class AdminAccountManagementController implements Initializable {
      */
     public void Update(ActionEvent event) throws Exception {
 
-        if(table.getSelectionModel().getSelectedItem() != null) {
+        if (table.getSelectionModel().getSelectedItem() != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to update this account?", ButtonType.YES, ButtonType.NO);
             alert.showAndWait();
             if (alert.getResult() == ButtonType.YES) {
                 if (isSelectedRowValid(selectedRowId)) {
                     User user = accountManagementModel.getUserById(selectedRowId);
-                    main.passAccount("ui/AdminUpdateAccount.fxml",user);
+                    main.passAccount("ui/AdminUpdateAccount.fxml", user);
                     alert.close();
                 }
-            }
-            else if (alert.getResult() == ButtonType.NO) {
+            } else if (alert.getResult() == ButtonType.NO) {
                 alert.close();
             }
-        }
-        else {
+        } else {
             Alert alert2 = new Alert(Alert.AlertType.ERROR, "Please pick an account before updating!", ButtonType.CLOSE);
             alert2.showAndWait();
             if (alert2.getResult() == ButtonType.CLOSE)
@@ -201,23 +201,35 @@ public class AdminAccountManagementController implements Initializable {
         }
     }
 
-    public void Deactivate(ActionEvent event) throws Exception {
+    /*
+     * activate or deactivate account
+     */
+    public void ActivateOrDeactivate(ActionEvent event) throws Exception {
 
         if (table.getSelectionModel().getSelectedItem() != null) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to deactivate this account?", ButtonType.YES, ButtonType.NO);
-            alert.showAndWait();
-            if (alert.getResult() == ButtonType.YES) {
-                if (isSelectedRowValid(selectedRowId)) {
-                    //remove user and all its bookings from database
-                    accountManagementModel.deactivateAccount(selectedRowId); // remove account
+            if (table.getSelectionModel().getSelectedItem().getStatus().equals("activated")) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to deactivate this account?", ButtonType.YES, ButtonType.NO);
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.YES) {
+                    accountManagementModel.activateOrDeactivate(selectedRowId, "deactivated"); // deactivate account
                     main.change("ui/AdminAccountManagement.fxml");
                     alert.close();
+                } else {
+                    alert.close();
                 }
-            } else if (alert.getResult() == ButtonType.NO) {
-                alert.close();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to activate this account?", ButtonType.YES, ButtonType.NO);
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.YES) {
+                    accountManagementModel.activateOrDeactivate(selectedRowId, "activated"); // activate account
+                    main.change("ui/AdminAccountManagement.fxml");
+                    alert.close();
+                } else {
+                    alert.close();
+                }
             }
         } else {
-            Alert alert2 = new Alert(Alert.AlertType.ERROR, "Please pick an account before deactivating!", ButtonType.CLOSE);
+            Alert alert2 = new Alert(Alert.AlertType.ERROR, "Please pick an account before activating or deactivating!", ButtonType.CLOSE);
             alert2.showAndWait();
             if (alert2.getResult() == ButtonType.CLOSE)
                 alert2.close();

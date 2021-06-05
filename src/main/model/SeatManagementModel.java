@@ -1,9 +1,7 @@
 package main.model;
 
-import main.Main;
 import main.SQLConnection;
 
-import java.security.SecureRandom;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,7 +15,7 @@ public class SeatManagementModel {
 
     Connection connection;
 
-    public SeatManagementModel(){
+    public SeatManagementModel() {
 
         connection = SQLConnection.connect();
         if (connection == null)
@@ -32,7 +30,7 @@ public class SeatManagementModel {
         PreparedStatement preparedStatement = null;
         boolean bool = false;
         //if condition equals to "Restriction", locks seats in between
-        if(condition.equals("Restriction")) {
+        if (condition.equals("Restriction")) {
             String query = "UPDATE Seat SET condition = ?, start_date = ?, end_date = ? WHERE status = ?;";
             String query2 = "UPDATE Seat SET condition = ?, start_date = 0, end_date = 0 WHERE status = ?;";
             try {
@@ -47,12 +45,10 @@ public class SeatManagementModel {
                 preparedStatement.setInt(2, 1);
                 preparedStatement.executeUpdate();
                 bool = true;
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
                 bool = false;
-            }finally {
+            } finally {
                 preparedStatement.close();
 
             }
@@ -67,11 +63,9 @@ public class SeatManagementModel {
                 preparedStatement.setDate(3, Date.valueOf(endDate));
                 preparedStatement.executeUpdate();
                 bool = true;
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 bool = false;
-            }finally {
+            } finally {
                 preparedStatement.close();
             }
         }
@@ -83,10 +77,10 @@ public class SeatManagementModel {
      */
     public ArrayList<String> getSeatId(String condition) throws SQLException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         ArrayList<String> seatIds = new ArrayList<String>();
-        if(condition != null) {
-            if(condition.equals("Restriction")) {
+        if (condition != null) {
+            if (condition.equals("Restriction")) {
                 String query = "select * from seat where status = ? ";
                 try {
                     preparedStatement = connection.prepareStatement(query);
@@ -95,16 +89,14 @@ public class SeatManagementModel {
                     while (resultSet.next()) {
                         seatIds.add(resultSet.getString("id"));
                     }
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
-                }finally {
+                } finally {
                     preparedStatement.close();
                     resultSet.close();
                 }
             }
-            if(condition.equals("Lockdown")) {
+            if (condition.equals("Lockdown")) {
                 String query = "select * from seat ";
                 try {
 
@@ -113,16 +105,13 @@ public class SeatManagementModel {
                     while (resultSet.next()) {
                         seatIds.add(resultSet.getString("id"));
                     }
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
-                }finally {
+                } finally {
                     preparedStatement.close();
                     resultSet.close();
                 }
-            }
-            else {
+            } else {
                 seatIds = null;
             }
         }
@@ -135,9 +124,9 @@ public class SeatManagementModel {
     public ArrayList<String> getBookingIdAffectedByCondition(String condition, LocalDate startDate, LocalDate endDate) throws SQLException {
 
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         ArrayList<String> seatIds = new ArrayList<String>();
-        if(condition.equals("Restriction")) {
+        if (condition.equals("Restriction")) {
             String query = "SELECT * from booking where booking_date >= ? and booking_date <= ? and seat_id in (select id from Seat where status = ?);";
             try {
                 preparedStatement = connection.prepareStatement(query);
@@ -148,16 +137,13 @@ public class SeatManagementModel {
                 while (resultSet.next()) {
                     seatIds.add(resultSet.getString("id"));
                 }
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 preparedStatement.close();
                 resultSet.close();
             }
-        }
-        else {
+        } else {
             String query = "SELECT * from booking where booking_date >= ? and booking_date <= ? ;";
             try {
                 preparedStatement = connection.prepareStatement(query);
@@ -167,11 +153,9 @@ public class SeatManagementModel {
                 while (resultSet.next()) {
                     seatIds.add(resultSet.getString("id"));
                 }
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 preparedStatement.close();
                 resultSet.close();
             }
@@ -191,11 +175,9 @@ public class SeatManagementModel {
             preparedStatement.setString(1, "Normal");
             preparedStatement.executeUpdate();
             bool = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             bool = false;
-        }finally {
+        } finally {
             preparedStatement.close();
 
         }
@@ -207,7 +189,7 @@ public class SeatManagementModel {
      */
     public ArrayList<Seat> getAllSeats() throws SQLException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         ArrayList<Seat> seats = new ArrayList<Seat>();
         String query = "select * from seat ";
         try {
@@ -223,11 +205,9 @@ public class SeatManagementModel {
                 Seat seat = new Seat(seatId, status, condition, startDate, endDate);
                 seats.add(seat);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }

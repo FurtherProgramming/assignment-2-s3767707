@@ -16,7 +16,7 @@ public class RegisterModel {
 
     Connection connection;
 
-    public RegisterModel(){
+    public RegisterModel() {
 
         connection = SQLConnection.connect();
         if (connection == null)
@@ -38,12 +38,10 @@ public class RegisterModel {
 
             resultSet = preparedStatement.executeQuery();
             return resultSet.next();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return false;
-        }finally {
-            if(preparedStatement != null && resultSet != null) {
+        } finally {
+            if (preparedStatement != null && resultSet != null) {
                 preparedStatement.close();
                 resultSet.close();
             }
@@ -73,13 +71,11 @@ public class RegisterModel {
             preparedStatement.setString(9, "activated");
             preparedStatement.executeUpdate();
             bool = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             bool = false;
-        }finally {
-            if(preparedStatement != null) {
+        } finally {
+            if (preparedStatement != null) {
                 preparedStatement.close();
 
             }

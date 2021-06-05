@@ -1,11 +1,16 @@
-package main.test;
+package main.test.modelTest;
 
 import main.SQLConnection;
 import main.model.UserBookingModel;
 import org.junit.jupiter.api.*;
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -15,7 +20,7 @@ public class UserBookingTest {
     private static Connection connection;
 
     @BeforeAll
-    static void setUpBeforeClass(){
+    static void setUpBeforeClass() {
 
         userBookingModel = new UserBookingModel();
         connection = SQLConnection.connect();
@@ -24,7 +29,7 @@ public class UserBookingTest {
     }
 
     @AfterAll
-    static  void setUpAfterClass() throws SQLException {
+    static void setUpAfterClass() throws SQLException {
 
         connection.close();
 
@@ -34,7 +39,7 @@ public class UserBookingTest {
     @Order(1)
     void testvalidateMultipleBookings_returnBookingList_IfUsernameAndStatusMatched() throws SQLException {
 
-        assertNotNull(userBookingModel.validateMultipleBookings(LocalDate.of(2022,6,1), "0800"));
+        assertNotNull(userBookingModel.validateMultipleBookings(LocalDate.of(2022, 6, 1), "0800"));
     }
 
     @Test
@@ -52,19 +57,16 @@ public class UserBookingTest {
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 assertEquals("124", resultSet.getString("id"));
-            }
-            else {
+            } else {
                 fail();
             }
             preparedStatement = connection.prepareStatement(query2);
             preparedStatement.setString(1, "124");
             preparedStatement.executeUpdate();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if(preparedStatement != null) {
+        } finally {
+            if (preparedStatement != null) {
                 preparedStatement.close();
             }
         }
@@ -89,7 +91,7 @@ public class UserBookingTest {
     void testCheckHourBeforeEdit_returnFalse_IfDateTimeEquals48Hours() throws SQLException {
 
         ArrayList<String> seatIds = userBookingModel.isBooked(LocalDate.of(2022, 6, 1), "0800");
-        for(String id : seatIds) {
+        for (String id : seatIds) {
             assertNotNull(id);
         }
     }
@@ -100,7 +102,7 @@ public class UserBookingTest {
 
         int count = 0;
         ArrayList<String> seatIds = userBookingModel.allSeatId();
-        for(String id : seatIds) {
+        for (String id : seatIds) {
             count++;
         }
         assertEquals(16, count);

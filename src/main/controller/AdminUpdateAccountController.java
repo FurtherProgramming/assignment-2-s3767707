@@ -24,9 +24,9 @@ import java.util.ResourceBundle;
  */
 public class AdminUpdateAccountController implements Initializable {
     public AccountManagementModel accountManagementModel = new AccountManagementModel();
+    public Main main = new Main();
     private RegisterModel registerModel = new RegisterModel();
     private LoginModel loginModel = new LoginModel();
-    public Main main = new Main();
     @FXML
     private TextField txtEmployerId;
     @FXML
@@ -46,7 +46,7 @@ public class AdminUpdateAccountController implements Initializable {
 
     // Check database connection
     @Override
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
 
         addItemToChoiceBox();
     }
@@ -70,7 +70,7 @@ public class AdminUpdateAccountController implements Initializable {
     /*
      * Enter account details to update
      */
-    public void UpdateAccount(ActionEvent event) throws Exception{
+    public void UpdateAccount(ActionEvent event) throws Exception {
 
         try {
             AccountHolder holder = AccountHolder.getInstance();
@@ -123,20 +123,17 @@ public class AdminUpdateAccountController implements Initializable {
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
-            }
-            else if(accountManagementModel.empIdExist(txtEmployerId.getText(), user.getEmployerId())) {
+            } else if (accountManagementModel.empIdExist(txtEmployerId.getText(), user.getEmployerId())) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Employer id exists!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
-            }
-            else if(accountManagementModel.usernameExist(txtUsername.getText(), user.getUsername())) {
+            } else if (accountManagementModel.usernameExist(txtUsername.getText(), user.getUsername())) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Username exists!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
-            }
-            else{
+            } else {
                 // remove account first and add account again in database so same username can be reused
                 // (employer id and username is unique)
                 // Empoyer id and username cannot be changed

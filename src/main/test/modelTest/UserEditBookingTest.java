@@ -1,9 +1,7 @@
-package main.test;
+package main.test.modelTest;
 
 import main.SQLConnection;
 import main.model.Booking;
-import main.model.LoginModel;
-import main.model.RegisterModel;
 import main.model.UserEditBookingModel;
 import org.junit.jupiter.api.*;
 
@@ -13,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserEditBookingTest {
 
@@ -20,7 +19,7 @@ public class UserEditBookingTest {
     private static Connection connection;
 
     @BeforeAll
-    static void setUpBeforeClass(){
+    static void setUpBeforeClass() {
 
         userEditBookingModel = new UserEditBookingModel();
         connection = SQLConnection.connect();
@@ -29,7 +28,7 @@ public class UserEditBookingTest {
     }
 
     @AfterAll
-    static  void setUpAfterClass() throws SQLException {
+    static void setUpAfterClass() throws SQLException {
 
         connection.close();
 
@@ -69,7 +68,7 @@ public class UserEditBookingTest {
     @Order(4)
     void testCheckHourBeforeEdit_returnTrue_IfDateAndTimeMoreThan48Hours() throws SQLException {
 
-        Boolean bool = userEditBookingModel.checkHourBeforeEdit(LocalDate.of(2021,6,4), "1400", LocalDate.of(2021,6,2), LocalDateTime.of(2021, 6, 2, 13, 59));
+        Boolean bool = userEditBookingModel.checkHourBeforeEdit(LocalDate.of(2021, 6, 4), "1400", LocalDate.of(2021, 6, 2), LocalDateTime.of(2021, 6, 2, 13, 59));
         assertTrue(bool);
     }
 
@@ -77,7 +76,7 @@ public class UserEditBookingTest {
     @Order(5)
     void testCheckHourBeforeEdit_returnFalse_IfDateTimeEquals48Hours() throws SQLException {
 
-        Boolean bool = userEditBookingModel.checkHourBeforeEdit(LocalDate.of(2021,6,4), "1400", LocalDate.of(2021,6,2), LocalDateTime.of(2021, 6, 2, 14, 00));
+        Boolean bool = userEditBookingModel.checkHourBeforeEdit(LocalDate.of(2021, 6, 4), "1400", LocalDate.of(2021, 6, 2), LocalDateTime.of(2021, 6, 2, 14, 00));
         assertFalse(bool);
     }
 
@@ -85,7 +84,7 @@ public class UserEditBookingTest {
     @Order(6)
     void testCheckHourBeforeEdit_returnFalse_IfDateTimeWithin48Hours() throws SQLException {
 
-        Boolean bool = userEditBookingModel.checkHourBeforeEdit(LocalDate.of(2021,6,4), "1400", LocalDate.of(2021,6,3), LocalDateTime.of(2021, 6, 3, 14, 00));
+        Boolean bool = userEditBookingModel.checkHourBeforeEdit(LocalDate.of(2021, 6, 4), "1400", LocalDate.of(2021, 6, 3), LocalDateTime.of(2021, 6, 3, 14, 00));
         assertFalse(bool);
     }
 
@@ -101,11 +100,11 @@ public class UserEditBookingTest {
             preparedStatement = connection.prepareStatement(query2);
             preparedStatement.setString(1, "edOua1");
             resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 fail();
-            }
-            else {
-                assertNull(null); ;
+            } else {
+                assertNull(null);
+                ;
             }
             LocalDate date = LocalDate.of(2022, 6, 1);
             preparedStatement = connection.prepareStatement(query);
@@ -117,12 +116,10 @@ public class UserEditBookingTest {
             preparedStatement.setString(6, "Pending");
             preparedStatement.setString(7, "N");
             preparedStatement.executeUpdate();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if(preparedStatement != null) {
+        } finally {
+            if (preparedStatement != null) {
                 preparedStatement.close();
 
             }
@@ -143,12 +140,10 @@ public class UserEditBookingTest {
             while (resultSet.next()) {
                 count++;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if(preparedStatement != null) {
+        } finally {
+            if (preparedStatement != null) {
                 preparedStatement.close();
             }
         }
@@ -159,12 +154,10 @@ public class UserEditBookingTest {
             while (resultSet.next()) {
                 count2++;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if(preparedStatement != null) {
+        } finally {
+            if (preparedStatement != null) {
                 preparedStatement.close();
             }
         }
@@ -188,16 +181,13 @@ public class UserEditBookingTest {
             if (resultSet.next()) {
                 assertEquals("2", resultSet.getString("seat_id"));
                 assertEquals("1400", resultSet.getString("booking_time"));
-            }
-            else {
+            } else {
                 fail();
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if(preparedStatement != null) {
+        } finally {
+            if (preparedStatement != null) {
                 preparedStatement.close();
             }
         }

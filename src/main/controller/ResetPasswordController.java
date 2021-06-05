@@ -25,23 +25,22 @@ public class ResetPasswordController implements Initializable {
     private TextField txtUsername;
 
 
-
     // Check database connection
     @Override
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
 
 
     }
 
-    public void ValidateUsername(ActionEvent event){
+    public void ValidateUsername(ActionEvent event) {
 
         try {
             // user need to enter username before accessing their secret question
             User user = resetPasswordModel.validateUsername(txtUsername.getText());
-            if (user != null){
+            if (user != null) {
                 Main.stage.setUserData(user);
                 main.change("ui/SecretQuestion.fxml");
-            }else{
+            } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Username is invalid!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE) {

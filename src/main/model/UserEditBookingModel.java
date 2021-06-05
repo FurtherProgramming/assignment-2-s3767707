@@ -1,7 +1,7 @@
 package main.model;
 
-import main.Main;
 import main.SQLConnection;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,7 +16,8 @@ import java.util.ArrayList;
 public class UserEditBookingModel {
 
     Connection connection;
-    public UserEditBookingModel(){
+
+    public UserEditBookingModel() {
 
         connection = SQLConnection.connect();
         if (connection == null)
@@ -31,7 +32,7 @@ public class UserEditBookingModel {
      */
     public ArrayList<Booking> getUserBookings(String username, String status) throws SQLException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         ArrayList<Booking> bookings = new ArrayList<Booking>();
 
         String query = "select * from booking where username = ? and status = ? order by booking_date";
@@ -54,11 +55,10 @@ public class UserEditBookingModel {
                 bookings.add(booking);
             }
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -72,23 +72,20 @@ public class UserEditBookingModel {
     public Boolean checkHourBeforeEdit(LocalDate date, String time, LocalDate now, LocalDateTime currentTime) {
 
         boolean valid = false;
-        int hour = Integer.parseInt(time)/100;
+        int hour = Integer.parseInt(time) / 100;
         long daysBetween = ChronoUnit.DAYS.between(now, date);
-        if(daysBetween < 2) {
+        if (daysBetween < 2) {
             valid = false;
-        }
-        else if(daysBetween >= 3) {
+        } else if (daysBetween >= 3) {
             valid = true;
-        }
-        else {
+        } else {
             int currentHour = currentTime.getHour();
             // if difference of days between current day and booking date is 2 days, calculate the difference in hours
             int diff = (24 - currentHour) + 24 + hour; // today's hours left before midnight + 24hour + midnight to booking time
             System.out.println(diff);
-            if(diff <= 48) {
+            if (diff <= 48) {
                 valid = false;
-            }
-            else {
+            } else {
                 valid = true;
             }
         }
@@ -108,11 +105,9 @@ public class UserEditBookingModel {
             preparedStatement.setString(1, bookingId);
             preparedStatement.executeUpdate();
             bool = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             bool = false;
-        }finally {
+        } finally {
             preparedStatement.close();
         }
         return bool;
@@ -133,11 +128,9 @@ public class UserEditBookingModel {
             preparedStatement.setString(3, bookingId);
             preparedStatement.executeUpdate();
             bool = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             bool = false;
-        }finally {
+        } finally {
             preparedStatement.close();
 
         }

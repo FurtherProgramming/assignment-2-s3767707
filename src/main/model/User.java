@@ -5,7 +5,7 @@ package main.model;
  * Description:	A class that represents a user object
  * Author:		Anson Go Guang Ping
  */
-public class User{
+public class User {
 
     private String employerId;
     private String firstname;

@@ -1,7 +1,7 @@
 package main.model;
 
-import main.Main;
 import main.SQLConnection;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +16,7 @@ public class LoginModel {
 
     Connection connection;
 
-    public LoginModel(){
+    public LoginModel() {
 
         connection = SQLConnection.connect();
         if (connection == null)
@@ -29,7 +29,7 @@ public class LoginModel {
      */
     public User isLogin(String username, String pass) throws SQLException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         User user = null;
         String query = "select * from employee where username = ? and password= ?";
         try {
@@ -52,13 +52,11 @@ public class LoginModel {
                 user = new User(empId, fn, ln, role, un, p, ques, ans, st);
             }
 
-        }
-        catch (Exception e)
-        {
-           e.printStackTrace();
-        }finally {
-           preparedStatement.close();
-           resultSet.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            preparedStatement.close();
+            resultSet.close();
         }
         return user;
     }
@@ -68,7 +66,7 @@ public class LoginModel {
      */
     public Boolean isAdmin(String user, String pass) throws SQLException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         String query = "select * from employee where username = ? and password= ?";
         try {
 
@@ -79,15 +77,12 @@ public class LoginModel {
             resultSet = preparedStatement.executeQuery();
             if (resultSet.getString("role").equals("admin")) {
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return false;
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -98,7 +93,7 @@ public class LoginModel {
      */
     public Boolean usernameExist(String username) throws SQLException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         boolean valid = false;
         String query = "select * from employee where username = ? ";
         try {
@@ -106,14 +101,12 @@ public class LoginModel {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, username);
             resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 valid = true;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             valid = false;
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -125,7 +118,7 @@ public class LoginModel {
      */
     public Boolean isActivated(String username) throws SQLException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         boolean bool = false;
         String query = "select * from employee where username = ? and status = ?";
         try {
@@ -137,11 +130,9 @@ public class LoginModel {
                 bool = true;
             }
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }

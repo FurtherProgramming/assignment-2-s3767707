@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import main.model.*;
+
 import java.util.ArrayList;
 
 /*
@@ -22,10 +23,13 @@ import java.util.ArrayList;
 public class Main extends Application {
 
     public static Stage stage = new Stage();
-    private UserBookingModel userBookingModel = new UserBookingModel();
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
 
         Parent root = FXMLLoader.load(getClass().getResource("ui/Home.fxml"));
         Scene scene = new Scene(root);
@@ -54,43 +58,41 @@ public class Main extends Application {
         AccountHolder holder = AccountHolder.getInstance();
         holder.setAccount(user);
         // preview of account details when rendering AdminUpdateAccount page
-        if(user != null) {
+        if (user != null) {
             TextField t = (TextField) scene.lookup("#txtEmployerId");
-            if(t != null) {
+            if (t != null) {
                 t.setText(user.getEmployerId());
             }
             t = (TextField) scene.lookup("#txtFirstname");
-            if(t != null) {
+            if (t != null) {
                 t.setText(user.getFirstName());
             }
             t = (TextField) scene.lookup("#txtLastname");
-            if(t != null) {
+            if (t != null) {
                 t.setText(user.getLastName());
             }
             ChoiceBox t2 = (ChoiceBox) scene.lookup("#txtRole");
-            if(t2 != null) {
+            if (t2 != null) {
                 t2.setValue(user.getRole());
             }
             t = (TextField) scene.lookup("#txtUsername");
-            if(t != null) {
+            if (t != null) {
                 t.setText(user.getUsername());
             }
             t = (TextField) scene.lookup("#txtPassword");
-            if(t != null) {
+            if (t != null) {
                 t.setText(user.getPassword());
             }
             t2 = (ChoiceBox) scene.lookup("#txtSecretQuestion");
-            if(t2 != null) {
+            if (t2 != null) {
                 t2.setValue(user.getQuestion());
             }
             t = (TextField) scene.lookup("#txtAnswer");
-            if(t != null) {
+            if (t != null) {
                 t.setText(user.getAnswer());
             }
         }
     }
-
-
 
     /*
      * set seat colour after setting COVID condition
@@ -105,15 +107,14 @@ public class Main extends Application {
         DatePicker startDate = (DatePicker) scene.lookup("#startDate");
         DatePicker endDate = (DatePicker) scene.lookup("#endDate");
 
-        for(Seat seat : allSeats) {
-            if(seat.getCondition().equals("Normal")) {
+        for (Seat seat : allSeats) {
+            if (seat.getCondition().equals("Normal")) {
                 condition.setValue(seat.getCondition());
                 String seatId = "#" + seat.getSeatId();
                 Rectangle rectangle = (Rectangle) scene.lookup(seatId);
                 rectangle.setFill(Color.LIGHTGREEN);
-            }
-            else {
-                if(seat.getSeatId().equals("2")) {
+            } else {
+                if (seat.getSeatId().equals("2")) {
                     condition.setValue(seat.getCondition());
                     startDate.setValue(seat.getStartDate());
                     endDate.setValue(seat.getEndDate());
@@ -137,11 +138,11 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.show();
         Label l = (Label) scene.lookup("#date");
-        if(l != null) {
+        if (l != null) {
             l.setText(String.valueOf(booking.getBookingDate()));
         }
         ChoiceBox c = (ChoiceBox) scene.lookup("#time");
-        if(c != null) {
+        if (c != null) {
             c.setValue(String.valueOf(booking.getBookingTime()));
         }
         for (String id : seatIds) {
@@ -160,7 +161,7 @@ public class Main extends Application {
         }
         if (seatCd != null) {
             for (Seat seat : seatCd) {
-                if(!booking.getBookingDate().isBefore(seat.getStartDate()) && !booking.getBookingDate().isAfter(seat.getEndDate())) {
+                if (!booking.getBookingDate().isBefore(seat.getStartDate()) && !booking.getBookingDate().isAfter(seat.getEndDate())) {
                     if (seat.getCondition().equals("Restriction") || seat.getCondition().equals("Lockdown")) {
                         String seatId = "#" + seat.getSeatId();
                         Rectangle rectangle = (Rectangle) scene.lookup(seatId);
@@ -169,9 +170,5 @@ public class Main extends Application {
                 }
             }
         }
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

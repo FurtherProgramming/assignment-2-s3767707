@@ -5,12 +5,16 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import main.Main;
 import main.model.AccountManagementModel;
 import main.model.AdminReportModel;
 import main.model.User;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -46,7 +50,7 @@ public class EmployeeReportController implements Initializable {
 
     // Check database connection
     @Override
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
 
         setTableColumns();
         try {
@@ -100,8 +104,7 @@ public class EmployeeReportController implements Initializable {
             adminReportModel.exportEmployeeTable();
             alert.close();
             main.change("ui/AdminReport.fxml");
-        }
-        else {
+        } else {
             alert.close();
         }
     }

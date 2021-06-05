@@ -5,7 +5,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -32,9 +35,10 @@ public class UserUpdateBookingController implements Initializable {
     private ChoiceBox time;
     @FXML
     private Label date;
+
     // Check database connection
     @Override
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
 
         addItemToChoiceBox();
     }
@@ -61,7 +65,7 @@ public class UserUpdateBookingController implements Initializable {
 
         Rectangle rectangle = (Rectangle) event.getSource();
         // if rectangle is red, it is booked by others
-        if(rectangle.getFill() == Color.RED) {
+        if (rectangle.getFill() == Color.RED) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Seat unavailable. Please pick again!", ButtonType.CLOSE);
             alert.showAndWait();
             if (alert.getResult() == ButtonType.CLOSE) {
@@ -69,14 +73,13 @@ public class UserUpdateBookingController implements Initializable {
             }
         }
         // if rectangle is red, it is locked due to COVID restrictions
-        else if(rectangle.getFill() == Color.ORANGE) {
+        else if (rectangle.getFill() == Color.ORANGE) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Seat locked. Please pick again!", ButtonType.CLOSE);
             alert.showAndWait();
             if (alert.getResult() == ButtonType.CLOSE) {
                 alert.close();
             }
-        }
-        else {
+        } else {
 
             BookingHolder holder = BookingHolder.getInstance();
             Booking booking = holder.getBooking();
@@ -89,8 +92,7 @@ public class UserUpdateBookingController implements Initializable {
             if (alert.getResult() == ButtonType.YES) {
                 userEditBookingModel.updateBooking(bookingId, seatId, time);
                 main.change("ui/UserViewBooking.fxml");
-            }
-            else {
+            } else {
                 alert.close();
             }
         }
@@ -106,15 +108,14 @@ public class UserUpdateBookingController implements Initializable {
         boolean dateEqualStart = booking.getBookingDate().isEqual(userBookingModel.getConditionStartDate());
         boolean dateEqualEnd = booking.getBookingDate().isEqual(userBookingModel.getConditionEndDate());
         boolean dateBetween = booking.getBookingDate().isAfter(userBookingModel.getConditionStartDate()) && booking.getBookingDate().isBefore(userBookingModel.getConditionEndDate());
-        if(time.getValue() == null) {
+        if (time.getValue() == null) {
 
             Alert alert = new Alert(Alert.AlertType.ERROR, "Pick your time!", ButtonType.CLOSE);
             alert.showAndWait();
             if (alert.getResult() == ButtonType.CLOSE) {
                 alert.close();
             }
-        }
-        else {
+        } else {
 
             booking.setBookingTime(time.getValue().toString());
             User user = (User) Main.stage.getUserData();
@@ -128,22 +129,19 @@ public class UserUpdateBookingController implements Initializable {
             temps = userBookingModel.isBooked(booking.getBookingDate(), time2);
             seats.add(seatId);
             ArrayList<String> seatIds = userBookingModel.allSeatId(); // get all seat ids and set it green later
-            for(String temp : temps) {
+            for (String temp : temps) {
                 seats.add(temp);
             }
             // if search date is between COVID restriction duration
-            if(dateEqualStart || dateEqualEnd || dateBetween) {
+            if (dateEqualStart || dateEqualEnd || dateBetween) {
                 ArrayList<Seat> lockedSeats = seatManagementModel.getAllSeats(); // get all locked seat ids and set them orange later
                 main.displaySeatsWithCondition("ui/UserUpdateBooking.fxml", booking, seats, seatIds, lockedSeats); // set all seats based on the arrays
-            }
-            else {
+            } else {
                 ArrayList<Seat> lockedSeats = null;
                 main.displaySeatsWithCondition("ui/UserUpdateBooking.fxml", booking, seats, seatIds, lockedSeats);
             }
         }
     }
-
-
 
 
 }

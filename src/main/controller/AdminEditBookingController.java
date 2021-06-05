@@ -12,7 +12,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import main.Main;
-import main.model.*;
+import main.model.AdminEditBookingModel;
+import main.model.Booking;
+import main.model.User;
+import main.model.UserBookingModel;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -26,12 +30,12 @@ import java.util.ResourceBundle;
  */
 public class AdminEditBookingController implements Initializable {
 
+    @FXML
+    public ObservableList<Booking> populateTableList;
     private Main main = new Main();
     private AdminEditBookingModel adminEditBookingModel = new AdminEditBookingModel();
     private UserBookingModel userBookingModel = new UserBookingModel();
     private ArrayList<String> seats = new ArrayList<String>();
-    @FXML
-    public ObservableList<Booking> populateTableList;
     @FXML
     private TableColumn<Booking, String> bookingId;
     @FXML

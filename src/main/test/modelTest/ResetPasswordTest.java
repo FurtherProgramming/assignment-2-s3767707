@@ -1,9 +1,8 @@
-package main.test;
+package main.test.modelTest;
 
 import main.SQLConnection;
 import main.model.ResetPasswordModel;
 import main.model.User;
-import main.model.UserBookingModel;
 import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
@@ -20,7 +19,7 @@ public class ResetPasswordTest {
     private static Connection connection;
 
     @BeforeAll
-    static void setUpBeforeClass(){
+    static void setUpBeforeClass() {
 
         resetPasswordModel = new ResetPasswordModel();
         connection = SQLConnection.connect();
@@ -29,7 +28,7 @@ public class ResetPasswordTest {
     }
 
     @AfterAll
-    static  void setUpAfterClass() throws SQLException {
+    static void setUpAfterClass() throws SQLException {
 
         connection.close();
 
@@ -55,21 +54,21 @@ public class ResetPasswordTest {
     @Order(32)
     void testValidateAnswer_returnTrue_IfAnswerIsValid() throws SQLException {
 
-        assertTrue(resetPasswordModel.validateAnswer("a","a"));
+        assertTrue(resetPasswordModel.validateAnswer("a", "a"));
     }
 
     @Test
     @Order(33)
     void testValidateAnswer_returnFalse_IfAnswerIsNotValid() throws SQLException {
 
-        assertFalse(resetPasswordModel.validateAnswer("a","b"));
+        assertFalse(resetPasswordModel.validateAnswer("a", "b"));
     }
 
     @Test
     @Order(34)
     void testGenerateRandomPassword_StringLengthEquals4_IfGenerateRandomStringWith4Character() throws SQLException {
 
-       assertEquals(4, resetPasswordModel.generateRandomPassword(4).length());
+        assertEquals(4, resetPasswordModel.generateRandomPassword(4).length());
     }
 
     @Test
@@ -92,10 +91,9 @@ public class ResetPasswordTest {
             preparedStatement.setString(1, "a");
             preparedStatement.setString(2, "a");
             preparedStatement.executeUpdate();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }

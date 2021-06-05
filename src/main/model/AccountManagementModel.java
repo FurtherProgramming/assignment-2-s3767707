@@ -1,7 +1,7 @@
 package main.model;
 
-import main.Main;
 import main.SQLConnection;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +17,7 @@ public class AccountManagementModel {
 
     Connection connection;
 
-    public AccountManagementModel(){
+    public AccountManagementModel() {
 
         connection = SQLConnection.connect();
         if (connection == null)
@@ -26,11 +26,11 @@ public class AccountManagementModel {
     }
 
     /*
-     * get all user from database
+     * Get all user from database
      */
     public ArrayList<User> getAllUser() throws SQLException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         ArrayList<User> users = new ArrayList<User>();
         String query = "select * from employee";
         try {
@@ -50,11 +50,9 @@ public class AccountManagementModel {
                 User user = new User(empId, fn, ln, role, un, p, ques, ans, st);
                 users.add(user);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -62,7 +60,7 @@ public class AccountManagementModel {
     }
 
     /*
-     * remove user from database by employer id
+     * Remove user from database by employer id
      */
     public Boolean removeAccount(String empId) throws SQLException {
         PreparedStatement preparedStatement = null;
@@ -74,19 +72,17 @@ public class AccountManagementModel {
             preparedStatement.setString(1, empId);
             preparedStatement.executeUpdate();
             bool = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             bool = false;
-        }finally {
+        } finally {
             preparedStatement.close();
         }
         return bool;
     }
 
     /*
-     * remove bookings from database by username
+     * Remove bookings from database by username
      */
     public Boolean removeBookings(String username) throws SQLException {
         PreparedStatement preparedStatement = null;
@@ -98,23 +94,21 @@ public class AccountManagementModel {
             preparedStatement.setString(1, username);
             preparedStatement.executeUpdate();
             bool = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             bool = false;
-        }finally {
+        } finally {
             preparedStatement.close();
         }
         return bool;
     }
 
     /*
-     * get user from database with employer id
+     * Get user from database with employer id
      */
     public User getUserById(String empId) throws SQLException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         User user = null;
         String query = "select * from employee where emp_id = ? ";
         try {
@@ -134,23 +128,21 @@ public class AccountManagementModel {
                 String st = resultSet.getString("status");
                 user = new User(emp_Id, fn, ln, role, un, p, ques, ans, st);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-           preparedStatement.close();
-           resultSet.close();
+        } finally {
+            preparedStatement.close();
+            resultSet.close();
         }
         return user;
     }
 
     /*
-     * get user from database by username
+     * Get user from database by username
      */
     public User getUserByUsername(String username) throws SQLException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         User user = null;
         String query = "select * from employee where username = ? ";
         try {
@@ -170,11 +162,9 @@ public class AccountManagementModel {
                 String st = resultSet.getString("status");
                 user = new User(emp_Id, fn, ln, role, un, p, ques, ans, st);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -182,12 +172,12 @@ public class AccountManagementModel {
     }
 
     /*
-     * update account details by employer id
+     * Update account details by employer id
      */
     public Boolean updateAccount(String empId, String fn, String ln, String role, String un, String pass, String ques, String ans, User user) throws SQLException {
 
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         boolean bool = false;
         String query = "UPDATE employee SET emp_id = ?, firstname = ?, lastname = ?, role = ?, username = ?, password = ?, secret_question = ?, answer = ? WHERE emp_id = ?;";
         try {
@@ -203,11 +193,9 @@ public class AccountManagementModel {
             preparedStatement.setString(9, user.getEmployerId());
             preparedStatement.executeUpdate();
             bool = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             bool = false;
-        }finally {
+        } finally {
             preparedStatement.close();
         }
         return bool;
@@ -216,36 +204,34 @@ public class AccountManagementModel {
     /*
      * update account details by employer id
      */
-    public Boolean deactivateAccount(String empId) throws SQLException {
+    public Boolean activateOrDeactivate(String empId, String status) throws SQLException {
 
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         boolean bool = false;
         String query = "UPDATE employee SET status = ? WHERE emp_id = ?;";
         try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, "deactivated");
+            preparedStatement.setString(1, status);
             preparedStatement.setString(2, empId);
 
             preparedStatement.executeUpdate();
             bool = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             bool = false;
-        }finally {
+        } finally {
             preparedStatement.close();
         }
         return bool;
     }
 
     /*
-     * return true if username exist
-     * allows admin to reuse previous account username
+     * Return true if username exist
+     * Allows admin to reuse previous account username
      */
     public Boolean usernameExist(String username, String prevUsername) throws SQLException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         boolean valid = false;
         String query = "select * from employee where username = ?";
         try {
@@ -253,19 +239,16 @@ public class AccountManagementModel {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, username);
             resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
-                if(resultSet.getString("username").equals(prevUsername)) { // if username entered equals to previous username
+            if (resultSet.next()) {
+                if (resultSet.getString("username").equals(prevUsername)) { // if username entered equals to previous username
                     valid = false;
-                }
-                else {
+                } else {
                     valid = true;
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             valid = false;
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -273,32 +256,29 @@ public class AccountManagementModel {
     }
 
     /*
-     * return true if username exist
-     * allows admin to reuse previous account username
+     * Return true if username exist
+     * Allows admin to reuse previous account username
      */
     public Boolean empIdExist(String empId, String prevEmpId) throws SQLException {
 
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         boolean valid = false;
         String query = "select * from employee where emp_id = ?";
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, empId);
             resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
-                if(resultSet.getString("emp_id").equals(prevEmpId)) { // if username entered equals to previous username
+            if (resultSet.next()) {
+                if (resultSet.getString("emp_id").equals(prevEmpId)) { // if employer id entered equals to previous employer id
                     valid = false;
-                }
-                else {
+                } else {
                     valid = true;
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             valid = false;
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }

@@ -9,7 +9,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import main.Main;
-import main.model.*;
+import main.model.AdminReportModel;
+import main.model.Booking;
+import main.model.User;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -23,11 +26,10 @@ import java.util.ResourceBundle;
  */
 public class BookingReportController implements Initializable {
 
-    private Main main = new Main();
-    private AdminReportModel adminReportModel = new AdminReportModel();
-
     @FXML
     public ObservableList<Booking> populateTableList;
+    private Main main = new Main();
+    private AdminReportModel adminReportModel = new AdminReportModel();
     @FXML
     private TableColumn<Booking, String> bookingId;
     @FXML
@@ -107,32 +109,29 @@ public class BookingReportController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you confirm to export Booking table to csv?!", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.YES) {
-            if(date.getValue() != null) { //if admin enter date
+            if (date.getValue() != null) { //if admin enter date
                 adminReportModel.exportBookingTableWithDate(date.getValue()); // export all accepted bookings on that day into csv file
                 alert.close();
                 main.change("ui/AdminReport.fxml");
-            }
-            else {
+            } else {
                 adminReportModel.exportBookingTable(); // export all accepted bookings into csv file
                 alert.close();
                 main.change("ui/AdminReport.fxml");
             }
-        }
-        else {
+        } else {
             alert.close();
         }
     }
 
     public void Search(ActionEvent event) throws Exception {
 
-        if(date.getValue() != null) {
+        if (date.getValue() != null) {
             table.getItems().clear(); // clear table to avoid stacking
             // show table of accepted bookings with booking date searched
             ArrayList<Booking> bookings = adminReportModel.getAllBookingsWithDate(date.getValue());
             ObservableList<Booking> populateTableList = FXCollections.observableArrayList(bookings);
             table.getItems().addAll(populateTableList);
-        }
-        else {
+        } else {
             table.getItems().clear();
             // show table of all accepted bookings
             ArrayList<Booking> bookings = adminReportModel.getAllBookings();

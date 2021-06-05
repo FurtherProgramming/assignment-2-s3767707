@@ -1,6 +1,7 @@
 package main.model;
 
 import main.SQLConnection;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class UserBookingModel {
 
     Connection connection;
 
-    public UserBookingModel(){
+    public UserBookingModel() {
 
         connection = SQLConnection.connect();
         if (connection == null)
@@ -40,14 +41,13 @@ public class UserBookingModel {
             preparedStatement.setString(3, "Pending");
             preparedStatement.setString(4, "Accepted");
             resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 usernames.add(resultSet.getString("username"));
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if(preparedStatement != null && resultSet != null) {
+        } finally {
+            if (preparedStatement != null && resultSet != null) {
                 preparedStatement.close();
                 resultSet.close();
             }
@@ -59,8 +59,8 @@ public class UserBookingModel {
 
         boolean found = false;
         ArrayList<String> usernames = validateMultipleBookings(date, time);
-        for(String un : usernames) {
-            if(username.equals(un)) {
+        for (String un : usernames) {
+            if (username.equals(un)) {
                 found = true;
             }
         }
@@ -87,12 +87,10 @@ public class UserBookingModel {
             preparedStatement.setString(7, check);
             preparedStatement.executeUpdate();
             bool = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             bool = false;
-        }finally {
-            if(preparedStatement != null) {
+        } finally {
+            if (preparedStatement != null) {
                 preparedStatement.close();
 
             }
@@ -112,15 +110,13 @@ public class UserBookingModel {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, username);
             resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 seatId = resultSet.getString("seat_id");
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
 
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -145,17 +141,15 @@ public class UserBookingModel {
             preparedStatement.setString(3, "Rejected");
 
             resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
 
                 seatId = resultSet.getString("seat_id");
                 seats.add(seatId);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
 
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -175,16 +169,14 @@ public class UserBookingModel {
         try {
             preparedStatement = connection.prepareStatement(query);
             resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 seatId = resultSet.getString("id");
                 seats.add(seatId);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
 
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -204,17 +196,15 @@ public class UserBookingModel {
         try {
             preparedStatement = connection.prepareStatement(query);
             resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
+            if (resultSet.next()) {
 
                 date = resultSet.getDate("start_date").toLocalDate();
 
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
 
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -234,15 +224,13 @@ public class UserBookingModel {
         try {
             preparedStatement = connection.prepareStatement(query);
             resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 date = resultSet.getDate("end_date").toLocalDate();
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
 
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -263,7 +251,7 @@ public class UserBookingModel {
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, "Y");
             resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 String bookId = resultSet.getString("id");
                 String un = resultSet.getString("username");
                 String seatId = resultSet.getString("seat_id");
@@ -273,12 +261,10 @@ public class UserBookingModel {
                 String checkIn = resultSet.getString("check_in");
                 booking = new Booking(bookId, un, seatId, bookDate, status, bookTime, checkIn);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
 
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -294,12 +280,12 @@ public class UserBookingModel {
         ResultSet resultSet = null;
         // get seat id of left employee
         int leftSeat = Integer.parseInt(seatId) - 1;
-        if(leftSeat == 0) {
+        if (leftSeat == 0) {
             leftSeat = 16;
         }
         // get seat id of right employee
-        int rightSeat  = Integer.parseInt(seatId) + 1;
-        if(rightSeat == 17) {
+        int rightSeat = Integer.parseInt(seatId) + 1;
+        if (rightSeat == 17) {
             rightSeat = 1;
         }
         String query = "select * from booking where booking_date = ? and booking_time = ? and (seat_id = ? or seat_id = ?)";
@@ -311,15 +297,13 @@ public class UserBookingModel {
             preparedStatement.setString(3, String.valueOf(leftSeat));
             preparedStatement.setString(4, String.valueOf(rightSeat));
             resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 usernames.add(resultSet.getString("username"));
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
 
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -337,11 +321,11 @@ public class UserBookingModel {
         String firstUser = null;
         String secondUser = null;
         // if seated with one employee last sit
-        if(adjacentUsers.size() == 1) {
+        if (adjacentUsers.size() == 1) {
             firstUser = adjacentUsers.get(0);
         }
         // if seated with two employee last sits
-        if(adjacentUsers.size() == 2) {
+        if (adjacentUsers.size() == 2) {
             firstUser = adjacentUsers.get(0);
             secondUser = adjacentUsers.get(1);
         }
@@ -354,15 +338,13 @@ public class UserBookingModel {
             preparedStatement.setString(3, firstUser);
             preparedStatement.setString(4, secondUser);
             resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 seats.add(resultSet.getString("seat_id"));
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
 
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -370,29 +352,27 @@ public class UserBookingModel {
     }
 
 
-     /*
-      * get seats beside same Employees that have been sitten previously
-      */
+    /*
+     * get seats beside same Employees that have been sitten previously
+     */
     public ArrayList<String> SeatsBesidePrevUser(ArrayList<String> seatIds) {
 
         ArrayList<String> seats = new ArrayList<String>();
-        for(String seat: seatIds) {
-            if(seat != null) {
-                if(seat.equals("1")) {
+        for (String seat : seatIds) {
+            if (seat != null) {
+                if (seat.equals("1")) {
                     String right = "16";
                     seats.add(right);
                     int leftNum = Integer.parseInt(seat) + 1;
                     String left = String.valueOf(leftNum);
                     seats.add(left);
-                }
-                else if(seat.equals("16")) {
+                } else if (seat.equals("16")) {
                     String left = "1";
                     seats.add(left);
                     int rightNum = Integer.parseInt(seat) - 1;
                     String right = String.valueOf(rightNum);
                     seats.add(right);
-                }
-                else {
+                } else {
                     int leftNum = Integer.parseInt(seat) - 1;
                     String left = String.valueOf(leftNum);
                     seats.add(left);

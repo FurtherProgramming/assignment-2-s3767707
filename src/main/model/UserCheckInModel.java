@@ -1,6 +1,7 @@
 package main.model;
 
 import main.SQLConnection;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class UserCheckInModel {
 
     Connection connection;
 
-    public UserCheckInModel(){
+    public UserCheckInModel() {
 
         connection = SQLConnection.connect();
         if (connection == null)
@@ -35,29 +36,26 @@ public class UserCheckInModel {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, bookingId);
             resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 String bookTime = resultSet.getString("booking_time");
                 //validate if check in time is within booking time session
-                if(bookTime.equals("0800")) {
-                    if(time < 14 && time >= 8) {
+                if (bookTime.equals("0800")) {
+                    if (time < 14 && time >= 8) {
                         isDate = true;
                     }
                 }
-                if(bookTime.equals("1400")){
-                    if(time >= 14) {
+                if (bookTime.equals("1400")) {
+                    if (time >= 14) {
                         isDate = true;
                     }
                 }
-            }
-            else {
+            } else {
                 isDate = false;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             isDate = false;
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -77,17 +75,15 @@ public class UserCheckInModel {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, bookingId);
             resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 String check = resultSet.getString("check_in");
-                if(check.equals("Y")) {
+                if (check.equals("Y")) {
                     isCheck = true;
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -108,11 +104,9 @@ public class UserCheckInModel {
             preparedStatement.setString(2, bookingId);
             preparedStatement.executeUpdate();
             bool = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             bool = false;
-        }finally {
+        } finally {
             preparedStatement.close();
 
         }
@@ -124,7 +118,7 @@ public class UserCheckInModel {
      */
     public ArrayList<Booking> getUserBooking(String username, String status, LocalDate date) throws SQLException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         ArrayList<Booking> bookings = new ArrayList<Booking>();
         String query = "select * from booking where username = ? and status = ? and booking_date = ?";
         try {
@@ -145,11 +139,10 @@ public class UserCheckInModel {
                 Booking booking = new Booking(bookId, un, seatId, bookDate.toLocalDate(), st, time, check);
                 bookings.add(booking);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }

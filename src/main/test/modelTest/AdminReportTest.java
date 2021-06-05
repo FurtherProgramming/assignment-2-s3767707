@@ -1,23 +1,19 @@
-package main.test;
+package main.test.modelTest;
 
 import main.SQLConnection;
 import main.model.AdminReportModel;
 import main.model.Booking;
-import main.model.UserBookingModel;
 import org.junit.jupiter.api.*;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AdminReportTest {
@@ -26,7 +22,7 @@ public class AdminReportTest {
     private static Connection connection;
 
     @BeforeAll
-    static void setUpBeforeClass(){
+    static void setUpBeforeClass() {
 
         adminReportModel = new AdminReportModel();
         connection = SQLConnection.connect();
@@ -35,7 +31,7 @@ public class AdminReportTest {
     }
 
     @AfterAll
-    static  void setUpAfterClass() throws SQLException {
+    static void setUpAfterClass() throws SQLException {
 
         connection.close();
 
@@ -48,7 +44,7 @@ public class AdminReportTest {
         adminReportModel.exportEmployeeTable();
         BufferedReader bufr = new BufferedReader(new FileReader("Employee-report.csv"));
         String inputLine;
-        inputLine= bufr.readLine();
+        inputLine = bufr.readLine();
         assertNotNull(inputLine);
     }
 
@@ -59,7 +55,7 @@ public class AdminReportTest {
         adminReportModel.exportBookingTable();
         BufferedReader bufr = new BufferedReader(new FileReader("Booking-report.csv"));
         String inputLine;
-        inputLine= bufr.readLine();
+        inputLine = bufr.readLine();
         assertNotNull(inputLine);
     }
 
@@ -70,7 +66,7 @@ public class AdminReportTest {
         adminReportModel.exportBookingTableWithDate(LocalDate.of(2021, 6, 6));
         BufferedReader bufr = new BufferedReader(new FileReader("Booking-report.csv"));
         String inputLine;
-        inputLine= bufr.readLine();
+        inputLine = bufr.readLine();
         assertNotNull(inputLine);
     }
 
@@ -79,7 +75,7 @@ public class AdminReportTest {
     void testGetAllBookings_returnNotNull_IfBookingsFound() throws SQLException {
 
         ArrayList<Booking> bookings = adminReportModel.getAllBookings();
-        for(Booking b : bookings) {
+        for (Booking b : bookings) {
             assertNotNull(b);
         }
     }
@@ -89,7 +85,7 @@ public class AdminReportTest {
     void testGetAllBookingsWithDate_returnNotNull_IfBookingsFound() throws SQLException {
 
         ArrayList<Booking> bookings = adminReportModel.getAllBookingsWithDate(LocalDate.of(2021, 6, 6));
-        for(Booking b : bookings) {
+        for (Booking b : bookings) {
             assertNotNull(b);
         }
     }

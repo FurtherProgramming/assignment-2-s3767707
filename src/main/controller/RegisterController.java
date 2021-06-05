@@ -5,10 +5,14 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextField;
 import main.Main;
 import main.model.LoginModel;
 import main.model.RegisterModel;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,9 +24,9 @@ import java.util.ResourceBundle;
  * Author:		Anson Go Guang Ping
  */
 public class RegisterController implements Initializable {
+    public Main main = new Main();
     private RegisterModel registerModel = new RegisterModel();
     private LoginModel loginModel = new LoginModel();
-    public Main main = new Main();
     @FXML
     private TextField txtEmployerId;
     @FXML
@@ -40,7 +44,7 @@ public class RegisterController implements Initializable {
 
     // Check database connection
     @Override
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
 
         addItemToChoiceBox();
     }
@@ -55,7 +59,7 @@ public class RegisterController implements Initializable {
         txtSecretQuestion.getItems().addAll(secretQuestion);
     }
 
-    public void Register(ActionEvent event) throws Exception{
+    public void Register(ActionEvent event) throws Exception {
 
         try {
             if (txtEmployerId.getText().isEmpty()) {
@@ -63,56 +67,47 @@ public class RegisterController implements Initializable {
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
-            }
-            else if (txtFirstname.getText().isEmpty()) {
+            } else if (txtFirstname.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "First name is required!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
-            }
-            else if (txtLastname.getText().isEmpty()) {
+            } else if (txtLastname.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Last name is required!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
-            }
-            else if (txtUsername.getText().isEmpty()) {
+            } else if (txtUsername.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Username is required!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
-            }
-            else if (txtPassword.getText().isEmpty()) {
+            } else if (txtPassword.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Password is required!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
-            }
-            else if (txtSecretQuestion.getValue() == null) {
+            } else if (txtSecretQuestion.getValue() == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Pick a secret question!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
-            }
-            else if (txtAnswer.getText().isEmpty()) {
+            } else if (txtAnswer.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Answer for secret question is required!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
-            }
-            else if (registerModel.employerIdExist(txtEmployerId.getText())){
+            } else if (registerModel.employerIdExist(txtEmployerId.getText())) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Employer id exists!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
-            }
-            else if (loginModel.usernameExist(txtUsername.getText())){
+            } else if (loginModel.usernameExist(txtUsername.getText())) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Username exists!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
-            }
-            else{
+            } else {
                 registerModel.register(txtEmployerId.getText(), txtFirstname.getText(), txtLastname.getText(), "user", txtUsername.getText(), txtPassword.getText(), txtSecretQuestion.getValue(), txtAnswer.getText());
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Register successfully!", ButtonType.CLOSE);
                 alert.showAndWait();

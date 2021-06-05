@@ -1,15 +1,16 @@
-package main.test;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+package main.test.modelTest;
 
 import main.SQLConnection;
 import main.model.LoginModel;
 import main.model.RegisterModel;
 import org.junit.jupiter.api.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RegisterModelTest {
@@ -19,7 +20,7 @@ public class RegisterModelTest {
     private static Connection connection;
 
     @BeforeAll
-    static void setUpBeforeClass(){
+    static void setUpBeforeClass() {
 
         connection = SQLConnection.connect();
         if (connection == null)
@@ -28,7 +29,7 @@ public class RegisterModelTest {
     }
 
     @AfterAll
-    static  void setUpAfterClass() throws SQLException {
+    static void setUpAfterClass() throws SQLException {
 
         connection.close();
 
@@ -70,7 +71,7 @@ public class RegisterModelTest {
     @Order(28)
     void testRegister_returnTrue_IfAllInfoIsValid() throws SQLException {
 
-        boolean bool = registerModel.register("c","c","c","user","c","c","What is your favourite colour?","c");
+        boolean bool = registerModel.register("c", "c", "c", "user", "c", "c", "What is your favourite colour?", "c");
         assertTrue(bool);
         PreparedStatement preparedStatement = null;
         String query = "DELETE FROM Employee WHERE emp_id = ?";
@@ -80,11 +81,9 @@ public class RegisterModelTest {
             preparedStatement.setString(1, "c");
             preparedStatement.executeUpdate();
             bool = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             bool = false;
-        }finally {
+        } finally {
             preparedStatement.close();
 
         }

@@ -7,21 +7,22 @@ package main.model;
  */
 public class AccountHolder {
 
-    private User user;
     private final static AccountHolder INSTANCE = new AccountHolder();
+    private User user;
 
-    private AccountHolder() {}
+    private AccountHolder() {
+    }
 
     public static AccountHolder getInstance() {
         return INSTANCE;
     }
 
-    public void setAccount(User user) {
-        this.user = user;
-    }
-
     public User getAccount() {
         return this.user;
+    }
+
+    public void setAccount(User user) {
+        this.user = user;
     }
 
 

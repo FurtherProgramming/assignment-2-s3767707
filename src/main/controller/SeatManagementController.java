@@ -5,10 +5,14 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import main.Main;
 import main.model.AdminEditBookingModel;
 import main.model.SeatManagementModel;
+
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -33,7 +37,7 @@ public class SeatManagementController implements Initializable {
 
     // Check database connection
     @Override
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
 
         addItemToChoiceBox();
     }
@@ -52,66 +56,60 @@ public class SeatManagementController implements Initializable {
 
     public void Apply(ActionEvent event) throws Exception {
 
-        if(condition.getValue() != null) {
-            if(startDate.getValue() != null) {
-                if(endDate.getValue() != null) {
-                    if(startDate.getValue().isAfter(LocalDate.now())) { // start duration must be in the future
-                        if(startDate.getValue().isEqual(endDate.getValue()) || startDate.getValue().isBefore(endDate.getValue())) { // duration strat date is always before end date
+        if (condition.getValue() != null) {
+            if (startDate.getValue() != null) {
+                if (endDate.getValue() != null) {
+                    if (startDate.getValue().isAfter(LocalDate.now())) { // start duration must be in the future
+                        if (startDate.getValue().isEqual(endDate.getValue()) || startDate.getValue().isBefore(endDate.getValue())) { // duration strat date is always before end date
                             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you confirm to set the seat condition?", ButtonType.YES, ButtonType.NO);
                             alert.showAndWait();
                             if (alert.getResult() == ButtonType.YES) {
-                                if(condition.getValue().equals("Restriction")) {
+                                if (condition.getValue().equals("Restriction")) {
                                     seatManagementModel.updateSeat(condition.getValue(), startDate.getValue(), endDate.getValue()); // update seat details in database
                                     ArrayList<String> bookingIds = seatManagementModel.getBookingIdAffectedByCondition("Restriction", startDate.getValue(), endDate.getValue());
                                     // reject all bookings during the duration
-                                    for(String id: bookingIds) {
+                                    for (String id : bookingIds) {
                                         adminEditBookingModel.editBookingStatus(id, "Rejected");
                                     }
                                     main.setSeatColorInSeatManagement("ui/SeatManagement.fxml", seatManagementModel.getAllSeats()); // change seat visual colours
                                 }
-                                if(condition.getValue().equals("Lockdown")) {
+                                if (condition.getValue().equals("Lockdown")) {
                                     seatManagementModel.updateSeat(condition.getValue(), startDate.getValue(), endDate.getValue());
                                     ArrayList<String> bookingIds = seatManagementModel.getBookingIdAffectedByCondition("Lockdown", startDate.getValue(), endDate.getValue());
-                                    for(String id: bookingIds) {
+                                    for (String id : bookingIds) {
                                         adminEditBookingModel.editBookingStatus(id, "Rejected");
                                     }
                                     main.setSeatColorInSeatManagement("ui/SeatManagement.fxml", seatManagementModel.getAllSeats());
                                 }
                                 alert.close();
-                            }
-                            else {
+                            } else {
                                 alert.close();
                             }
-                        }
-                        else {
+                        } else {
                             Alert alert = new Alert(Alert.AlertType.ERROR, "Start date cannot be after end date!!", ButtonType.CLOSE);
                             alert.showAndWait();
                             if (alert.getResult() == ButtonType.CLOSE)
                                 alert.close();
                         }
-                    }
-                    else {
+                    } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR, "Start date cannot be today or past!", ButtonType.CLOSE);
                         alert.showAndWait();
                         if (alert.getResult() == ButtonType.CLOSE)
                             alert.close();
                     }
-                }
-                else {
+                } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Pick end date!", ButtonType.CLOSE);
                     alert.showAndWait();
                     if (alert.getResult() == ButtonType.CLOSE)
                         alert.close();
                 }
-            }
-            else {
+            } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Pick start date!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
             }
-        }
-        else {
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Pick condition first!", ButtonType.CLOSE);
             alert.showAndWait();
             if (alert.getResult() == ButtonType.CLOSE)
@@ -129,9 +127,6 @@ public class SeatManagementController implements Initializable {
         seatManagementModel.resetCondition();
         main.setSeatColorInSeatManagement("ui/SeatManagement.fxml", seatManagementModel.getAllSeats());
     }
-
-
-
 
 
 }

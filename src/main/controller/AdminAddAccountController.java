@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import main.Main;
 import main.model.LoginModel;
 import main.model.RegisterModel;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ import java.util.ResourceBundle;
  */
 public class AdminAddAccountController implements Initializable {
     public RegisterModel registerModel = new RegisterModel();
-    private LoginModel loginModel = new LoginModel();
     public Main main = new Main();
+    private LoginModel loginModel = new LoginModel();
     @FXML
     private TextField txtEmployerId;
     @FXML
@@ -45,7 +46,7 @@ public class AdminAddAccountController implements Initializable {
 
     // Check database connection
     @Override
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
 
         addItemToChoiceBox();
     }
@@ -71,7 +72,7 @@ public class AdminAddAccountController implements Initializable {
     /*
      * handles register button
      */
-    public void Register(ActionEvent event) throws Exception{
+    public void Register(ActionEvent event) throws Exception {
 
         try {
             // if employer id not entered, show error message
@@ -131,21 +132,19 @@ public class AdminAddAccountController implements Initializable {
                     alert.close();
             }
             // if employer id exists, show error message
-            else if (registerModel.employerIdExist(txtEmployerId.getText())){
+            else if (registerModel.employerIdExist(txtEmployerId.getText())) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Employer id exists!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
             }
             // if username exists, show error message
-            else if (loginModel.usernameExist(txtUsername.getText())){
+            else if (loginModel.usernameExist(txtUsername.getText())) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Username exists!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
-            }
-
-            else{
+            } else {
                 registerModel.register(txtEmployerId.getText(), txtFirstname.getText(), txtLastname.getText(), txtRole.getValue(), txtUsername.getText(), txtPassword.getText(), txtSecretQuestion.getValue(), txtAnswer.getText()); // register user
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Register successfully!", ButtonType.CLOSE);
                 alert.showAndWait();

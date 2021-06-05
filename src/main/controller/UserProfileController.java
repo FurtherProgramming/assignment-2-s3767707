@@ -8,6 +8,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import main.Main;
 import main.model.User;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -23,7 +24,7 @@ public class UserProfileController implements Initializable {
     private Label username;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
         User user = (User) Main.stage.getUserData();
         username.setText(user.getUsername());
     }
@@ -46,10 +47,10 @@ public class UserProfileController implements Initializable {
     public void MakeBooking(ActionEvent event) throws Exception {
 
         User u = (User) Main.stage.getUserData();
-        if(u.getStatus().equals("activated")) {
+        // only activated account can make booking
+        if (u.getStatus().equals("activated")) {
             main.change("ui/UserBooking.fxml");
-        }
-        else {
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Account deactivated. Please contact admin to reactivate your account!!", ButtonType.CLOSE);
             alert.showAndWait();
             if (alert.getResult() == ButtonType.CLOSE) {
@@ -67,10 +68,10 @@ public class UserProfileController implements Initializable {
     public void CheckIn(ActionEvent event) throws Exception {
 
         User u = (User) Main.stage.getUserData();
-        if(u.getStatus().equals("activated")) {
+        // only activated account and check in
+        if (u.getStatus().equals("activated")) {
             main.change("ui/UserCheckIn.fxml");
-        }
-        else {
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Account deactivated. Please contact admin to reactivate your account!!", ButtonType.CLOSE);
             alert.showAndWait();
             if (alert.getResult() == ButtonType.CLOSE) {

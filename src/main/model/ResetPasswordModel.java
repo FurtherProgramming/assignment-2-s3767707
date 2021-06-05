@@ -1,6 +1,5 @@
 package main.model;
 
-import main.Main;
 import main.SQLConnection;
 
 import java.security.SecureRandom;
@@ -18,7 +17,7 @@ public class ResetPasswordModel {
 
     Connection connection;
 
-    public ResetPasswordModel(){
+    public ResetPasswordModel() {
 
         connection = SQLConnection.connect();
         if (connection == null)
@@ -31,7 +30,7 @@ public class ResetPasswordModel {
      */
     public User validateUsername(String username) throws SQLException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         User user = null;
         String query = "select * from employee where username = ?";
         try {
@@ -51,13 +50,11 @@ public class ResetPasswordModel {
                 String st = resultSet.getString("status");
                 user = new User(empId, fn, ln, role, un, pass, ques, ans, st);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-           preparedStatement.close();
-           resultSet.close();
+        } finally {
+            preparedStatement.close();
+            resultSet.close();
         }
         return user;
     }
@@ -67,10 +64,9 @@ public class ResetPasswordModel {
      */
     public Boolean validateAnswer(String answer, String txtAnswer) {
 
-        if(answer.equals(txtAnswer)) {
+        if (answer.equals(txtAnswer)) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -78,16 +74,14 @@ public class ResetPasswordModel {
     /*
      * generates random password
      */
-    public String generateRandomPassword(int len)
-    {
+    public String generateRandomPassword(int len) {
 
         final String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
         SecureRandom random = new SecureRandom();
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < len; i++)
-        {
+        for (int i = 0; i < len; i++) {
             int randomIndex = random.nextInt(chars.length());
             sb.append(chars.charAt(randomIndex));
         }
@@ -109,11 +103,9 @@ public class ResetPasswordModel {
             preparedStatement.setString(2, username);
             preparedStatement.executeUpdate();
             bool = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             bool = false;
-        }finally {
+        } finally {
             preparedStatement.close();
 
         }

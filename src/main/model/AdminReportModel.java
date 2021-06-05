@@ -1,6 +1,7 @@
 package main.model;
 
 import main.SQLConnection;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class AdminReportModel {
 
     Connection connection;
 
-    public AdminReportModel(){
+    public AdminReportModel() {
 
         connection = SQLConnection.connect();
         if (connection == null)
@@ -29,7 +30,7 @@ public class AdminReportModel {
      */
     public void exportEmployeeTable() throws SQLException, IOException {
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         String csvFilePath = "Employee-report.csv";
         BufferedWriter fileWriter = null;
         String query = "select * from employee";
@@ -55,11 +56,9 @@ public class AdminReportModel {
                 fileWriter.newLine();
                 fileWriter.write(line);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
             fileWriter.close();
@@ -77,7 +76,7 @@ public class AdminReportModel {
         fileWriter = new BufferedWriter(new FileWriter(csvFilePath));
         fileWriter.write("booking_id, username, seat_id, booking_date, booking_time, status, check_in");
         ArrayList<Booking> bookings = getAllBookingsWithDate(date);
-        for(Booking booking : bookings) {
+        for (Booking booking : bookings) {
 
             String line = String.format("\"%s\",%s,%s,%s,%s,%s,%s",
                     booking.getBookingId(), booking.getUsername(), booking.getSeatId(), booking.getBookingDate().toString(), booking.getBookingTime(), booking.getStatus(), booking.getCheckIn());
@@ -97,7 +96,7 @@ public class AdminReportModel {
         fileWriter = new BufferedWriter(new FileWriter(csvFilePath));
         fileWriter.write("booking_id, username, seat_id, booking_date, booking_time, status, check_in");
         ArrayList<Booking> bookings = getAllBookings();
-        for(Booking booking : bookings) {
+        for (Booking booking : bookings) {
 
             String line = String.format("\"%s\",%s,%s,%s,%s,%s,%s",
                     booking.getBookingId(), booking.getUsername(), booking.getSeatId(), booking.getBookingDate().toString(), booking.getBookingTime(), booking.getStatus(), booking.getCheckIn());
@@ -113,7 +112,7 @@ public class AdminReportModel {
     public ArrayList<Booking> getAllBookings() throws SQLException {
 
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         ArrayList<Booking> bookings = new ArrayList<Booking>();
         String query = "select * from booking ORDER BY booking_date ";
         try {
@@ -130,11 +129,10 @@ public class AdminReportModel {
                 Booking booking = new Booking(bookId, un, seatId, bookDate.toLocalDate(), st, time, check);
                 bookings.add(booking);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }
@@ -147,7 +145,7 @@ public class AdminReportModel {
     public ArrayList<Booking> getAllBookingsWithDate(LocalDate date) throws SQLException {
 
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet=null;
+        ResultSet resultSet = null;
         ArrayList<Booking> bookings = new ArrayList<Booking>();
         String query = "select * from booking where booking_date = ? ORDER BY status";
         try {
@@ -165,10 +163,9 @@ public class AdminReportModel {
                 Booking booking = new Booking(bookId, un, seatId, bookDate.toLocalDate(), st, time, check);
                 bookings.add(booking);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             preparedStatement.close();
             resultSet.close();
         }

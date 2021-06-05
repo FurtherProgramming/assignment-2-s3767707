@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import main.Main;
 import main.model.AdminEditBookingModel;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -18,9 +19,10 @@ public class HomeController implements Initializable {
 
     private Main main = new Main();
     private AdminEditBookingModel adminEditBookingModel = new AdminEditBookingModel();
+
     // Check database connection
     @Override
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
 
         try {
             adminEditBookingModel.autoRejectBooking(LocalDate.now(), "Rejected"); // booking id auto rejected after mid
@@ -44,10 +46,6 @@ public class HomeController implements Initializable {
 
         main.change("ui/Home.fxml");
     }
-
-
-
-
 
 
 }
