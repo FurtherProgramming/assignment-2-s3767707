@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="400.0" prefWidth="512.0" xmlns="http://javafx.com/javafx/8.0.171"
+      fx:controller="main.controller.HomeController">
+    <children>
+        <ToolBar layoutY="7.0" prefHeight="45.0" prefWidth="512.0">
+            <items>
+                <Button mnemonicParsing="false" onAction="#HomePage" text="Home"/>
+                <Button fx:id="login" mnemonicParsing="false" onAction="#LoginPage" text="Login"/>
+                <Button mnemonicParsing="false" onAction="#RegisterPage" text="Register"/>
+            </items>
+        </ToolBar>
+        <Label layoutX="197.0" layoutY="173.0" prefHeight="54.0" prefWidth="119.0" text="ARUB">
+            <font>
+                <Font name="Arial Black" size="36.0"/>
+            </font>
+        </Label>
+    </children>
+</Pane>

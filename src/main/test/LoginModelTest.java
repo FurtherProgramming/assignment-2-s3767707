@@ -1,4 +1,4 @@
-package main.test.modelTest;
+package main.test;
 
 
 import main.model.LoginModel;

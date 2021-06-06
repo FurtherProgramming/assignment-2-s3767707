@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Ellipse?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="384.0" prefWidth="449.0"
+            xmlns="http://javafx.com/javafx/8.0.171" fx:controller="main.controller.BookingManagementController">
+    <children>
+        <ToolBar layoutX="1.0" prefHeight="45.0" prefWidth="448.0">
+            <items>
+                <Button mnemonicParsing="false" onAction="#HomePage" prefHeight="31.0" prefWidth="70.0" text="Home"/>
+                <Button mnemonicParsing="false" onAction="#ProfilePage" prefHeight="31.0" prefWidth="71.0"
+                        text="Profile"/>
+                <Button mnemonicParsing="false" onAction="#Logout" prefHeight="31.0" prefWidth="76.0" text="Logout"/>
+            </items>
+        </ToolBar>
+        <Label layoutX="142.0" layoutY="118.0">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Label>
+        <Hyperlink layoutX="168.0" layoutY="387.0"/>
+        <Label layoutX="108.0" layoutY="125.0" prefHeight="35.0" prefWidth="239.0" text="Booking Management">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Label>
+        <Button onAction="#EditBooking" layoutX="126.0" layoutY="218.0" mnemonicParsing="false" prefHeight="31.0"
+                prefWidth="198.0" text="View Bookings"/>
+        <Button onAction="#SeatManagement" layoutX="126.0" layoutY="285.0" mnemonicParsing="false" prefHeight="31.0"
+                prefWidth="198.0" text="COVID seat management"/>
+        <Circle fill="WHITE" layoutX="50.0" layoutY="81.0" radius="18.0" stroke="BLACK" strokeType="INSIDE"/>
+        <Circle layoutX="50.0" layoutY="76.0" radius="5.0" stroke="BLACK" strokeType="INSIDE"/>
+        <Ellipse layoutX="50.0" layoutY="90.0" radiusX="13.0" radiusY="8.0" stroke="BLACK" strokeType="INSIDE"/>
+        <Label fx:id="username" layoutX="88.0" layoutY="71.0" text="Label"/>
+        <Button onAction="#ProfilePage" layoutX="358.0" layoutY="67.0" mnemonicParsing="false" text="&lt;Back"/>
+    </children>
+</AnchorPane>
