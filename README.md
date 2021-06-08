@@ -11,9 +11,9 @@ Packaging for classes:
  - main.model
  - main.ui
 Packaging for test:
- - test.model
+ - main.test
 
-## How to clone the project using intelliJIDEA and RUN the application
+## How to clone the project using intelliJIDEA and RUN the application (Updated)
 1- Download IntelliJ IDEA Ultimate Version (You had to apply for student license)
 
 2- Open IntelliJ IDEA, select "File" from the top menu, select "New" and select "Project from Version Control"  
@@ -33,7 +33,9 @@ Packaging for test:
 
 5- Click + button, choose Java, and navigate to your project folder, then Lib folder, choose "sqlite-jdbc-3.34.0.jar", and click on "open"
 
-6- Click on Apply and then OK to close the window
+6- Click + button again, choose maven, and download junit 5.4 library from url org.junit.jupiter:junit-jupiter:5.4.2  
+
+7- Click on Apply and then OK to close the window
 
 Now you are ready to Run the Application.
 
@@ -42,9 +44,23 @@ Congratulations!
 
 Login info:
 
-Username: test
-
-Password: test
+1. Admin:  
+ - Username: test  
+   Password: test    
+   
+ 2. User:
+ - Username: a  
+   Password: a    
+   
+ - Username: q   
+   Password: q    
+      
+ - Username: w   
+   Password: w    
+      
+ - Username: e   
+   Password: e    
+      
 
 
 ## Prepare other content
