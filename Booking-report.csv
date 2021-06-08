@@ -1,9 +1,0 @@
-booking_id, username, seat_id, booking_date, booking_time, status, check_in
-"F9hfa16",a,16,2021-06-05,1400,Cancelled,N
-"OIwIa1",a,1,2021-06-06,1400,Accepted,Y
-"BI9g1",w,1,2021-07-01,0800,Cancelled,Y
-"VBkn3",e,3,2021-07-01,0800,Cancelled,Y
-"g8wG15",w,16,2021-07-03,0800,Cancelled,N
-"rae99",e,9,2021-07-03,0800,Cancelled,N
-"edOua1",a,1,2022-06-01,0800,Pending,N
-"4Iri2",q,2,2022-07-01,0800,Accepted,Y

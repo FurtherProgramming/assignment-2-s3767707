@@ -1,3 +1,0 @@
-booking_id, username, seat_id, booking_date, booking_time, status, check_in
-"BI9g1",w,1,2021-07-01,0800,Cancelled,Y
-"VBkn3",e,3,2021-07-01,0800,Cancelled,Y
