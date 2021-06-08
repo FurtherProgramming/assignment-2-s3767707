@@ -68,7 +68,7 @@ public class SecretQuestionController implements Initializable {
 
     public void Cancel(ActionEvent event) throws Exception {
 
-        main.change("ui/Login.fxml");
+        main.change("ui/ResetPassword.fxml");
     }
 
 

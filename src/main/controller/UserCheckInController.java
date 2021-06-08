@@ -128,6 +128,11 @@ public class UserCheckInController implements Initializable {
                         alert.showAndWait();
                         if (alert.getResult() == ButtonType.YES) {
                             userCheckInModel.checkIn(selectedRowId);
+                            Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Check in successfully!", ButtonType.CLOSE);
+                            alert2.showAndWait();
+                            if (alert2.getResult() == ButtonType.CLOSE) {
+                                alert2.close();
+                            }
                             main.change("ui/UserCheckIn.fxml");
                         } else {
                             alert.close();

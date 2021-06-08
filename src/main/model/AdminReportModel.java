@@ -59,9 +59,14 @@ public class AdminReportModel {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
             fileWriter.close();
+
         }
 
     }
@@ -71,7 +76,7 @@ public class AdminReportModel {
      */
     public void exportBookingTableWithDate(LocalDate date) throws SQLException, IOException {
 
-        String csvFilePath = "Booking-report.csv";
+        String csvFilePath = "Booking-report_" + date + ".csv";
         BufferedWriter fileWriter = null;
         fileWriter = new BufferedWriter(new FileWriter(csvFilePath));
         fileWriter.write("booking_id, username, seat_id, booking_date, booking_time, status, check_in");
@@ -133,8 +138,12 @@ public class AdminReportModel {
 
             e.printStackTrace();
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
         return bookings;
     }
@@ -166,9 +175,51 @@ public class AdminReportModel {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
         return bookings;
+    }
+
+    /*
+     * Get all user from database
+     */
+    public ArrayList<User> getAllUser() throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        ArrayList<User> users = new ArrayList<User>();
+        String query = "select * from employee";
+        try {
+
+            preparedStatement = connection.prepareStatement(query);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String empId = resultSet.getString("emp_id");
+                String fn = resultSet.getString("firstname");
+                String ln = resultSet.getString("lastname");
+                String role = resultSet.getString("role");
+                String un = resultSet.getString("username");
+                String p = resultSet.getString("password");
+                String ques = resultSet.getString("secret_question");
+                String ans = resultSet.getString("answer");
+                String st = resultSet.getString("status");
+                User user = new User(empId, fn, ln, role, un, p, ques, ans, st);
+                users.add(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
+        }
+        return users;
     }
 }

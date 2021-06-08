@@ -36,7 +36,7 @@ public class RegisterModelTest {
     }
 
     @Test
-    @Order(24)
+    @Order(1)
     void testEmployerId_returnTrue_IfEmployerIdExists() throws SQLException {
 
         boolean bool = registerModel.employerIdExist("1");
@@ -44,7 +44,7 @@ public class RegisterModelTest {
     }
 
     @Test
-    @Order(25)
+    @Order(2)
     void testEmployerId_returnTrue_IfEmployerIdNotExists() throws SQLException {
 
         boolean bool = registerModel.employerIdExist("10");
@@ -52,7 +52,7 @@ public class RegisterModelTest {
     }
 
     @Test
-    @Order(26)
+    @Order(3)
     void testUsername_returnTrue_IfUsernameExists() throws SQLException {
 
         boolean bool = loginModel.usernameExist("test");
@@ -60,7 +60,7 @@ public class RegisterModelTest {
     }
 
     @Test
-    @Order(27)
+    @Order(4)
     void testUsername_returnFalse_IfUsernameNotExists() throws SQLException {
 
         boolean bool = loginModel.usernameExist("d");
@@ -68,7 +68,7 @@ public class RegisterModelTest {
     }
 
     @Test
-    @Order(28)
+    @Order(5)
     void testRegister_returnTrue_IfAllInfoIsValid() throws SQLException {
 
         boolean bool = registerModel.register("c", "c", "c", "user", "c", "c", "What is your favourite colour?", "c");
@@ -84,14 +84,16 @@ public class RegisterModelTest {
         } catch (Exception e) {
             bool = false;
         } finally {
-            preparedStatement.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
 
         }
 
     }
 
     @Test
-    @Order(29)
+    @Order(6)
     void testRegister_returnTrue_IfDatabaseIsUpdated() throws SQLException {
 
         boolean bool = registerModel.employerIdExist("1");

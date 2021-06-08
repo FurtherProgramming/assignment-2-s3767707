@@ -26,9 +26,9 @@ public class AccountManagementModel {
     }
 
     /*
-     * Get all user from database
+     * Get all user from database except current user
      */
-    public ArrayList<User> getAllUser() throws SQLException {
+    public ArrayList<User> getAllUser(String currentUsername) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         ArrayList<User> users = new ArrayList<User>();
@@ -47,14 +47,22 @@ public class AccountManagementModel {
                 String ques = resultSet.getString("secret_question");
                 String ans = resultSet.getString("answer");
                 String st = resultSet.getString("status");
-                User user = new User(empId, fn, ln, role, un, p, ques, ans, st);
-                users.add(user);
+                if(currentUsername != null) {
+                    if(!un.equals(currentUsername)) {
+                        User user = new User(empId, fn, ln, role, un, p, ques, ans, st);
+                        users.add(user);
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
         return users;
     }
@@ -76,7 +84,9 @@ public class AccountManagementModel {
             e.printStackTrace();
             bool = false;
         } finally {
-            preparedStatement.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
         }
         return bool;
     }
@@ -98,7 +108,9 @@ public class AccountManagementModel {
             e.printStackTrace();
             bool = false;
         } finally {
-            preparedStatement.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
         }
         return bool;
     }
@@ -131,8 +143,12 @@ public class AccountManagementModel {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
         return user;
     }
@@ -165,8 +181,12 @@ public class AccountManagementModel {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
         return user;
     }
@@ -177,7 +197,6 @@ public class AccountManagementModel {
     public Boolean updateAccount(String empId, String fn, String ln, String role, String un, String pass, String ques, String ans, User user) throws SQLException {
 
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         boolean bool = false;
         String query = "UPDATE employee SET emp_id = ?, firstname = ?, lastname = ?, role = ?, username = ?, password = ?, secret_question = ?, answer = ? WHERE emp_id = ?;";
         try {
@@ -196,7 +215,9 @@ public class AccountManagementModel {
         } catch (Exception e) {
             bool = false;
         } finally {
-            preparedStatement.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
         }
         return bool;
     }
@@ -207,7 +228,6 @@ public class AccountManagementModel {
     public Boolean activateOrDeactivate(String empId, String status) throws SQLException {
 
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         boolean bool = false;
         String query = "UPDATE employee SET status = ? WHERE emp_id = ?;";
         try {
@@ -220,7 +240,9 @@ public class AccountManagementModel {
         } catch (Exception e) {
             bool = false;
         } finally {
-            preparedStatement.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
         }
         return bool;
     }
@@ -249,8 +271,12 @@ public class AccountManagementModel {
         } catch (Exception e) {
             valid = false;
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
         return valid;
     }
@@ -279,8 +305,12 @@ public class AccountManagementModel {
         } catch (Exception e) {
             valid = false;
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
         return valid;
     }

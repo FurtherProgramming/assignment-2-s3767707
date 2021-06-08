@@ -49,8 +49,9 @@ public class SeatManagementModel {
                 e.printStackTrace();
                 bool = false;
             } finally {
-                preparedStatement.close();
-
+                if(preparedStatement != null) {
+                    preparedStatement.close();
+                }
             }
         }
         //if conditions = "Lockdown", locks all seats
@@ -92,8 +93,12 @@ public class SeatManagementModel {
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    preparedStatement.close();
-                    resultSet.close();
+                    if(preparedStatement != null) {
+                        preparedStatement.close();
+                    }
+                    if (resultSet != null) {
+                        resultSet.close();
+                    }
                 }
             }
             if (condition.equals("Lockdown")) {
@@ -108,8 +113,12 @@ public class SeatManagementModel {
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    preparedStatement.close();
-                    resultSet.close();
+                    if(preparedStatement != null) {
+                        preparedStatement.close();
+                    }
+                    if (resultSet != null) {
+                        resultSet.close();
+                    }
                 }
             } else {
                 seatIds = null;
@@ -140,8 +149,12 @@ public class SeatManagementModel {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                preparedStatement.close();
-                resultSet.close();
+                if(preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (resultSet != null) {
+                    resultSet.close();
+                }
             }
         } else {
             String query = "SELECT * from booking where booking_date >= ? and booking_date <= ? ;";
@@ -156,8 +169,12 @@ public class SeatManagementModel {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                preparedStatement.close();
-                resultSet.close();
+                if(preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (resultSet != null) {
+                    resultSet.close();
+                }
             }
         }
         return seatIds;
@@ -178,7 +195,9 @@ public class SeatManagementModel {
         } catch (Exception e) {
             bool = false;
         } finally {
-            preparedStatement.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
 
         }
         return bool;
@@ -208,8 +227,12 @@ public class SeatManagementModel {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
         return seats;
     }

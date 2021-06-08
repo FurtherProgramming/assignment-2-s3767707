@@ -35,7 +35,7 @@ public class ResetPasswordTest {
     }
 
     @Test
-    @Order(30)
+    @Order(1)
     void testValidateUsername_returnNotNull_IfUsernameValid() throws SQLException {
 
         User user = resetPasswordModel.validateUsername("a");
@@ -43,7 +43,7 @@ public class ResetPasswordTest {
     }
 
     @Test
-    @Order(31)
+    @Order(2)
     void testValidateUsername_returnNull_IfUsernameNotValid() throws SQLException {
 
         User user = resetPasswordModel.validateUsername("qwe");
@@ -51,28 +51,28 @@ public class ResetPasswordTest {
     }
 
     @Test
-    @Order(32)
+    @Order(3)
     void testValidateAnswer_returnTrue_IfAnswerIsValid() throws SQLException {
 
         assertTrue(resetPasswordModel.validateAnswer("a", "a"));
     }
 
     @Test
-    @Order(33)
+    @Order(4)
     void testValidateAnswer_returnFalse_IfAnswerIsNotValid() throws SQLException {
 
         assertFalse(resetPasswordModel.validateAnswer("a", "b"));
     }
 
     @Test
-    @Order(34)
+    @Order(5)
     void testGenerateRandomPassword_StringLengthEquals4_IfGenerateRandomStringWith4Character() throws SQLException {
 
         assertEquals(4, resetPasswordModel.generateRandomPassword(4).length());
     }
 
     @Test
-    @Order(35)
+    @Order(6)
     void testUpdatePassword_PasswordEquals_IfPasswordSuccessfullyUpdated() throws SQLException {
 
         resetPasswordModel.updatePassword("a", "b");
@@ -94,8 +94,12 @@ public class ResetPasswordTest {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
     }
 }

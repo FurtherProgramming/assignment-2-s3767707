@@ -54,8 +54,12 @@ public class AdminEditBookingModel {
 
             e.printStackTrace();
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
 
         return bookings;
@@ -67,7 +71,6 @@ public class AdminEditBookingModel {
     public Boolean editBookingStatus(String bookId, String status) throws SQLException {
 
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         boolean bool = false;
         String query = "UPDATE booking SET status = ? WHERE id = ?;";
         try {
@@ -79,7 +82,9 @@ public class AdminEditBookingModel {
         } catch (Exception e) {
             bool = false;
         } finally {
-            preparedStatement.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
         }
         return bool;
     }
@@ -101,30 +106,12 @@ public class AdminEditBookingModel {
         } catch (Exception e) {
             bool = false;
         } finally {
-            preparedStatement.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
         }
         return bool;
     }
 
-    /*
-     * Delete rejected bookings from database after one week of expire date
-     */
-    public Boolean removeBookingFromDatabaseAfter7Days() throws SQLException {
 
-        PreparedStatement preparedStatement = null;
-        boolean bool = false;
-        LocalDate date = LocalDate.now().minusDays(7);
-        String query = "DELETE from booking where booking_date < ?";
-        try {
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setDate(1, Date.valueOf(date));
-            preparedStatement.executeUpdate();
-            bool = true;
-        } catch (Exception e) {
-            bool = false;
-        } finally {
-            preparedStatement.close();
-        }
-        return bool;
-    }
 }

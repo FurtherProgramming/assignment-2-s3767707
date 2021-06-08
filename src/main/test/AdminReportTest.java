@@ -38,7 +38,7 @@ public class AdminReportTest {
     }
 
     @Test
-    @Order(10)
+    @Order(1)
     void testExportEmployeeTable_returnNotNull_IfCSVfileCreatedAndNotEmpty() throws SQLException, IOException {
 
         adminReportModel.exportEmployeeTable();
@@ -49,7 +49,7 @@ public class AdminReportTest {
     }
 
     @Test
-    @Order(11)
+    @Order(2)
     void testExportBookingTable_returnNotNull_IfCSVFileCreatedAndNotEmpty() throws SQLException, IOException {
 
         adminReportModel.exportBookingTable();
@@ -60,7 +60,7 @@ public class AdminReportTest {
     }
 
     @Test
-    @Order(12)
+    @Order(3)
     void testExportBookingTableWithDate_returnNotNull_IfCSVFileCreatedAndNotEmpty() throws SQLException, IOException {
 
         adminReportModel.exportBookingTableWithDate(LocalDate.of(2021, 6, 6));
@@ -71,7 +71,7 @@ public class AdminReportTest {
     }
 
     @Test
-    @Order(13)
+    @Order(4)
     void testGetAllBookings_returnNotNull_IfBookingsFound() throws SQLException {
 
         ArrayList<Booking> bookings = adminReportModel.getAllBookings();
@@ -81,7 +81,7 @@ public class AdminReportTest {
     }
 
     @Test
-    @Order(14)
+    @Order(5)
     void testGetAllBookingsWithDate_returnNotNull_IfBookingsFound() throws SQLException {
 
         ArrayList<Booking> bookings = adminReportModel.getAllBookingsWithDate(LocalDate.of(2021, 6, 6));

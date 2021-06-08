@@ -39,7 +39,7 @@ public class AccountManagementTest {
     @Order(1)
     void testGetAllUser_returnUserList_IfDatabaseNotEmpty() throws SQLException {
 
-        ArrayList<User> users = accountManagementModel.getAllUser();
+        ArrayList<User> users = accountManagementModel.getAllUser(null);
         for (User user : users) {
             assertNotNull(user.getEmployerId());
         }

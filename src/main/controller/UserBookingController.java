@@ -36,7 +36,7 @@ public class UserBookingController implements Initializable {
     @FXML
     private DatePicker datePicker;
     @FXML
-    private ChoiceBox book_time;
+    private ChoiceBox time;
 
     // Check database connection
     @Override
@@ -52,7 +52,7 @@ public class UserBookingController implements Initializable {
         times.add("0800");
         times.add("1400");
         timeList.addAll(times);
-        book_time.getItems().addAll(timeList);
+        time.getItems().addAll(timeList);
     }
 
     public void Profile(ActionEvent event) throws Exception {
@@ -71,27 +71,31 @@ public class UserBookingController implements Initializable {
         main.change("ui/Login.fxml");
     }
 
+    public void Reset(ActionEvent event) throws Exception {
+
+        main.change("ui/UserBooking.fxml");
+    }
 
     public void Search(ActionEvent event) throws Exception {
 
         if (datePicker.getValue() != null) { // if date choosed
-            if (book_time.getValue() != null) { //if book time choosed
+            if (time.getValue() != null) { //if book time choosed
                 if (datePicker.getValue().isAfter(LocalDate.now())) {//if date choosed is after current date
-                    if (!userBookingModel.UsernameExistInList(user.getUsername(), datePicker.getValue(), book_time.getValue().toString())) {// user can only have one bookings per session, applies to pending  bookings too to avoid spamming
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Click on seats to book!", ButtonType.CLOSE);
+                    if (!userBookingModel.UsernameExistInList(user.getUsername(), datePicker.getValue(), time.getValue().toString())) {// user can only have one bookings per session, applies to pending  bookings too to avoid spamming
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Click on seats to book!", ButtonType.CLOSE);
                         alert.showAndWait();
                         if (alert.getResult() == ButtonType.CLOSE) {
                             alert.close();
                         }
-                        Booking booking = new Booking(null, user.getUsername(), null, datePicker.getValue(), "Pending", book_time.getValue().toString(), "N");
-                        ArrayList<String> bookedSeats = userBookingModel.isBooked(datePicker.getValue(), book_time.getValue().toString());
+                        Booking booking = new Booking(null, user.getUsername(), null, datePicker.getValue(), "Pending", time.getValue().toString(), "N");
+                        ArrayList<String> bookedSeats = userBookingModel.isBooked(datePicker.getValue(), time.getValue().toString());
                         bookedSeats.add(userBookingModel.previousBooking(user.getUsername()));// user cannot book the same seat as previous bookings
                         // get seats beside same Employees that have been sitten previously
                         Booking prevBooking = userBookingModel.previousSit(user.getUsername());
                         if (prevBooking != null) {
                             ArrayList<String> usernames = userBookingModel.getAdjacentUserOfPreviousSit(prevBooking.getBookingDate(), prevBooking.getBookingTime(), prevBooking.getSeatId());
                             if (usernames != null) {
-                                ArrayList<String> SeatsBookedByPrevUsers = userBookingModel.getSeatsOfPreviousAdjacentUser(datePicker.getValue(), book_time.getValue().toString(), usernames);
+                                ArrayList<String> SeatsBookedByPrevUsers = userBookingModel.getSeatsOfPreviousAdjacentUser(datePicker.getValue(), time.getValue().toString(), usernames);
                                 ArrayList<String> SeatsBesidePrevUsers = userBookingModel.SeatsBesidePrevUser(SeatsBookedByPrevUsers);
                                 for (String s : SeatsBesidePrevUsers) {
                                     bookedSeats.add(s);
@@ -124,7 +128,6 @@ public class UserBookingController implements Initializable {
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE) {
                     alert.close();
-                    main.change("ui/UserBooking.fxml");
                 }
             }
         } else {
@@ -132,7 +135,6 @@ public class UserBookingController implements Initializable {
             alert.showAndWait();
             if (alert.getResult() == ButtonType.CLOSE) {
                 alert.close();
-                main.change("ui/UserBooking.fxml");
             }
         }
     }
@@ -156,7 +158,7 @@ public class UserBookingController implements Initializable {
                 alert.close();
             }
         } else if (rectangle.getFill() == Color.WHITE) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Click on the search button!", ButtonType.CLOSE);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Pick your booking date and time first!", ButtonType.CLOSE);
             alert.showAndWait();
             if (alert.getResult() == ButtonType.CLOSE) {
                 alert.close();
@@ -174,6 +176,11 @@ public class UserBookingController implements Initializable {
                 booking.setSeatId(seatId);
                 userBookingModel.book(bookingId, seatId, booking.getBookingDate(), username, booking.getBookingTime(), "N");
                 alert.close();
+                Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Seat booked successfully!", ButtonType.CLOSE);
+                alert2.showAndWait();
+                if (alert2.getResult() == ButtonType.CLOSE) {
+                    alert2.close();
+                }
                 main.change("ui/UserProfile.fxml");
             } else {
                 alert.close();

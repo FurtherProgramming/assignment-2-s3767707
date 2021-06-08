@@ -168,7 +168,7 @@ public class UserEditBookingTest {
     @Order(9)
     void testupdateBooking_returnUpdatedInfo_IfUpdatedBookingFound() throws SQLException {
 
-        userEditBookingModel.updateBooking("edOua1", "2", "1400");
+        userEditBookingModel.updateBooking("edOua1", "2", "1400", LocalDate.of(2022, 6, 1));
         String query = "Select * from booking where id = ? and seat_id = ? and booking_time = ?";
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
@@ -191,6 +191,6 @@ public class UserEditBookingTest {
                 preparedStatement.close();
             }
         }
-        userEditBookingModel.updateBooking("edOua1", "1", "0800");
+        userEditBookingModel.updateBooking("edOua1", "1", "0800",LocalDate.of(2022, 6, 1));
     }
 }

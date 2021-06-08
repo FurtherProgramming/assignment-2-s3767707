@@ -34,6 +34,8 @@ public class RegisterController implements Initializable {
     @FXML
     private TextField txtLastname;
     @FXML
+    private ChoiceBox<String> txtRole;
+    @FXML
     private TextField txtUsername;
     @FXML
     private TextField txtPassword;
@@ -51,11 +53,17 @@ public class RegisterController implements Initializable {
 
     public void addItemToChoiceBox() {
 
+        ObservableList role = FXCollections.observableArrayList();
         ObservableList secretQuestion = FXCollections.observableArrayList();
         ArrayList<String> secretQuestions = new ArrayList<String>();
+        ArrayList<String> roles = new ArrayList<String>();
+        roles.add("admin");
+        roles.add("user");
         secretQuestions.add("What is your favourite colour?");
         secretQuestions.add("What is your favourite food?");
+        role.addAll(roles);
         secretQuestion.addAll(secretQuestions);
+        txtRole.getItems().addAll(role);
         txtSecretQuestion.getItems().addAll(secretQuestion);
     }
 
@@ -77,6 +85,11 @@ public class RegisterController implements Initializable {
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
+            }else if (txtRole.getValue() == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Pick your role!", ButtonType.CLOSE);
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.CLOSE)
+                    alert.close();
             } else if (txtUsername.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Username is required!", ButtonType.CLOSE);
                 alert.showAndWait();
@@ -88,7 +101,7 @@ public class RegisterController implements Initializable {
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
             } else if (txtSecretQuestion.getValue() == null) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Pick a secret question!", ButtonType.CLOSE);
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Pick your secret question!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
@@ -108,7 +121,7 @@ public class RegisterController implements Initializable {
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
             } else {
-                registerModel.register(txtEmployerId.getText(), txtFirstname.getText(), txtLastname.getText(), "user", txtUsername.getText(), txtPassword.getText(), txtSecretQuestion.getValue(), txtAnswer.getText());
+                registerModel.register(txtEmployerId.getText(), txtFirstname.getText(), txtLastname.getText(), txtRole.getValue(), txtUsername.getText(), txtPassword.getText(), txtSecretQuestion.getValue(), txtAnswer.getText());
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Register successfully!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)

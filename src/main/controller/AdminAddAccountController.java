@@ -146,7 +146,7 @@ public class AdminAddAccountController implements Initializable {
                     alert.close();
             } else {
                 registerModel.register(txtEmployerId.getText(), txtFirstname.getText(), txtLastname.getText(), txtRole.getValue(), txtUsername.getText(), txtPassword.getText(), txtSecretQuestion.getValue(), txtAnswer.getText()); // register user
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Register successfully!", ButtonType.CLOSE);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Account added successfully!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
@@ -157,23 +157,9 @@ public class AdminAddAccountController implements Initializable {
         }
     }
 
-    public void LoginPage(ActionEvent event) throws Exception {
-
-        main.change("ui/Login.fxml");
-    }
-
-    public void RegisterPage(ActionEvent event) throws Exception {
-
-        main.change("ui/Register.fxml");
-    }
-
-    public void HomePage(ActionEvent event) throws Exception {
-
-        main.change("ui/Home.fxml");
-    }
 
     public void Back(ActionEvent event) throws Exception {
 
-        main.change("ui/AccountManagement.fxml");
+        main.change("ui/AdminAccountManagement.fxml");
     }
 }

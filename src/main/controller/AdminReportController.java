@@ -51,11 +51,11 @@ public class AdminReportController implements Initializable {
 
     public void EmployeeReport(ActionEvent event) throws Exception {
 
-        main.change("ui/EmployeeReport.fxml");
+        main.change("ui/AdminEmployeeReport.fxml");
     }
 
     public void BookingReport(ActionEvent event) throws Exception {
 
-        main.change("ui/BookingReport.fxml");
+        main.change("ui/AdminBookingReport.fxml");
     }
 }

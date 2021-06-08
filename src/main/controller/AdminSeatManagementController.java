@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
  * Description:	A class that handles seat condition during COVID
  * Author:		Anson Go Guang Ping
  */
-public class SeatManagementController implements Initializable {
+public class AdminSeatManagementController implements Initializable {
 
     private Main main = new Main();
     private SeatManagementModel seatManagementModel = new SeatManagementModel();
@@ -69,7 +69,12 @@ public class SeatManagementController implements Initializable {
                                     ArrayList<String> bookingIds = seatManagementModel.getBookingIdAffectedByCondition("Restriction", startDate.getValue(), endDate.getValue());
                                     // reject all bookings during the duration
                                     for (String id : bookingIds) {
-                                        adminEditBookingModel.editBookingStatus(id, "Rejected");
+                                        adminEditBookingModel.editBookingStatus(id, "Cancelled");
+                                    }
+                                    Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Restriction condition applied!", ButtonType.CLOSE);
+                                    alert2.showAndWait();
+                                    if (alert2.getResult() == ButtonType.CLOSE) {
+                                        alert2.close();
                                     }
                                     main.setSeatColorInSeatManagement("ui/SeatManagement.fxml", seatManagementModel.getAllSeats()); // change seat visual colours
                                 }
@@ -77,7 +82,12 @@ public class SeatManagementController implements Initializable {
                                     seatManagementModel.updateSeat(condition.getValue(), startDate.getValue(), endDate.getValue());
                                     ArrayList<String> bookingIds = seatManagementModel.getBookingIdAffectedByCondition("Lockdown", startDate.getValue(), endDate.getValue());
                                     for (String id : bookingIds) {
-                                        adminEditBookingModel.editBookingStatus(id, "Rejected");
+                                        adminEditBookingModel.editBookingStatus(id, "Cancelled");
+                                    }
+                                    Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Lockdown condition applied!", ButtonType.CLOSE);
+                                    alert2.showAndWait();
+                                    if (alert2.getResult() == ButtonType.CLOSE) {
+                                        alert2.close();
                                     }
                                     main.setSeatColorInSeatManagement("ui/SeatManagement.fxml", seatManagementModel.getAllSeats());
                                 }
@@ -119,12 +129,17 @@ public class SeatManagementController implements Initializable {
 
     public void Back(ActionEvent event) throws Exception {
 
-        main.change("ui/BookingManagement.fxml");
+        main.change("ui/AdminBookingManagement.fxml");
     }
 
     public void Reset(ActionEvent event) throws Exception {
 
         seatManagementModel.resetCondition();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Normal condition applied!", ButtonType.CLOSE);
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.CLOSE) {
+            alert.close();
+        }
         main.setSeatColorInSeatManagement("ui/SeatManagement.fxml", seatManagementModel.getAllSeats());
     }
 

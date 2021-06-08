@@ -62,7 +62,17 @@ public class UserProfileController implements Initializable {
 
     public void ViewBooking(ActionEvent actionEvent) throws Exception {
 
-        main.change("ui/UserViewBooking.fxml");
+        User u = (User) Main.stage.getUserData();
+        // only activated account can view booking
+        if (u.getStatus().equals("activated")) {
+            main.change("ui/UserViewBooking.fxml");
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Account deactivated. Please contact admin to reactivate your account!!", ButtonType.CLOSE);
+            alert.showAndWait();
+            if (alert.getResult() == ButtonType.CLOSE) {
+                alert.close();
+            }
+        }
     }
 
     public void CheckIn(ActionEvent event) throws Exception {

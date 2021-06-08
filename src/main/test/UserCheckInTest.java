@@ -37,28 +37,28 @@ public class UserCheckInTest {
     }
 
     @Test
-    @Order(47)
+    @Order(1)
     void testisTime_returnTrue_IfCheckInTimeIsValid() throws SQLException {
 
         assertTrue(userCheckInModel.isTime("edOua1", 8));
     }
 
     @Test
-    @Order(48)
+    @Order(2)
     void testisTime_returnFalse_IfCheckInTimeIsInvalid() throws SQLException {
 
         assertFalse(userCheckInModel.isTime("edOua1", 7));
     }
 
     @Test
-    @Order(49)
+    @Order(3)
     void testisCheckedIn_returnFalse_IfNotCheckedIn() throws SQLException {
 
         assertFalse(userCheckInModel.isCheckedIn("edOua1"));
     }
 
     @Test
-    @Order(50)
+    @Order(4)
     void testisCheckedIn_returnTrue_IfCheckedIn() throws SQLException {
 
         PreparedStatement preparedStatement = null;
@@ -78,13 +78,15 @@ public class UserCheckInTest {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            preparedStatement.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
 
         }
     }
 
     @Test
-    @Order(51)
+    @Order(5)
     void testcheckIn_returnCheckedIn_IfDatabaseSuccessfullyUpdated() throws SQLException {
 
         userCheckInModel.checkIn("edOua1");
@@ -116,7 +118,7 @@ public class UserCheckInTest {
     }
 
     @Test
-    @Order(52)
+    @Order(6)
     void testGetUserBooking_returnNotNull_IfBookingExist() throws SQLException {
 
         LocalDate date = LocalDate.of(2022, 6, 1);
@@ -125,7 +127,7 @@ public class UserCheckInTest {
     }
 
     @Test
-    @Order(53)
+    @Order(7)
     void testGetUserBooking_returnNull_IfBookingNotExist() throws SQLException {
 
         LocalDate date = LocalDate.of(2024, 6, 1);

@@ -39,6 +39,11 @@ public class Booking {
         this.seatId = seatId;
     }
 
+    public void setBookingDate(LocalDate date) {
+
+        this.bookingDate = date;
+    }
+
     public LocalDate getBookingDate() {
 
         return bookingDate;

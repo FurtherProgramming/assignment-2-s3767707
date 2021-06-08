@@ -21,7 +21,7 @@ public class LoginModelTest {
     }
 
     @Test
-    @Order(15)
+    @Order(1)
     void testUsername_returnNull_IfUsernameIsEmpty() throws SQLException {
 
         User user = loginModel.isLogin("", "test");
@@ -29,7 +29,7 @@ public class LoginModelTest {
     }
 
     @Test
-    @Order(16)
+    @Order(2)
     void testPassword_returnNull_IfPasswordIsEmpty() throws SQLException {
 
         User user = loginModel.isLogin("test", "");
@@ -37,7 +37,7 @@ public class LoginModelTest {
     }
 
     @Test
-    @Order(17)
+    @Order(3)
     void testPassword_returnNotNull_IfUsernameAndPasswordIsValid() throws SQLException {
 
         User user = loginModel.isLogin("test", "test");
@@ -45,7 +45,7 @@ public class LoginModelTest {
     }
 
     @Test
-    @Order(18)
+    @Order(4)
     void testPassword_returnNull_IfUsernameIsInvalid() throws SQLException {
 
         User user = loginModel.isLogin("test1", "test");
@@ -53,7 +53,7 @@ public class LoginModelTest {
     }
 
     @Test
-    @Order(19)
+    @Order(5)
     void testPassword_returnNull_IfPasswordIsInvalid() throws SQLException {
 
         User user = loginModel.isLogin("test", "test1");
@@ -61,7 +61,7 @@ public class LoginModelTest {
     }
 
     @Test
-    @Order(20)
+    @Order(6)
     void testAdmin_returnFalse_IfUserNotAdmin() throws SQLException {
 
         boolean bool = loginModel.isAdmin("a", "a");
@@ -69,7 +69,7 @@ public class LoginModelTest {
     }
 
     @Test
-    @Order(21)
+    @Order(7)
     void testAdmin_returnTrue_IfUserIsAdmin() throws SQLException {
 
         boolean bool = loginModel.isAdmin("test", "test");
@@ -77,7 +77,7 @@ public class LoginModelTest {
     }
 
     @Test
-    @Order(22)
+    @Order(8)
     void testUsername_returnTrue_IfUsernameExist() throws SQLException {
 
         boolean bool = loginModel.usernameExist("test");
@@ -85,7 +85,7 @@ public class LoginModelTest {
     }
 
     @Test
-    @Order(23)
+    @Order(9)
     void testUsername_returnTrue_IfUsernameNotExist() throws SQLException {
 
         boolean bool = loginModel.usernameExist("test1");

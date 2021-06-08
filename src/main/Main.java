@@ -137,13 +137,22 @@ public class Main extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-        Label l = (Label) scene.lookup("#date");
-        if (l != null) {
-            l.setText(String.valueOf(booking.getBookingDate()));
-        }
+
         ChoiceBox c = (ChoiceBox) scene.lookup("#time");
         if (c != null) {
             c.setValue(String.valueOf(booking.getBookingTime()));
+        }
+        DatePicker d = (DatePicker) scene.lookup("#datePicker");
+        if (d != null) {
+            d.setValue(booking.getBookingDate());
+        }
+        Label bd = (Label) scene.lookup("#book_date");
+        if (bd != null) {
+            bd.setText(String.valueOf(booking.getBookingDate()));
+        }
+        Label bt = (Label) scene.lookup("#book_time");
+        if (bt != null) {
+            bt.setText(booking.getBookingTime());
         }
         for (String id : seatIds) {
             if (id != null) {

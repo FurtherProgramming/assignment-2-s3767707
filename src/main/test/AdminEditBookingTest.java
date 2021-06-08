@@ -49,6 +49,17 @@ public class AdminEditBookingTest {
 
     @Test
     @Order(2)
+    void testGetUserBookings_returnNull_IfBookingsNotFound() throws SQLException {
+
+        LocalDate date = LocalDate.of(2023, 6, 1);
+        ArrayList<Booking> bookings = adminEditBookingModel.getUserBookings("Pending", date);
+        for (Booking b : bookings) {
+            assertNull(b.getBookingId());
+        }
+    }
+
+    @Test
+    @Order(3)
     void testEditBookingStatus_returnNotNull_IfResultFoundAfterStatusUpdated() throws SQLException {
 
         adminEditBookingModel.editBookingStatus("OIwIa1", "Accepted");

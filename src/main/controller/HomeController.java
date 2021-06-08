@@ -25,8 +25,7 @@ public class HomeController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         try {
-            adminEditBookingModel.autoRejectBooking(LocalDate.now(), "Rejected"); // booking id auto rejected after mid
-            //adminEditBookingModel.removeBookingFromDatabaseAfter7Days();
+            adminEditBookingModel.autoRejectBooking(LocalDate.now(), "Cancelled"); // booking id auto rejected after midnight
         } catch (SQLException e) {
             e.printStackTrace();
         }

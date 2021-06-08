@@ -16,7 +16,7 @@
                 <Text fill="WHITE" layoutX="18.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0"
                       style="-fx-font-weight: bold; -fx-font-size: 15;" text="Booking List"/>
                 <Button fx:id="backButton" contentDisplay="TOP" graphicTextGap="0.0" layoutX="639.0" minHeight="21.0"
-                        mnemonicParsing="false" onAction="#Profile" prefHeight="34.0" prefWidth="57.0"
+                        mnemonicParsing="false" onAction="#Back" prefHeight="34.0" prefWidth="57.0"
                         style="-fx-background-color: none; -fx-label-padding: -10; -fx-font-size: 12;" text="&lt;Back"
                         textAlignment="CENTER" textFill="#ebdfdf">
                     <font>
@@ -48,7 +48,7 @@
                 <Button mnemonicParsing="false" onAction="#Logout" prefHeight="31.0" prefWidth="76.0" text="Logout"/>
             </items>
         </ToolBar>
-        <Button layoutX="350.0" layoutY="402.0" mnemonicParsing="false" onAction="#RejectBooking" prefHeight="31.0"
-                prefWidth="350.0" text="Reject"/>
+        <Button layoutX="350.0" layoutY="402.0" mnemonicParsing="false" onAction="#CancelBooking" prefHeight="31.0"
+                prefWidth="350.0" text="Cancel"/>
     </children>
 </AnchorPane>

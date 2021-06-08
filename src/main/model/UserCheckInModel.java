@@ -56,8 +56,12 @@ public class UserCheckInModel {
             e.printStackTrace();
             isDate = false;
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
         return isDate;
     }
@@ -84,8 +88,12 @@ public class UserCheckInModel {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
         return isCheck;
     }
@@ -107,7 +115,9 @@ public class UserCheckInModel {
         } catch (Exception e) {
             bool = false;
         } finally {
-            preparedStatement.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
 
         }
         return bool;
@@ -143,8 +153,12 @@ public class UserCheckInModel {
 
             e.printStackTrace();
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
 
         return bookings;

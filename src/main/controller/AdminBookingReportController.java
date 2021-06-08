@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
  * Description:	A class that handles admin generate booking report page
  * Author:		Anson Go Guang Ping
  */
-public class BookingReportController implements Initializable {
+public class AdminBookingReportController implements Initializable {
 
     @FXML
     public ObservableList<Booking> populateTableList;
@@ -73,7 +73,7 @@ public class BookingReportController implements Initializable {
 
     public void Profile(ActionEvent event) throws Exception {
 
-        main.change("ui/UserProfile.fxml");
+        main.change("ui/AdminProfile.fxml");
     }
 
     public void Logout(ActionEvent event) throws Exception {
@@ -110,13 +110,21 @@ public class BookingReportController implements Initializable {
         alert.showAndWait();
         if (alert.getResult() == ButtonType.YES) {
             if (date.getValue() != null) { //if admin enter date
-                adminReportModel.exportBookingTableWithDate(date.getValue()); // export all accepted bookings on that day into csv file
+                adminReportModel.exportBookingTableWithDate(date.getValue()); // export all bookings on that day into csv file
                 alert.close();
-                main.change("ui/AdminReport.fxml");
+                Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Booking report exported successfully!", ButtonType.CLOSE);
+                alert2.showAndWait();
+                if (alert2.getResult() == ButtonType.CLOSE)
+                    alert2.close();
+                main.change("ui/AdminBookingReport.fxml");
             } else {
-                adminReportModel.exportBookingTable(); // export all accepted bookings into csv file
+                adminReportModel.exportBookingTable(); // export all bookings into csv file
                 alert.close();
-                main.change("ui/AdminReport.fxml");
+                Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Booking report exported successfully!", ButtonType.CLOSE);
+                alert2.showAndWait();
+                if (alert2.getResult() == ButtonType.CLOSE)
+                    alert2.close();
+                main.change("ui/AdminBookingReport.fxml");
             }
         } else {
             alert.close();
@@ -132,6 +140,10 @@ public class BookingReportController implements Initializable {
             ObservableList<Booking> populateTableList = FXCollections.observableArrayList(bookings);
             table.getItems().addAll(populateTableList);
         } else {
+            Alert alert2 = new Alert(Alert.AlertType.ERROR, "Pick a booking date before searching!", ButtonType.CLOSE);
+            alert2.showAndWait();
+            if (alert2.getResult() == ButtonType.CLOSE)
+                alert2.close();
             table.getItems().clear();
             // show table of all accepted bookings
             ArrayList<Booking> bookings = adminReportModel.getAllBookings();
@@ -142,6 +154,6 @@ public class BookingReportController implements Initializable {
 
     public void Reset(ActionEvent event) throws Exception {
 
-        main.change("ui/BookingReport.fxml");
+        main.change("ui/AdminBookingReport.fxml");
     }
 }

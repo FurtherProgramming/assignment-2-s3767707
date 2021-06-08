@@ -53,8 +53,12 @@ public class ResetPasswordModel {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
         return user;
     }
@@ -106,8 +110,9 @@ public class ResetPasswordModel {
         } catch (Exception e) {
             bool = false;
         } finally {
-            preparedStatement.close();
-
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
         }
         return bool;
     }

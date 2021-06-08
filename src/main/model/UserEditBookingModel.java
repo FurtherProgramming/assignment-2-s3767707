@@ -59,8 +59,12 @@ public class UserEditBookingModel {
 
             e.printStackTrace();
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
 
         return bookings;
@@ -108,7 +112,9 @@ public class UserEditBookingModel {
         } catch (Exception e) {
             bool = false;
         } finally {
-            preparedStatement.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
         }
         return bool;
     }
@@ -116,22 +122,26 @@ public class UserEditBookingModel {
     /*
      * update booking's seat id and booking time
      */
-    public Boolean updateBooking(String bookingId, String seatId, String time) throws SQLException {
+    public Boolean updateBooking(String bookingId, String seatId, String time, LocalDate date) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean bool = false;
 
-        String query = "UPDATE booking SET seat_id = ?, booking_time = ? WHERE id = ?;";
+        String query = "UPDATE booking SET seat_id = ?, booking_time = ?, booking_date = ? WHERE id = ?;";
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, seatId);
             preparedStatement.setString(2, time);
-            preparedStatement.setString(3, bookingId);
+            preparedStatement.setDate(3, Date.valueOf(date));
+            preparedStatement.setString(4, bookingId);
+
             preparedStatement.executeUpdate();
             bool = true;
         } catch (Exception e) {
             bool = false;
         } finally {
-            preparedStatement.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
 
         }
         return bool;

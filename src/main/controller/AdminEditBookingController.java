@@ -85,7 +85,7 @@ public class AdminEditBookingController implements Initializable {
 
     public void Back(ActionEvent event) throws Exception {
 
-        main.change("ui/BookingManagement.fxml");
+        main.change("ui/AdminBookingManagement.fxml");
     }
 
     private void setTableColumns() {
@@ -115,16 +115,21 @@ public class AdminEditBookingController implements Initializable {
     /*
      * handles reject booking button
      */
-    public void RejectBooking(ActionEvent event) throws Exception {
+    public void CancelBooking(ActionEvent event) throws Exception {
 
         //if a row is picked, remove booking
         if (table.getSelectionModel().getSelectedItem() != null) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to reject this booking?", ButtonType.YES, ButtonType.NO);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to cancel this booking?", ButtonType.YES, ButtonType.NO);
             alert.showAndWait();
             if (alert.getResult() == ButtonType.YES) {
                 if (isSelectedRowValid(selectedRowId)) {
                     String bookingId = table.getSelectionModel().getSelectedItem().getBookingId();
-                    adminEditBookingModel.editBookingStatus(bookingId, "Rejected");
+                    adminEditBookingModel.editBookingStatus(bookingId, "Cancelled");
+                    Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Booking cancelled successfully!", ButtonType.CLOSE);
+                    alert2.showAndWait();
+                    if (alert2.getResult() == ButtonType.CLOSE) {
+                        alert2.close();
+                    }
                     main.change("ui/AdminEditBooking.fxml");
                     alert.close();
                 }
@@ -152,6 +157,11 @@ public class AdminEditBookingController implements Initializable {
                 if (isSelectedRowValid(selectedRowId)) {
                     String bookingId = table.getSelectionModel().getSelectedItem().getBookingId();
                     adminEditBookingModel.editBookingStatus(bookingId, "Accepted"); // update booking status into "Accepted"
+                    Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Booking accepted successfully!", ButtonType.CLOSE);
+                    alert2.showAndWait();
+                    if (alert2.getResult() == ButtonType.CLOSE) {
+                        alert2.close();
+                    }
                     main.change("ui/AdminEditBooking.fxml");
                     alert.close();
                 }

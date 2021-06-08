@@ -143,6 +143,10 @@ public class AdminUpdateAccountController implements Initializable {
                     alert.close();
                     accountManagementModel.updateAccount(txtEmployerId.getText(), txtFirstname.getText(), txtLastname.getText(), txtRole.getValue(), txtUsername.getText(), txtPassword.getText(), txtSecretQuestion.getValue(), txtAnswer.getText(), user);
                     main.change("ui/AdminAccountManagement.fxml");
+                    Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Account updated successfully!", ButtonType.CLOSE);
+                    alert2.showAndWait();
+                    if (alert2.getResult() == ButtonType.CLOSE)
+                        alert2.close();
                 }
             }
         } catch (SQLException e) {
@@ -150,23 +154,8 @@ public class AdminUpdateAccountController implements Initializable {
         }
     }
 
-    public void LoginPage(ActionEvent event) throws Exception {
-
-        main.change("ui/Login.fxml");
-    }
-
-    public void RegisterPage(ActionEvent event) throws Exception {
-
-        main.change("ui/Register.fxml");
-    }
-
-    public void HomePage(ActionEvent event) throws Exception {
-
-        main.change("ui/Home.fxml");
-    }
-
     public void Back(ActionEvent event) throws Exception {
 
-        main.change("ui/AccountManagement.fxml");
+        main.change("ui/AdminAccountManagement.fxml");
     }
 }

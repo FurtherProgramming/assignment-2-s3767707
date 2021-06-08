@@ -59,7 +59,7 @@ public class AdminAccountManagementController implements Initializable {
         User user = (User) Main.stage.getUserData();
         try {
             // show all accounts in table
-            ObservableList<User> populateTableList = FXCollections.observableArrayList(accountManagementModel.getAllUser());
+            ObservableList<User> populateTableList = FXCollections.observableArrayList(accountManagementModel.getAllUser(user.getUsername()));
             table.getItems().addAll(populateTableList);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -207,26 +207,42 @@ public class AdminAccountManagementController implements Initializable {
     public void ActivateOrDeactivate(ActionEvent event) throws Exception {
 
         if (table.getSelectionModel().getSelectedItem() != null) {
-            if (table.getSelectionModel().getSelectedItem().getStatus().equals("activated")) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to deactivate this account?", ButtonType.YES, ButtonType.NO);
-                alert.showAndWait();
-                if (alert.getResult() == ButtonType.YES) {
-                    accountManagementModel.activateOrDeactivate(selectedRowId, "deactivated"); // deactivate account
-                    main.change("ui/AdminAccountManagement.fxml");
-                    alert.close();
+            if(!table.getSelectionModel().getSelectedItem().getRole().equals("admin")) {
+                if (table.getSelectionModel().getSelectedItem().getStatus().equals("activated")) {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to deactivate this account?", ButtonType.YES, ButtonType.NO);
+                    alert.showAndWait();
+                    if (alert.getResult() == ButtonType.YES) {
+                        accountManagementModel.activateOrDeactivate(selectedRowId, "deactivated"); // deactivate account
+                        main.change("ui/AdminAccountManagement.fxml");
+                        alert.close();
+                        Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Account deactivated!", ButtonType.CLOSE);
+                        alert2.showAndWait();
+                        if (alert2.getResult() == ButtonType.CLOSE)
+                            alert2.close();
+                    } else {
+                        alert.close();
+                    }
                 } else {
-                    alert.close();
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to activate this account?", ButtonType.YES, ButtonType.NO);
+                    alert.showAndWait();
+                    if (alert.getResult() == ButtonType.YES) {
+                        accountManagementModel.activateOrDeactivate(selectedRowId, "activated"); // activate account
+                        main.change("ui/AdminAccountManagement.fxml");
+                        alert.close();
+                        Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Account activated!", ButtonType.CLOSE);
+                        alert2.showAndWait();
+                        if (alert2.getResult() == ButtonType.CLOSE)
+                            alert2.close();
+                    } else {
+                        alert.close();
+                    }
                 }
-            } else {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to activate this account?", ButtonType.YES, ButtonType.NO);
-                alert.showAndWait();
-                if (alert.getResult() == ButtonType.YES) {
-                    accountManagementModel.activateOrDeactivate(selectedRowId, "activated"); // activate account
-                    main.change("ui/AdminAccountManagement.fxml");
-                    alert.close();
-                } else {
-                    alert.close();
-                }
+            }
+            else {
+                Alert alert2 = new Alert(Alert.AlertType.ERROR, "You cannot deactivate an admin account!", ButtonType.CLOSE);
+                alert2.showAndWait();
+                if (alert2.getResult() == ButtonType.CLOSE)
+                    alert2.close();
             }
         } else {
             Alert alert2 = new Alert(Alert.AlertType.ERROR, "Please pick an account before activating or deactivating!", ButtonType.CLOSE);

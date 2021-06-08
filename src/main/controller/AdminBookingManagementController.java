@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
  * Description:	A class that handles admin booking management page
  * Author:		Anson Go Guang Ping
  */
-public class BookingManagementController implements Initializable {
+public class AdminBookingManagementController implements Initializable {
 
     private Main main = new Main();
     @FXML

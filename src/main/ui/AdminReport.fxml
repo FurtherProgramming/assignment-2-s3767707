@@ -34,6 +34,6 @@
         <Label fx:id="username" layoutX="88.0" layoutY="71.0" text="Label"/>
         <Button onAction="#BookingReport" layoutX="141.0" layoutY="225.0" mnemonicParsing="false" prefHeight="31.0"
                 prefWidth="167.0" text="Booking"/>
-        <Button layoutX="359.0" layoutY="67.0" mnemonicParsing="false" text="&lt;Back"/>
+        <Button onAction="#Back" layoutX="359.0" layoutY="67.0" mnemonicParsing="false" text="&lt;Back"/>
     </children>
 </AnchorPane>

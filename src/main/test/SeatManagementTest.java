@@ -37,7 +37,7 @@ public class SeatManagementTest {
     }
 
     @Test
-    @Order(36)
+    @Order(1)
     void testUpdateSeat_returnRestrictionCondition_IfDatabaseUpdated() throws SQLException {
 
         LocalDate startDate = LocalDate.of(2022, 6, 6);
@@ -67,7 +67,7 @@ public class SeatManagementTest {
     }
 
     @Test
-    @Order(37)
+    @Order(2)
     void testUpdateSeat_returnLockdownCondition_IfDatabaseUpdated() throws SQLException {
 
         LocalDate startDate = LocalDate.of(2022, 6, 6);
@@ -97,7 +97,7 @@ public class SeatManagementTest {
     }
 
     @Test
-    @Order(38)
+    @Order(3)
     void testResetCondition_SeatCountIs16_IfAllNormalSeatIsSearched() throws SQLException {
 
         seatManagementModel.resetCondition();
@@ -124,7 +124,7 @@ public class SeatManagementTest {
     }
 
     @Test
-    @Order(39)
+    @Order(4)
     void testGetAllSeats_SeatCountIs16_IfGetAllSeats() throws SQLException {
 
         ArrayList<Seat> seats = seatManagementModel.getAllSeats();
@@ -136,7 +136,7 @@ public class SeatManagementTest {
     }
 
     @Test
-    @Order(40)
+    @Order(5)
     void testGetBookingIdAffectedByCondition_returnNotNull_IfBookingsFound() throws SQLException {
 
         LocalDate startDate = LocalDate.of(2021, 6, 5);

@@ -3,4 +3,6 @@ employer_id,first_name,last_name,role,username,password,secret_question,answer
 "q",q,q,user,q,q,What is your favourite colour?,q
 "w",w,w,user,w,w,What is your favourite colour?,w
 "e",e,e,user,e,e,What is your favourite colour?,e
+"x",x,x,user,x,x,What is your favourite colour?,x
+"v",v,v,user,v,v,What is your favourite colour?,v
 "2",a,a,user,a,a,What is your favourite colour?,a

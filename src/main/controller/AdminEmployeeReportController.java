@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
  * Description:	A class that handles admin generate employee report page
  * Author:		Anson Go Guang Ping
  */
-public class EmployeeReportController implements Initializable {
+public class AdminEmployeeReportController implements Initializable {
     private Main main = new Main();
     private AccountManagementModel accountManagementModel = new AccountManagementModel();
     private AdminReportModel adminReportModel = new AdminReportModel();
@@ -55,7 +55,7 @@ public class EmployeeReportController implements Initializable {
         setTableColumns();
         try {
             // show table of all users
-            ObservableList<User> populateTableList = FXCollections.observableArrayList(accountManagementModel.getAllUser());
+            ObservableList<User> populateTableList = FXCollections.observableArrayList(adminReportModel.getAllUser());
             table.getItems().addAll(populateTableList);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -69,7 +69,7 @@ public class EmployeeReportController implements Initializable {
 
     public void Profile(ActionEvent event) throws Exception {
 
-        main.change("ui/UserProfile.fxml");
+        main.change("ui/AdminProfile.fxml");
     }
 
     public void Logout(ActionEvent event) throws Exception {
@@ -103,6 +103,11 @@ public class EmployeeReportController implements Initializable {
         if (alert.getResult() == ButtonType.YES) {
             adminReportModel.exportEmployeeTable();
             alert.close();
+            Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Employee report exported successfully", ButtonType.YES, ButtonType.NO);
+            alert2.showAndWait();
+            if (alert2.getResult() == ButtonType.YES) {
+
+            }
             main.change("ui/AdminReport.fxml");
         } else {
             alert.close();

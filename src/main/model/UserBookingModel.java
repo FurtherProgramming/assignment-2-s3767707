@@ -41,14 +41,16 @@ public class UserBookingModel {
             preparedStatement.setString(3, "Pending");
             preparedStatement.setString(4, "Accepted");
             resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 usernames.add(resultSet.getString("username"));
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (preparedStatement != null && resultSet != null) {
+            if(preparedStatement != null) {
                 preparedStatement.close();
+            }
+            if (resultSet != null) {
                 resultSet.close();
             }
         }
@@ -117,8 +119,12 @@ public class UserBookingModel {
             e.printStackTrace();
 
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
 
         return seatId;
@@ -138,7 +144,7 @@ public class UserBookingModel {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setDate(1, Date.valueOf(date));
             preparedStatement.setString(2, time);
-            preparedStatement.setString(3, "Rejected");
+            preparedStatement.setString(3, "Cancelled");
 
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -150,8 +156,12 @@ public class UserBookingModel {
             e.printStackTrace();
 
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
 
         return seats;
@@ -177,8 +187,12 @@ public class UserBookingModel {
             e.printStackTrace();
 
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
 
         return seats;
@@ -205,8 +219,12 @@ public class UserBookingModel {
             e.printStackTrace();
 
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
 
         return date;
@@ -231,8 +249,12 @@ public class UserBookingModel {
             e.printStackTrace();
 
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
         return date;
     }
@@ -265,8 +287,12 @@ public class UserBookingModel {
             e.printStackTrace();
 
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
         return booking;
     }
@@ -304,8 +330,12 @@ public class UserBookingModel {
             e.printStackTrace();
 
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
 
         return usernames;
@@ -345,8 +375,12 @@ public class UserBookingModel {
             e.printStackTrace();
 
         } finally {
-            preparedStatement.close();
-            resultSet.close();
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
         }
         return seats;
     }

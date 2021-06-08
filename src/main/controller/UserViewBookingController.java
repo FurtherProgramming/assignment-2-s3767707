@@ -65,7 +65,7 @@ public class UserViewBookingController implements Initializable {
             // sort the table from booking status "Accepted"->"Pending"->"Rejected" after each cancellation
             ObservableList<Booking> populateTableListAccepted = FXCollections.observableArrayList(userEditBookingModel.getUserBookings(user.getUsername(), "Accepted"));
             ObservableList<Booking> populateTableListPending = FXCollections.observableArrayList(userEditBookingModel.getUserBookings(user.getUsername(), "Pending"));
-            ObservableList<Booking> populateTableListRejected = FXCollections.observableArrayList(userEditBookingModel.getUserBookings(user.getUsername(), "Rejected"));
+            ObservableList<Booking> populateTableListRejected = FXCollections.observableArrayList(userEditBookingModel.getUserBookings(user.getUsername(), "Cancelled"));
             table.getItems().addAll(populateTableListAccepted);
             table.getItems().addAll(populateTableListPending);
             table.getItems().addAll(populateTableListRejected);
@@ -131,56 +131,52 @@ public class UserViewBookingController implements Initializable {
 
         User u = (User) Main.stage.getUserData();
         // oonly activated account can cancel booking
-        if (u.getStatus().equals("activated")) {
-            main.change("ui/UserCheckIn.fxml");
-            if (table.getSelectionModel().getSelectedItem() != null) { // if no item selected
-                boolean validStatus = table.getSelectionModel().getSelectedItem().getStatus().equals("Accepted") || table.getSelectionModel().getSelectedItem().getStatus().equals("Pending");
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to cancel this booking?", ButtonType.YES, ButtonType.NO);
-                alert.showAndWait();
-                // if the user clicks OK
+        if (table.getSelectionModel().getSelectedItem() != null) { // if no item selected
+            boolean validStatus = table.getSelectionModel().getSelectedItem().getStatus().equals("Accepted") || table.getSelectionModel().getSelectedItem().getStatus().equals("Pending");
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to cancel this booking?", ButtonType.YES, ButtonType.NO);
+            alert.showAndWait();
+            // if the user clicks OK
 
-                if (alert.getResult() == ButtonType.YES) {
-                    if (isSelectedRowValid(selectedRowId)) {
-                        if (validStatus) { // user can only cancel "Pending" or "Accepted" bookings
-                            if (validateBookingCancellation()) { // comparing booking's date with the current date
-                                if (userEditBookingModel.checkHourBeforeEdit(table.getSelectionModel().getSelectedItem().getBookingDate(), table.getSelectionModel().getSelectedItem().getBookingTime(), LocalDate.now(), LocalDateTime.now())) { // check if changes is not within 48 hours of booking date
-                                    adminEditBookingModel.editBookingStatus(selectedRowId, "Rejected");
-                                    main.change("ui/UserViewBooking.fxml");
-                                    alert.close();
-                                } else {
-                                    Alert alert2 = new Alert(Alert.AlertType.ERROR, "You cannot cancel a booking within 48 hours!", ButtonType.CLOSE);
-                                    alert2.showAndWait();
-                                    if (alert2.getResult() == ButtonType.CLOSE)
-                                        alert2.close();
+            if (alert.getResult() == ButtonType.YES) {
+                if (isSelectedRowValid(selectedRowId)) {
+                    if (validStatus) { // user can only cancel "Pending" or "Accepted" bookings
+                        if (validateBookingCancellation()) { // comparing booking's date with the current date
+                            if (userEditBookingModel.checkHourBeforeEdit(table.getSelectionModel().getSelectedItem().getBookingDate(), table.getSelectionModel().getSelectedItem().getBookingTime(), LocalDate.now(), LocalDateTime.now())) { // check if changes is not within 48 hours of booking date
+                                adminEditBookingModel.editBookingStatus(selectedRowId, "Cancelled");
+                                Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Booking cancelled successfully!", ButtonType.CLOSE);
+                                alert2.showAndWait();
+                                if (alert2.getResult() == ButtonType.CLOSE) {
+                                    alert2.close();
                                 }
+                                main.change("ui/UserViewBooking.fxml");
+                                alert.close();
                             } else {
-                                Alert alert2 = new Alert(Alert.AlertType.ERROR, "You cannot cancel an old booking!", ButtonType.CLOSE);
+                                Alert alert2 = new Alert(Alert.AlertType.ERROR, "You cannot cancel a booking within 48 hours!", ButtonType.CLOSE);
                                 alert2.showAndWait();
                                 if (alert2.getResult() == ButtonType.CLOSE)
                                     alert2.close();
                             }
                         } else {
-                            Alert alert2 = new Alert(Alert.AlertType.ERROR, "Booking already rejected!", ButtonType.CLOSE);
+                            Alert alert2 = new Alert(Alert.AlertType.ERROR, "You cannot cancel an old booking!", ButtonType.CLOSE);
                             alert2.showAndWait();
                             if (alert2.getResult() == ButtonType.CLOSE)
                                 alert2.close();
                         }
+                    } else {
+                        Alert alert2 = new Alert(Alert.AlertType.ERROR, "Booking already cancelled!", ButtonType.CLOSE);
+                        alert2.showAndWait();
+                        if (alert2.getResult() == ButtonType.CLOSE)
+                            alert2.close();
                     }
-                } else if (alert.getResult() == ButtonType.NO) {
-                    alert.close();
                 }
-            } else {
-                Alert alert2 = new Alert(Alert.AlertType.ERROR, "Please pick a booking!", ButtonType.CLOSE);
-                alert2.showAndWait();
-                if (alert2.getResult() == ButtonType.CLOSE)
-                    alert2.close();
-            }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Account deactivated. Please contact admin to reactivate your account!!", ButtonType.CLOSE);
-            alert.showAndWait();
-            if (alert.getResult() == ButtonType.CLOSE) {
+            } else if (alert.getResult() == ButtonType.NO) {
                 alert.close();
             }
+        } else {
+            Alert alert2 = new Alert(Alert.AlertType.ERROR, "Please pick a booking!", ButtonType.CLOSE);
+            alert2.showAndWait();
+            if (alert2.getResult() == ButtonType.CLOSE)
+                alert2.close();
         }
     }
 
@@ -188,81 +184,84 @@ public class UserViewBookingController implements Initializable {
 
         User u = (User) Main.stage.getUserData();
         // only activated account can update booking
-        if (u.getStatus().equals("activated")) {
-            if (table.getSelectionModel().getSelectedItem() != null) {
-                boolean dateEqualStart = table.getSelectionModel().getSelectedItem().getBookingDate().isEqual(userBookingModel.getConditionStartDate());
-                boolean dateEqualEnd = table.getSelectionModel().getSelectedItem().getBookingDate().isEqual(userBookingModel.getConditionEndDate());
-                boolean dateBetween = table.getSelectionModel().getSelectedItem().getBookingDate().isAfter(userBookingModel.getConditionStartDate()) && table.getSelectionModel().getSelectedItem().getBookingDate().isBefore(userBookingModel.getConditionEndDate());
-                boolean validStatus = table.getSelectionModel().getSelectedItem().getStatus().equals("Pending");
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to update this booking?", ButtonType.YES, ButtonType.NO);
-                alert.showAndWait();
-                // if the user clicks OK
-                if (alert.getResult() == ButtonType.YES) {
-                    if (isSelectedRowValid(selectedRowId)) {
-                        if (validStatus) { // user can only update pending bookings
-                            if (validateBookingCancellation()) {
-                                if (userEditBookingModel.checkHourBeforeEdit(table.getSelectionModel().getSelectedItem().getBookingDate(), table.getSelectionModel().getSelectedItem().getBookingTime(), LocalDate.now(), LocalDateTime.now())) { // check changes is not within 48 hours
-                                    User user = (User) Main.stage.getUserData();
-                                    String username = user.getUsername();
-                                    String bookingId = table.getSelectionModel().getSelectedItem().getBookingId();
-                                    String seatId = table.getSelectionModel().getSelectedItem().getSeatId();
-                                    LocalDate date = table.getSelectionModel().getSelectedItem().getBookingDate();
-                                    String status = table.getSelectionModel().getSelectedItem().getStatus();
-                                    String time = table.getSelectionModel().getSelectedItem().getBookingTime();
-                                    String check = table.getSelectionModel().getSelectedItem().getCheckIn();
-                                    Booking booking = new Booking(bookingId, username, seatId, date, status, time, check);
-                                    String seat = userBookingModel.previousBooking(user.getUsername());
-                                    ArrayList<String> temps = new ArrayList<String>();
-                                    temps = userBookingModel.isBooked(date, time);
-                                    seats.add(seat);
-                                    ArrayList<String> seatIds = userBookingModel.allSeatId();
-                                    for (String temp : temps) {
-                                        seats.add(temp);
-                                    }
-                                    // if current date affected by COVID restrictions, set seat color
-                                    if (dateEqualStart || dateEqualEnd || dateBetween) {
-                                        ArrayList<Seat> lockedSeats = seatManagementModel.getAllSeats();
-                                        main.displaySeatsWithCondition("ui/UserUpdateBooking.fxml", booking, seats, seatIds, lockedSeats);
-                                    } else {
+        if (table.getSelectionModel().getSelectedItem() != null) {
 
-                                        ArrayList<Seat> lockedSeats = null;
-                                        main.displaySeatsWithCondition("ui/UserUpdateBooking.fxml", booking, seats, seatIds, lockedSeats);
+            boolean dateEqualStart = table.getSelectionModel().getSelectedItem().getBookingDate().isEqual(userBookingModel.getConditionStartDate());
+            boolean dateEqualEnd = table.getSelectionModel().getSelectedItem().getBookingDate().isEqual(userBookingModel.getConditionEndDate());
+            boolean dateBetween = table.getSelectionModel().getSelectedItem().getBookingDate().isAfter(userBookingModel.getConditionStartDate()) && table.getSelectionModel().getSelectedItem().getBookingDate().isBefore(userBookingModel.getConditionEndDate());
+            boolean validStatus = table.getSelectionModel().getSelectedItem().getStatus().equals("Pending");
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to update this booking?", ButtonType.YES, ButtonType.NO);
+            alert.showAndWait();
+            // if the user clicks OK
+            if (alert.getResult() == ButtonType.YES) {
+                if (isSelectedRowValid(selectedRowId)) {
+                    if (validStatus) { // user can only update pending bookings
+                        if (validateBookingCancellation()) {
+                            if (userEditBookingModel.checkHourBeforeEdit(table.getSelectionModel().getSelectedItem().getBookingDate(), table.getSelectionModel().getSelectedItem().getBookingTime(), LocalDate.now(), LocalDateTime.now())) { // check changes is not within 48 hours
+                                User user = (User) Main.stage.getUserData();
+                                String username = user.getUsername();
+                                String bookingId = table.getSelectionModel().getSelectedItem().getBookingId();
+                                String seatId = table.getSelectionModel().getSelectedItem().getSeatId();
+                                LocalDate date = table.getSelectionModel().getSelectedItem().getBookingDate();
+                                String status = table.getSelectionModel().getSelectedItem().getStatus();
+                                String time = table.getSelectionModel().getSelectedItem().getBookingTime();
+                                String check = table.getSelectionModel().getSelectedItem().getCheckIn();
+                                Booking booking = new Booking(bookingId, username, seatId, date, status, time, check);
+                                String seat = userBookingModel.previousBooking(user.getUsername());
+                                ArrayList<String> temps = new ArrayList<String>();
+                                temps = userBookingModel.isBooked(date, time);
+                                seats.add(seat);
+                                ArrayList<String> seatIds = userBookingModel.allSeatId();
+                                for (String temp : temps) {
+                                    seats.add(temp);
+                                }
+                                //user cannot sit beside employees from previous sit
+                                Booking prevBooking = userBookingModel.previousSit(user.getUsername());
+                                if (prevBooking != null) {
+                                    ArrayList<String> usernames = userBookingModel.getAdjacentUserOfPreviousSit(prevBooking.getBookingDate(), prevBooking.getBookingTime(), prevBooking.getSeatId());
+                                    if (usernames != null) {
+                                        ArrayList<String> SeatsBookedByPrevUsers = userBookingModel.getSeatsOfPreviousAdjacentUser(date, time, usernames);
+                                        ArrayList<String> SeatsBesidePrevUsers = userBookingModel.SeatsBesidePrevUser(SeatsBookedByPrevUsers);
+                                        for (String s : SeatsBesidePrevUsers) {
+                                            seats.add(s);
+                                        }
                                     }
-                                } else {
-                                    Alert alert2 = new Alert(Alert.AlertType.ERROR, "You cannot change a booking within 48 hours!", ButtonType.CLOSE);
-                                    alert2.showAndWait();
-                                    if (alert2.getResult() == ButtonType.CLOSE)
-                                        alert2.close();
+                                }
+                                // get all seat with their condition
+                                ArrayList<Seat> lockedSeats = seatManagementModel.getAllSeats();
+                                main.displaySeatsWithCondition("ui/UserUpdateBooking.fxml", booking, seats, seatIds, lockedSeats);
+                                Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Click on the seats to change your seat!", ButtonType.CLOSE);
+                                alert2.showAndWait();
+                                if (alert2.getResult() == ButtonType.CLOSE) {
+                                    alert2.close();
                                 }
                             } else {
-                                Alert alert2 = new Alert(Alert.AlertType.ERROR, "You cannot cancel an old booking!", ButtonType.CLOSE);
+                                Alert alert2 = new Alert(Alert.AlertType.ERROR, "You cannot change a booking within 48 hours!", ButtonType.CLOSE);
                                 alert2.showAndWait();
                                 if (alert2.getResult() == ButtonType.CLOSE)
                                     alert2.close();
                             }
                         } else {
-                            Alert alert2 = new Alert(Alert.AlertType.ERROR, "Booking cannot be changed! Only pick pending bookings!!", ButtonType.CLOSE);
+                            Alert alert2 = new Alert(Alert.AlertType.ERROR, "You cannot cancel an old booking!", ButtonType.CLOSE);
                             alert2.showAndWait();
                             if (alert2.getResult() == ButtonType.CLOSE)
                                 alert2.close();
                         }
+                    } else {
+                        Alert alert2 = new Alert(Alert.AlertType.ERROR, "Booking cannot be changed! Only pick pending bookings!!", ButtonType.CLOSE);
+                        alert2.showAndWait();
+                        if (alert2.getResult() == ButtonType.CLOSE)
+                            alert2.close();
                     }
-                } else if (alert.getResult() == ButtonType.NO) {
-                    alert.close();
                 }
-            } else {
-                Alert alert2 = new Alert(Alert.AlertType.ERROR, "Please pick an booking!", ButtonType.CLOSE);
-                alert2.showAndWait();
-                if (alert2.getResult() == ButtonType.CLOSE)
-                    alert2.close();
-            }
-            main.change("ui/UserCheckIn.fxml");
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Account deactivated. Please contact admin to reactivate your account!!", ButtonType.CLOSE);
-            alert.showAndWait();
-            if (alert.getResult() == ButtonType.CLOSE) {
+            } else if (alert.getResult() == ButtonType.NO) {
                 alert.close();
             }
+        } else {
+            Alert alert2 = new Alert(Alert.AlertType.ERROR, "Please pick an booking!", ButtonType.CLOSE);
+            alert2.showAndWait();
+            if (alert2.getResult() == ButtonType.CLOSE)
+                alert2.close();
         }
     }
 }

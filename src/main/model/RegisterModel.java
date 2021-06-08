@@ -41,8 +41,10 @@ public class RegisterModel {
         } catch (Exception e) {
             return false;
         } finally {
-            if (preparedStatement != null && resultSet != null) {
+            if(preparedStatement != null) {
                 preparedStatement.close();
+            }
+            if (resultSet != null) {
                 resultSet.close();
             }
 
