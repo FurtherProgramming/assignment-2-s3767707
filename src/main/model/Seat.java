@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 /*
  * Class:		Seat
- * Description:	A class that represents a seat object
+ * Description:	A class that represents a seat object. A seat represents a desk in the booking scene.
  * Author:		Anson Go Guang Ping
  */
 public class Seat {

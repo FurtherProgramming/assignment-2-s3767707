@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 /*
  * Class:		Booking
- * Description:	A class that represents a booking item
+ * Description:	A class that represents a booking item. A booking is created when user books a seat.
  * Author:		Anson Go Guang Ping
  */
 public class Booking {
@@ -39,11 +39,6 @@ public class Booking {
         this.seatId = seatId;
     }
 
-    public void setBookingDate(LocalDate date) {
-
-        this.bookingDate = date;
-    }
-
     public LocalDate getBookingDate() {
 
         return bookingDate;
@@ -72,11 +67,6 @@ public class Booking {
     public String getBookingTime() {
 
         return bookingTime;
-    }
-
-    public void setBookingTime(String time) {
-
-        this.bookingTime = time;
     }
 
     public String getCheckIn() {

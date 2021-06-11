@@ -66,7 +66,7 @@ public class UserEditBookingTest {
 
     @Test
     @Order(4)
-    void testCheckHourBeforeEdit_returnTrue_IfDateAndTimeMoreThan48Hours() throws SQLException {
+    void testCheckHourBeforeEdit_returnTrue_IfDateAndTimeMoreThan48Hours() {
 
         Boolean bool = userEditBookingModel.checkHourBeforeEdit(LocalDate.of(2021, 6, 4), "1400", LocalDate.of(2021, 6, 2), LocalDateTime.of(2021, 6, 2, 13, 59));
         assertTrue(bool);
@@ -74,7 +74,7 @@ public class UserEditBookingTest {
 
     @Test
     @Order(5)
-    void testCheckHourBeforeEdit_returnFalse_IfDateTimeEquals48Hours() throws SQLException {
+    void testCheckHourBeforeEdit_returnFalse_IfDateTimeEquals48Hours() {
 
         Boolean bool = userEditBookingModel.checkHourBeforeEdit(LocalDate.of(2021, 6, 4), "1400", LocalDate.of(2021, 6, 2), LocalDateTime.of(2021, 6, 2, 14, 00));
         assertFalse(bool);
@@ -82,7 +82,7 @@ public class UserEditBookingTest {
 
     @Test
     @Order(6)
-    void testCheckHourBeforeEdit_returnFalse_IfDateTimeWithin48Hours() throws SQLException {
+    void testCheckHourBeforeEdit_returnFalse_IfDateTimeWithin48Hours(){
 
         Boolean bool = userEditBookingModel.checkHourBeforeEdit(LocalDate.of(2021, 6, 4), "1400", LocalDate.of(2021, 6, 3), LocalDateTime.of(2021, 6, 3, 14, 00));
         assertFalse(bool);
@@ -104,7 +104,6 @@ public class UserEditBookingTest {
                 fail();
             } else {
                 assertNull(null);
-                ;
             }
             LocalDate date = LocalDate.of(2022, 6, 1);
             preparedStatement = connection.prepareStatement(query);

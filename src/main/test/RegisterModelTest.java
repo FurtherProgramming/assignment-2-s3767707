@@ -37,17 +37,17 @@ public class RegisterModelTest {
 
     @Test
     @Order(1)
-    void testEmployerId_returnTrue_IfEmployerIdExists() throws SQLException {
+    void testEmployeeId_returnTrue_IfEmployeeIdExists() throws SQLException {
 
-        boolean bool = registerModel.employerIdExist("1");
+        boolean bool = registerModel.employeeIdExist("1");
         assertTrue(bool);
     }
 
     @Test
     @Order(2)
-    void testEmployerId_returnTrue_IfEmployerIdNotExists() throws SQLException {
+    void testEmployeeId_returnTrue_IfEmployeeIdNotExists() throws SQLException {
 
-        boolean bool = registerModel.employerIdExist("10");
+        boolean bool = registerModel.employeeIdExist("10");
         assertFalse(bool);
     }
 
@@ -96,7 +96,7 @@ public class RegisterModelTest {
     @Order(6)
     void testRegister_returnTrue_IfDatabaseIsUpdated() throws SQLException {
 
-        boolean bool = registerModel.employerIdExist("1");
+        boolean bool = registerModel.employeeIdExist("1");
         assertTrue(bool);
 
     }

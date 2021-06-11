@@ -30,8 +30,6 @@ public class UserBookingController implements Initializable {
     private UserBookingModel userBookingModel = new UserBookingModel();
     private SeatManagementModel seatManagementModel = new SeatManagementModel();
     private Main main = new Main();
-    private ArrayList<String> seats = new ArrayList<String>();
-    private ArrayList<String> allSeatId = new ArrayList<String>();
     private User user = (User) Main.stage.getUserData();
     @FXML
     private DatePicker datePicker;
@@ -78,9 +76,9 @@ public class UserBookingController implements Initializable {
 
     public void Search(ActionEvent event) throws Exception {
 
-        if (datePicker.getValue() != null) { // if date choosed
-            if (time.getValue() != null) { //if book time choosed
-                if (datePicker.getValue().isAfter(LocalDate.now())) {//if date choosed is after current date
+        if (datePicker.getValue() != null) { // if date chose
+            if (time.getValue() != null) { //if book time chose
+                if (datePicker.getValue().isAfter(LocalDate.now())) {//if date chose is after current date
                     if (!userBookingModel.UsernameExistInList(user.getUsername(), datePicker.getValue(), time.getValue().toString())) {// user can only have one bookings per session, applies to pending  bookings too to avoid spamming
                         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Click on seats to book!", ButtonType.CLOSE);
                         alert.showAndWait();
@@ -90,7 +88,7 @@ public class UserBookingController implements Initializable {
                         Booking booking = new Booking(null, user.getUsername(), null, datePicker.getValue(), "Pending", time.getValue().toString(), "N");
                         ArrayList<String> bookedSeats = userBookingModel.isBooked(datePicker.getValue(), time.getValue().toString());
                         bookedSeats.add(userBookingModel.previousBooking(user.getUsername()));// user cannot book the same seat as previous bookings
-                        // get seats beside same Employees that have been sitten previously
+                        // get seats beside same Employees that have been sit previously
                         Booking prevBooking = userBookingModel.previousSit(user.getUsername());
                         if (prevBooking != null) {
                             ArrayList<String> usernames = userBookingModel.getAdjacentUserOfPreviousSit(prevBooking.getBookingDate(), prevBooking.getBookingTime(), prevBooking.getSeatId());

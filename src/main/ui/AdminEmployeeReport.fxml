@@ -30,7 +30,7 @@
         </AnchorPane>
         <TableView fx:id="table" layoutY="81.0" prefHeight="355.0" prefWidth="845.0">
             <columns>
-                <TableColumn fx:id="empId" prefWidth="115.0" text="Employer id"/>
+                <TableColumn fx:id="empId" prefWidth="115.0" text="Employee id"/>
                 <TableColumn fx:id="username" prefWidth="92.0" text="Username"/>
                 <TableColumn fx:id="password" prefWidth="92.0" text="Password"/>
                 <TableColumn fx:id="firstname" prefWidth="116.0" text="First name"/>

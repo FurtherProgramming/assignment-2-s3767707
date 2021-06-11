@@ -28,7 +28,7 @@ public class RegisterController implements Initializable {
     private RegisterModel registerModel = new RegisterModel();
     private LoginModel loginModel = new LoginModel();
     @FXML
-    private TextField txtEmployerId;
+    private TextField txtEmployeeId;
     @FXML
     private TextField txtFirstname;
     @FXML
@@ -70,8 +70,8 @@ public class RegisterController implements Initializable {
     public void Register(ActionEvent event) throws Exception {
 
         try {
-            if (txtEmployerId.getText().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Employer id is required!", ButtonType.CLOSE);
+            if (txtEmployeeId.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Employee id is required!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
@@ -110,8 +110,8 @@ public class RegisterController implements Initializable {
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
-            } else if (registerModel.employerIdExist(txtEmployerId.getText())) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Employer id exists!", ButtonType.CLOSE);
+            } else if (registerModel.employeeIdExist(txtEmployeeId.getText())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Employee id exists!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
@@ -121,7 +121,7 @@ public class RegisterController implements Initializable {
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
             } else {
-                registerModel.register(txtEmployerId.getText(), txtFirstname.getText(), txtLastname.getText(), txtRole.getValue(), txtUsername.getText(), txtPassword.getText(), txtSecretQuestion.getValue(), txtAnswer.getText());
+                registerModel.register(txtEmployeeId.getText(), txtFirstname.getText(), txtLastname.getText(), txtRole.getValue(), txtUsername.getText(), txtPassword.getText(), txtSecretQuestion.getValue(), txtAnswer.getText());
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Register successfully!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)

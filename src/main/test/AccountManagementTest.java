@@ -41,7 +41,7 @@ public class AccountManagementTest {
 
         ArrayList<User> users = accountManagementModel.getAllUser(null);
         for (User user : users) {
-            assertNotNull(user.getEmployerId());
+            assertNotNull(user.getEmployeeId());
         }
     }
 
@@ -122,7 +122,7 @@ public class AccountManagementTest {
 
     @Test
     @Order(4)
-    void testGetUserById_returnUser_IfSearchByEmployerId() throws SQLException {
+    void testGetUserById_returnUser_IfSearchByEmployeeId() throws SQLException {
 
         assertEquals("test", accountManagementModel.getUserById("1").getUsername());
     }
@@ -231,19 +231,19 @@ public class AccountManagementTest {
 
     @Test
     @Order(10)
-    void testUsernameExist_returnTrue_IfUpdatedUsernameExistInDatabse() throws SQLException {
+    void testUsernameExist_returnTrue_IfUpdatedUsernameExistInDatabase() throws SQLException {
         assertTrue(accountManagementModel.usernameExist("q", "a"));
     }
 
     @Test
     @Order(11)
-    void testEmployerIdExist_returnFalse_IfUpdatedEmployerIdIsPreviousEmployerId() throws SQLException {
+    void testEmployeeIdExist_returnFalse_IfUpdatedEmployeeIdIsPreviousEmployeeId() throws SQLException {
         assertFalse(accountManagementModel.empIdExist("1", "1"));
     }
 
     @Test
     @Order(12)
-    void testEmployerIdExist_returnTrue_IfUpdatedEmployerIdExistInDatabse() throws SQLException {
+    void testEmployeeIdExist_returnTrue_IfUpdatedEmployeeIdExistInDatabase() throws SQLException {
         assertTrue(accountManagementModel.empIdExist("2", "1"));
     }
 

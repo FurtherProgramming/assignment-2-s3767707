@@ -45,26 +45,26 @@ Congratulations!
 Database table attribute description:  
 
 1- Employee Table
- - emp_id :  Arub employer id  
- - firstname :  Employer's first name  
- - lastname :  Employer's last name  
- - role :  Employer's account role  
- - username :  Employer's account username  
- - password :  Employer's account password  
- - secret_question :  Employer's account secret question to reset password  
- - answer :  Employer's answer for secret question  
- - status :  Employer account status (sctivated/deactivated)  
+ - emp_id :  Arub employee id  
+ - firstname :  Employee's first name  
+ - lastname :  Employee's last name  
+ - role :  Employee's account role  
+ - username :  Employee's account username  
+ - password :  Employee's account password  
+ - secret_question :  Employee's account secret question to reset password  
+ - answer :  Employee's answer for secret question  
+ - status :  Employee account status (activated/deactivated)  
  Note: Activated account can access all functions while deactivated account can only view profile menu  
  
  2- Booking Table
   - id :  Booking id 
-  - username :  Employer's username  
+  - username :  Employee's username  
   - seat_id :  Booked seat no.  
   - booking_date :  Booking date  
   - booking_time :  Booking time (Time where seat is available for check-in)  
   - status :  Booking status (Accepted/Pending/Rejected)  
   Note: Accepted-> Approved by admin, Pending->Have not been reviewed by admin, Rejected->Cancelled by admin   
-  - check_in :  Attribute to determine whether the seat is seated by that user during the booking session  
+  - check_in :  Attribute to determine whether the seat is sit by that user during the booking session  
   
  3- Seat Table
   - id :  Seat no. 
@@ -117,7 +117,7 @@ User Make Booking:
 4- If a user books a seat and the booking is either pending or accepted, others will not be able to book it at that particular date and time.
 Note: The seat is opened again if that booking gets rejected.
 
-5-  Additional feature where user cannot sit beside same Employees that have been sitten previously is implemented by restricting user from booking the seats beside the seat booked by previous employees that have checked in and seat beside each other.  
+5-  Additional feature where user cannot sit beside same Employees that have been sit previously is implemented by restricting user from booking the seats beside the seat booked by previous employees that have checked in and seat beside each other.  
 Note: Only applies to previous **checked in** bookings. Restricting bookings would be more reasonable and efficient than restricting sitting as users may find annoying if they booked a seat and found out they cannot sit on it later. It also removes the need of admin checking whether they sit beside each other in the previous booking before accepting their current booking.
 
 
@@ -129,7 +129,7 @@ User Update Booking:
 
 3- The seat of **latest** booking will not be available even when user update the booking before it(user cannot book the same desk as the previous booking).  
 
-4- The seat beside same Employees that have been sitten previously will not be available.  
+4- The seat beside same Employees that have been sit previously will not be available.  
 
 User check in:  
 
@@ -195,17 +195,17 @@ Admin have three main features:
     - Account management  
         Admin can update, remove and add both users and admins account
     - Generate report   
-        Admin can generate account report and booking report. Booking report generated will be sorted by date and admin can specify what date of boookings should they export.  
+        Admin can generate account report and booking report. Booking report generated will be sorted by date and admin can specify what date of bookings should they export.  
 2. What steps need to be taken?
     - The project main class will be main.java
     - Please make sure to include the Junit 5 Jar file before running the test packages
     - Please make sure to run all the unit tests first before executing the program as changes in database may result in changes of outcome of test 
     - Right click on the main.java and select "Run 'Main.main()'" to run the project  
 3. Lessons learned  
-    - How to create classess by taking OOP into consideration  
-    - Has a deeper insight and nderstanding of the MVC structure   
+    - How to create classes by taking OOP into consideration  
+    - Has a deeper insight and understanding of the MVC structure   
     - Learns and visualize the overall steps and requirements needed to complete a full application project.  
-    - Learn how javafx elements are linked with java code in order to produce a user-interace based app.  
+    - Learn how javafx elements are linked with java code in order to produce a user-interface based app.  
 4. Difficulties faced  
     - Finds it hard to determine what methods to put in classes
     - When implementing booking function, discover lots of uncertainties in making design decision which makes the code implementing process complex.

@@ -46,32 +46,17 @@ public class AdminProfileController implements Initializable {
 
     public void BookingManagement(ActionEvent event) throws Exception {
 
-        User u = (User) Main.stage.getUserData();
-        // only activated account can manage booking
-
         main.change("ui/AdminBookingManagement.fxml");
-
-
     }
 
     public void AccountManagement(ActionEvent event) throws Exception {
 
-        User u = (User) Main.stage.getUserData();
-        // only activated account can manage account
-
         main.change("ui/AdminAccountManagement.fxml");
-
-
     }
 
     public void Report(ActionEvent event) throws Exception {
 
-        User u = (User) Main.stage.getUserData();
-        // only activated account generate report
-
         main.change("ui/AdminReport.fxml");
-
-
     }
 
 }

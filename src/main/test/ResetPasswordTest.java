@@ -52,21 +52,21 @@ public class ResetPasswordTest {
 
     @Test
     @Order(3)
-    void testValidateAnswer_returnTrue_IfAnswerIsValid() throws SQLException {
+    void testValidateAnswer_returnTrue_IfAnswerIsValid()  {
 
         assertTrue(resetPasswordModel.validateAnswer("a", "a"));
     }
 
     @Test
     @Order(4)
-    void testValidateAnswer_returnFalse_IfAnswerIsNotValid() throws SQLException {
+    void testValidateAnswer_returnFalse_IfAnswerIsNotValid() {
 
         assertFalse(resetPasswordModel.validateAnswer("a", "b"));
     }
 
     @Test
     @Order(5)
-    void testGenerateRandomPassword_StringLengthEquals4_IfGenerateRandomStringWith4Character() throws SQLException {
+    void testGenerateRandomPassword_StringLengthEquals4_IfGenerateRandomStringWith4Character() {
 
         assertEquals(4, resetPasswordModel.generateRandomPassword(4).length());
     }

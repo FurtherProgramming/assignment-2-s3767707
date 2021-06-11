@@ -68,7 +68,7 @@ public class AccountManagementModel {
     }
 
     /*
-     * Remove user from database by employer id
+     * Remove user from database by employee id
      */
     public Boolean removeAccount(String empId) throws SQLException {
         PreparedStatement preparedStatement = null;
@@ -116,7 +116,7 @@ public class AccountManagementModel {
     }
 
     /*
-     * Get user from database with employer id
+     * Get user from database with employee id
      */
     public User getUserById(String empId) throws SQLException {
         PreparedStatement preparedStatement = null;
@@ -192,7 +192,7 @@ public class AccountManagementModel {
     }
 
     /*
-     * Update account details by employer id
+     * Update account details by employee id
      */
     public Boolean updateAccount(String empId, String fn, String ln, String role, String un, String pass, String ques, String ans, User user) throws SQLException {
 
@@ -209,7 +209,7 @@ public class AccountManagementModel {
             preparedStatement.setString(6, pass);
             preparedStatement.setString(7, ques);
             preparedStatement.setString(8, ans);
-            preparedStatement.setString(9, user.getEmployerId());
+            preparedStatement.setString(9, user.getEmployeeId());
             preparedStatement.executeUpdate();
             bool = true;
         } catch (Exception e) {
@@ -223,7 +223,7 @@ public class AccountManagementModel {
     }
 
     /*
-     * update account details by employer id
+     * update account details by employee id
      */
     public Boolean activateOrDeactivate(String empId, String status) throws SQLException {
 

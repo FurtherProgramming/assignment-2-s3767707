@@ -61,7 +61,7 @@ public class Main extends Application {
         if (user != null) {
             TextField t = (TextField) scene.lookup("#txtEmployerId");
             if (t != null) {
-                t.setText(user.getEmployerId());
+                t.setText(user.getEmployeeId());
             }
             t = (TextField) scene.lookup("#txtFirstname");
             if (t != null) {

@@ -11,7 +11,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import main.Main;
-import main.model.AccountManagementModel;
 import main.model.AdminReportModel;
 import main.model.User;
 
@@ -26,7 +25,6 @@ import java.util.ResourceBundle;
  */
 public class AdminEmployeeReportController implements Initializable {
     private Main main = new Main();
-    private AccountManagementModel accountManagementModel = new AccountManagementModel();
     private AdminReportModel adminReportModel = new AdminReportModel();
     @FXML
     private TableColumn<User, String> username;
@@ -86,7 +84,7 @@ public class AdminEmployeeReportController implements Initializable {
     private void setTableColumns() {
 
         // specifying how to populate the columns of the table
-        empId.setCellValueFactory(new PropertyValueFactory<User, String>("employerId"));
+        empId.setCellValueFactory(new PropertyValueFactory<User, String>("employeeId"));
         username.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
         password.setCellValueFactory(new PropertyValueFactory<User, String>("password"));
         firstname.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
@@ -103,12 +101,11 @@ public class AdminEmployeeReportController implements Initializable {
         if (alert.getResult() == ButtonType.YES) {
             adminReportModel.exportEmployeeTable();
             alert.close();
-            Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Employee report exported successfully", ButtonType.YES, ButtonType.NO);
+            Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Employee report exported successfully", ButtonType.CLOSE);
             alert2.showAndWait();
-            if (alert2.getResult() == ButtonType.YES) {
-
+            if (alert2.getResult() == ButtonType.CLOSE) {
+                main.change("ui/AdminReport.fxml");
             }
-            main.change("ui/AdminReport.fxml");
         } else {
             alert.close();
         }

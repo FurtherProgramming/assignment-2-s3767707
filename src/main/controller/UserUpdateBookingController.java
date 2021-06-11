@@ -8,11 +8,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import main.Main;
-import main.model.*;
+import main.model.Booking;
+import main.model.BookingHolder;
+import main.model.UserEditBookingModel;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /*
@@ -22,11 +23,8 @@ import java.util.ResourceBundle;
  */
 public class UserUpdateBookingController implements Initializable {
 
-    private UserBookingModel userBookingModel = new UserBookingModel();
     private UserEditBookingModel userEditBookingModel = new UserEditBookingModel();
-    private SeatManagementModel seatManagementModel = new SeatManagementModel();
     private Main main = new Main();
-    private ArrayList<String> seats = new ArrayList<String>();
 
 
     // Check database connection

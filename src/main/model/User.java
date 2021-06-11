@@ -2,12 +2,12 @@ package main.model;
 
 /*
  * Class:		User
- * Description:	A class that represents a user object
+ * Description:	A class that represents a user object. A user can be an admin or normal user
  * Author:		Anson Go Guang Ping
  */
 public class User {
 
-    private String employerId;
+    private String employeeId;
     private String firstname;
     private String lastname;
     private String role;
@@ -20,7 +20,7 @@ public class User {
 
     public User(String empId, String fn, String ln, String role, String un, String pass, String ques, String ans, String status) {
 
-        this.employerId = empId;
+        this.employeeId = empId;
         this.firstname = fn;
         this.lastname = ln;
         this.role = role;
@@ -46,9 +46,9 @@ public class User {
         return question;
     }
 
-    public String getEmployerId() {
+    public String getEmployeeId() {
 
-        return employerId;
+        return employeeId;
     }
 
     public String getPassword() {

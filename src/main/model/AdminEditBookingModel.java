@@ -90,17 +90,18 @@ public class AdminEditBookingModel {
     }
 
     /*
-     * Update booking status by booking date
+     * Reject pending booking by midnight
      */
     public Boolean autoRejectBooking(LocalDate date, String status) throws SQLException {
 
         PreparedStatement preparedStatement = null;
         boolean bool = false;
-        String query = "UPDATE booking SET status = ? WHERE booking_date <= ?;";
+        String query = "UPDATE booking SET status = ? WHERE booking_date <= ? and status = ?;";
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, status);
             preparedStatement.setDate(2, Date.valueOf(date));
+            preparedStatement.setString(3, "Pending");
             preparedStatement.executeUpdate();
             bool = true;
         } catch (Exception e) {

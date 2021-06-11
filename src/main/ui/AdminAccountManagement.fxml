@@ -56,7 +56,7 @@
         <Button layoutX="240.0" layoutY="436.0" mnemonicParsing="false" onAction="#Update" prefHeight="31.0"
                 prefWidth="239.0" text="Update"/>
         <Button layoutX="716.0" layoutY="436.0" mnemonicParsing="false" onAction="#ActivateOrDeactivate"
-                prefHeight="31.0" prefWidth="239.0" text="Activaate/Deactivate"/>
+                prefHeight="31.0" prefWidth="239.0" text="Activate/Deactivate"/>
         <Button layoutX="478.0" layoutY="436.0" mnemonicParsing="false" onAction="#Delete" prefHeight="31.0"
                 prefWidth="239.0" text="Delete"/>
     </children>

@@ -129,8 +129,6 @@ public class UserViewBookingController implements Initializable {
 
     public void CancelBooking(ActionEvent event) throws Exception {
 
-        User u = (User) Main.stage.getUserData();
-        // oonly activated account can cancel booking
         if (table.getSelectionModel().getSelectedItem() != null) { // if no item selected
             boolean validStatus = table.getSelectionModel().getSelectedItem().getStatus().equals("Accepted") || table.getSelectionModel().getSelectedItem().getStatus().equals("Pending");
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to cancel this booking?", ButtonType.YES, ButtonType.NO);
@@ -182,13 +180,9 @@ public class UserViewBookingController implements Initializable {
 
     public void updateBooking(ActionEvent event) throws Exception {
 
-        User u = (User) Main.stage.getUserData();
-        // only activated account can update booking
+
         if (table.getSelectionModel().getSelectedItem() != null) {
 
-            boolean dateEqualStart = table.getSelectionModel().getSelectedItem().getBookingDate().isEqual(userBookingModel.getConditionStartDate());
-            boolean dateEqualEnd = table.getSelectionModel().getSelectedItem().getBookingDate().isEqual(userBookingModel.getConditionEndDate());
-            boolean dateBetween = table.getSelectionModel().getSelectedItem().getBookingDate().isAfter(userBookingModel.getConditionStartDate()) && table.getSelectionModel().getSelectedItem().getBookingDate().isBefore(userBookingModel.getConditionEndDate());
             boolean validStatus = table.getSelectionModel().getSelectedItem().getStatus().equals("Pending");
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you wish to update this booking?", ButtonType.YES, ButtonType.NO);
             alert.showAndWait();

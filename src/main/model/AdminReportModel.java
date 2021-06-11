@@ -72,7 +72,7 @@ public class AdminReportModel {
     }
 
     /*
-     * Generatea CSV report from accepted booking with date
+     * Generate a CSV report from accepted booking with date
      */
     public void exportBookingTableWithDate(LocalDate date) throws SQLException, IOException {
 
@@ -92,7 +92,7 @@ public class AdminReportModel {
     }
 
     /*
-     * Generatea CSV report from all accepted booking
+     * Generate a CSV report from all accepted booking
      */
     public void exportBookingTable() throws SQLException, IOException {
 

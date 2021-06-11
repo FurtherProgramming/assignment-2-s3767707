@@ -12,7 +12,6 @@ import main.Main;
 import main.model.Booking;
 import main.model.User;
 import main.model.UserCheckInModel;
-import main.model.UserEditBookingModel;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -28,7 +27,6 @@ import java.util.ResourceBundle;
 public class UserCheckInController implements Initializable {
     private UserCheckInModel userCheckInModel = new UserCheckInModel();
     private Main main = new Main();
-    private UserEditBookingModel userEditBookingModel = new UserEditBookingModel();
 
     @FXML
     private Label label;

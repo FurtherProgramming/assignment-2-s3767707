@@ -74,60 +74,6 @@ public class SeatManagementModel {
     }
 
     /*
-     * get seat id based on COVID condition
-     */
-    public ArrayList<String> getSeatId(String condition) throws SQLException {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        ArrayList<String> seatIds = new ArrayList<String>();
-        if (condition != null) {
-            if (condition.equals("Restriction")) {
-                String query = "select * from seat where status = ? ";
-                try {
-                    preparedStatement = connection.prepareStatement(query);
-                    preparedStatement.setInt(1, 0);
-                    resultSet = preparedStatement.executeQuery();
-                    while (resultSet.next()) {
-                        seatIds.add(resultSet.getString("id"));
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    if(preparedStatement != null) {
-                        preparedStatement.close();
-                    }
-                    if (resultSet != null) {
-                        resultSet.close();
-                    }
-                }
-            }
-            if (condition.equals("Lockdown")) {
-                String query = "select * from seat ";
-                try {
-
-                    preparedStatement = connection.prepareStatement(query);
-                    resultSet = preparedStatement.executeQuery();
-                    while (resultSet.next()) {
-                        seatIds.add(resultSet.getString("id"));
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    if(preparedStatement != null) {
-                        preparedStatement.close();
-                    }
-                    if (resultSet != null) {
-                        resultSet.close();
-                    }
-                }
-            } else {
-                seatIds = null;
-            }
-        }
-        return seatIds;
-    }
-
-    /*
      * get booking id affected by COVID condition
      */
     public ArrayList<String> getBookingIdAffectedByCondition(String condition, LocalDate startDate, LocalDate endDate) throws SQLException {

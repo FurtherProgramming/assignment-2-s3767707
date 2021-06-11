@@ -43,6 +43,8 @@ public class AdminBookingReportController implements Initializable {
     @FXML
     private TableColumn<Booking, String> bookingTime;
     @FXML
+    private TableColumn<Booking, String> checkIn;
+    @FXML
     private TableView<Booking> table;
     @FXML
     private String selectedRowId;
@@ -95,6 +97,7 @@ public class AdminBookingReportController implements Initializable {
         bookingDate.setCellValueFactory(new PropertyValueFactory<Booking, LocalDate>("bookingDate"));
         bookingTime.setCellValueFactory(new PropertyValueFactory<Booking, String>("bookingTime"));
         status.setCellValueFactory(new PropertyValueFactory<Booking, String>("status"));
+        checkIn.setCellValueFactory(new PropertyValueFactory<Booking, String>("checkIn"));
     }
 
     public void getRowId(MouseEvent e) {

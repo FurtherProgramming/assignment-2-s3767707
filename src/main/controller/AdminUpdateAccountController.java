@@ -10,7 +10,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import main.Main;
-import main.model.*;
+import main.model.AccountHolder;
+import main.model.AccountManagementModel;
+import main.model.User;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -25,10 +27,8 @@ import java.util.ResourceBundle;
 public class AdminUpdateAccountController implements Initializable {
     public AccountManagementModel accountManagementModel = new AccountManagementModel();
     public Main main = new Main();
-    private RegisterModel registerModel = new RegisterModel();
-    private LoginModel loginModel = new LoginModel();
     @FXML
-    private TextField txtEmployerId;
+    private TextField txtEmployeeId;
     @FXML
     private TextField txtFirstname;
     @FXML
@@ -123,7 +123,7 @@ public class AdminUpdateAccountController implements Initializable {
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
-            } else if (accountManagementModel.empIdExist(txtEmployerId.getText(), user.getEmployerId())) {
+            } else if (accountManagementModel.empIdExist(txtEmployeeId.getText(), user.getEmployeeId())) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Employer id exists!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
@@ -135,13 +135,13 @@ public class AdminUpdateAccountController implements Initializable {
                     alert.close();
             } else {
                 // remove account first and add account again in database so same username can be reused
-                // (employer id and username is unique)
-                // Empoyer id and username cannot be changed
+                // (employee id and username is unique)
+                // Employee id and username cannot be changed
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure to update this account?", ButtonType.YES, ButtonType.NO);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.YES) {
                     alert.close();
-                    accountManagementModel.updateAccount(txtEmployerId.getText(), txtFirstname.getText(), txtLastname.getText(), txtRole.getValue(), txtUsername.getText(), txtPassword.getText(), txtSecretQuestion.getValue(), txtAnswer.getText(), user);
+                    accountManagementModel.updateAccount(txtEmployeeId.getText(), txtFirstname.getText(), txtLastname.getText(), txtRole.getValue(), txtUsername.getText(), txtPassword.getText(), txtSecretQuestion.getValue(), txtAnswer.getText(), user);
                     main.change("ui/AdminAccountManagement.fxml");
                     Alert alert2 = new Alert(Alert.AlertType.INFORMATION, "Account updated successfully!", ButtonType.CLOSE);
                     alert2.showAndWait();

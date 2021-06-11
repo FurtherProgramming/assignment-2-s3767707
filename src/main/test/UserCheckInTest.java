@@ -63,7 +63,6 @@ public class UserCheckInTest {
 
         PreparedStatement preparedStatement = null;
         String query = "UPDATE booking SET check_in = ? WHERE id = ?;";
-        String query2 = "UPDATE booking SET check_in = ? WHERE id = ?;";
         try {
 
             preparedStatement = connection.prepareStatement(query);

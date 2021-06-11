@@ -124,34 +124,4 @@ public class LoginModel {
         }
         return valid;
     }
-
-    /*
-     * return true if account is activated
-     */
-    public Boolean isActivated(String username) throws SQLException {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        boolean bool = false;
-        String query = "select * from employee where username = ? and status = ?";
-        try {
-
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, username);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                bool = true;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if(preparedStatement != null) {
-                preparedStatement.close();
-            }
-            if (resultSet != null) {
-                resultSet.close();
-            }
-        }
-        return bool;
-    }
 }

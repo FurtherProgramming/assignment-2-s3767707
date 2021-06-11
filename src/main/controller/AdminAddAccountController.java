@@ -28,7 +28,7 @@ public class AdminAddAccountController implements Initializable {
     public Main main = new Main();
     private LoginModel loginModel = new LoginModel();
     @FXML
-    private TextField txtEmployerId;
+    private TextField txtEmployeeId;
     @FXML
     private TextField txtFirstname;
     @FXML
@@ -75,9 +75,9 @@ public class AdminAddAccountController implements Initializable {
     public void Register(ActionEvent event) throws Exception {
 
         try {
-            // if employer id not entered, show error message
-            if (txtEmployerId.getText().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Employer id is required!", ButtonType.CLOSE);
+            // if employee id not entered, show error message
+            if (txtEmployeeId.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Employee id is required!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
@@ -96,7 +96,7 @@ public class AdminAddAccountController implements Initializable {
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
             }
-            // if role not choosed, show error message
+            // if role not chose, show error message
             else if (txtRole.getValue() == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Role is required!", ButtonType.CLOSE);
                 alert.showAndWait();
@@ -117,7 +117,7 @@ public class AdminAddAccountController implements Initializable {
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
             }
-            // if secret question not choosed, show error message
+            // if secret question not chose, show error message
             else if (txtSecretQuestion.getValue() == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Pick a secret question!", ButtonType.CLOSE);
                 alert.showAndWait();
@@ -132,8 +132,8 @@ public class AdminAddAccountController implements Initializable {
                     alert.close();
             }
             // if employer id exists, show error message
-            else if (registerModel.employerIdExist(txtEmployerId.getText())) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Employer id exists!", ButtonType.CLOSE);
+            else if (registerModel.employeeIdExist(txtEmployeeId.getText())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Employee id exists!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
@@ -145,7 +145,7 @@ public class AdminAddAccountController implements Initializable {
                 if (alert.getResult() == ButtonType.CLOSE)
                     alert.close();
             } else {
-                registerModel.register(txtEmployerId.getText(), txtFirstname.getText(), txtLastname.getText(), txtRole.getValue(), txtUsername.getText(), txtPassword.getText(), txtSecretQuestion.getValue(), txtAnswer.getText()); // register user
+                registerModel.register(txtEmployeeId.getText(), txtFirstname.getText(), txtLastname.getText(), txtRole.getValue(), txtUsername.getText(), txtPassword.getText(), txtSecretQuestion.getValue(), txtAnswer.getText()); // register user
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Account added successfully!", ButtonType.CLOSE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.CLOSE)

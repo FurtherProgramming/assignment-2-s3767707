@@ -117,7 +117,7 @@ public class AdminAccountManagementController implements Initializable {
     private void setTableColumns() {
 
         // specifying how to populate the columns of the table
-        empId.setCellValueFactory(new PropertyValueFactory<User, String>("employerId"));
+        empId.setCellValueFactory(new PropertyValueFactory<User, String>("employeeId"));
         username.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
         password.setCellValueFactory(new PropertyValueFactory<User, String>("password"));
         firstname.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
@@ -138,7 +138,7 @@ public class AdminAccountManagementController implements Initializable {
 
         // storing the id number of the selected row in a String
         if (table.getSelectionModel().getSelectedItem() != null)
-            this.selectedRowId = table.getSelectionModel().getSelectedItem().getEmployerId();
+            this.selectedRowId = table.getSelectionModel().getSelectedItem().getEmployeeId();
     }
 
     /*

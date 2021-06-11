@@ -27,7 +27,7 @@ public class RegisterModel {
     /*
      * return if employer id exist
      */
-    public Boolean employerIdExist(String employerId) throws SQLException {
+    public Boolean employeeIdExist(String employerId) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         String query = "select * from employee where emp_id = ?";

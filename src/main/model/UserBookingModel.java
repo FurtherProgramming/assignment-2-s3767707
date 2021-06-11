@@ -31,7 +31,6 @@ public class UserBookingModel {
 
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        String seatId = null;
         ArrayList<String> usernames = new ArrayList<String>();
         String query = "select * from booking where booking_date = ? and booking_time = ? and (status = ? or status = ?)";
         try {
@@ -205,7 +204,6 @@ public class UserBookingModel {
         PreparedStatement preparedStatement = null;
         LocalDate date = null;
         ResultSet resultSet = null;
-        String seatId = null;
         String query = "select * from seat where status = 0 Limit 1";
         try {
             preparedStatement = connection.prepareStatement(query);
@@ -237,7 +235,6 @@ public class UserBookingModel {
         PreparedStatement preparedStatement = null;
         LocalDate date = null;
         ResultSet resultSet = null;
-        String seatId = null;
         String query = "select * from seat where status = 0 Limit 1";
         try {
             preparedStatement = connection.prepareStatement(query);
